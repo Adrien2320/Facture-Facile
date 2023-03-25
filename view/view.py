@@ -7,7 +7,9 @@ class MainView(ttk.Window):
         super().__init__(themename="superhero")
         self.title(title)
         self.geometry(f"{width}x{height}")
-
+        # style
+        bt_item_style = ttk.Style()
+        bt_item_style.configure("item.TButton",background = "#E59866", bordercolor = "#E59866", relief="flat" )
         # split window in multiple frames
         main_menu_frame = ttk.Frame(self)
         self.option_menu_frame = ttk.Frame(self)
@@ -18,19 +20,19 @@ class MainView(ttk.Window):
         self.data_frame.pack(side=cttk.RIGHT, fill=cttk.BOTH, expand=True)
         # widget button
         self.bt_item = ttk.Button(
-            main_menu_frame, text="Article", command=self.do_show_article, width=10
+            main_menu_frame, text="Article", command=self.do_show_article, width=20, style="item.TButton"
         )
         self.bt_customer = ttk.Button(
-            main_menu_frame, text="Client", command=self.do_show_customer, width=10
+            main_menu_frame, text="Client", command=self.do_show_customer, width=20
         )
         self.bt_invoice = ttk.Button(
-            main_menu_frame, text="Facture", command=self.do_show_invoice, width=10
+            main_menu_frame, text="Facture", command=self.do_show_invoice, width=20
         )
         self.bt_close = ttk.Button(
-            main_menu_frame, text="Quitter", command=self.do_close, width=10
+            main_menu_frame, text="Quitter", command=self.do_close, width=20 , style="danger"
         )
-        self.bt_apropos = ttk.Button(main_menu_frame, text="Apropos", width=10)
-        self.bt_setting = ttk.Button(main_menu_frame, text="Paramettre", width=10)
+        self.bt_apropos = ttk.Button(main_menu_frame, text="Apropos", width=20)
+        self.bt_setting = ttk.Button(main_menu_frame, text="Paramettre", width=20)
         # position widget
         self.bt_item.pack(side=cttk.TOP, pady=30, padx=10)
         self.bt_customer.pack(side=cttk.TOP, padx=10)
@@ -93,22 +95,22 @@ class MenuArticle:
         self.bt_setting_main_menu = bt_setting
         # widget button
         self.bt_add = ttk.Button(
-            menu_frame, text="Ajouter", command=self.do_show_add_data, width=15
+            menu_frame, text="Ajouter", command=self.do_show_add_data, width=20
         )
         self.bt_change = ttk.Button(
-            menu_frame, text="Modifier", command=self.do_show_change_data, width=15
+            menu_frame, text="Modifier", command=self.do_show_change_data, width=20
         )
         self.bt_remove = ttk.Button(
-            menu_frame, text="Supprimer", command=self.do_show_remove_data, width=15
+            menu_frame, text="Supprimer", command=self.do_show_remove_data, width=20
         )
         self.bt_item_search = ttk.Button(
             menu_frame,
             text="Rechercher",
             command=self.do_show_search_item_data,
-            width=15,
+            width=20,
         )
         self.bt_back = ttk.Button(
-            menu_frame, text="Retour", command=self.do_back_menu, width=15
+            menu_frame, text="Retour", command=self.do_back_menu, width=20 , style="danger"
         )
         # position button
         self.bt_add.pack(side=cttk.TOP, padx=10, pady=20)
@@ -136,7 +138,7 @@ class MenuArticle:
         self.top_frame.rowconfigure(5, weight=1)
         # widget button
         bt_confirm = ttk.Button(self.bottom_frame, text="CONFIRMATION")
-        bt_back = ttk.Button(self.bottom_frame, text="RETOUR", command=self.do_back_menu_option)
+        bt_back = ttk.Button(self.bottom_frame, text="RETOUR", command=self.do_back_menu_option , style="danger")
         # widget label
         lb_top_empty = ttk.Label(self.top_frame)
         lb_bottom_empty = ttk.Label(self.top_frame)
