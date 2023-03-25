@@ -1,0 +1,18 @@
+[tool.pdm]
+[tool.pdm.dev-dependencies]
+tools = [
+    "black>=23.1.0",
+]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Adrien2320", email = "mertensadrien23@hotmail.be"},
+]
+dependencies = [
+    "ttkbootstrap>=1.10.1",
+]
+requires-python = ">=3.11"
+license = {text = "MIT"}
