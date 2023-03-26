@@ -17,42 +17,42 @@ class MainView(ttk.Window):
             background="#E59866",
             bordercolor="#E59866",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_customer_style = ttk.Style().configure(
             "customer.TButton",
             background="#8BC34A",
             bordercolor="#8BC34A",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_invoice_style = ttk.Style().configure(
             "invoice.TButton",
             background="#7E57C2",
             bordercolor="#7E57C2",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_apropos_style = ttk.Style().configure(
             "apropos.TButton",
             background="#4DD0E1",
             bordercolor="#4DD0E1",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_setting_style = ttk.Style().configure(
             "setting.TButton",
             background="#FFA726",
             bordercolor="#FFA726",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_close_style = ttk.Style().configure(
             "close.TButton",
             background="#C0392B",
             bordercolor="#C0392B",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         # frame
         self.main_menu_frame = ttk.Frame(self)
@@ -121,77 +121,77 @@ class MainView(ttk.Window):
 class Article:
     def __init__(self, parent):
         self.window = parent
-        self.frame = ttk.Frame(parent)
-        self.frame.pack(side=cttk.LEFT, fill=cttk.Y)
+        self.frame_menu = ttk.Frame(parent)
+        self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
         # style and
         bt_add_style = ttk.Style().configure(
             "add.TButton",
             background="#8BC34A",
             bordercolor="#8BC34A",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_change_style = ttk.Style().configure(
             "change.TButton",
             background="#E59866",
             bordercolor="#E59866",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_remove_style = ttk.Style().configure(
             "remove.TButton",
             background="#7E57C2",
             bordercolor="#7E57C2",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_item_search = ttk.Style().configure(
             "search.TButton",
             background="#4DD0E1",
             bordercolor="#4DD0E1",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         bt_back_style = ttk.Style().configure(
             "back.TButton",
             background="#C0392B",
             bordercolor="#C0392B",
             relief="flat",
-            font=("Helvitica", 20),
+            font=("Georgia", 20),
         )
         # widget button
         self.bt_add = ttk.Button(
-            self.frame,
+            self.frame_menu,
             text="Ajouter",
-            command=self.create_add_item,
+            command=self.show_data_add_item,
             width=10,
             style="add.TButton",
         )
         self.bt_change = ttk.Button(
-            self.frame,
+            self.frame_menu,
             text="Modifier",
             command=self.do_show_change_data,
             width=10,
             style="change.TButton",
         )
         self.bt_remove = ttk.Button(
-            self.frame,
+            self.frame_menu,
             text="Supprimer",
             command=self.do_show_remove_data,
             width=10,
             style="remove.TButton",
         )
         self.bt_item_search = ttk.Button(
-            self.frame,
+            self.frame_menu,
             text="Rechercher",
             command=self.do_show_search_item_data,
             width=10,
             style="search.TButton",
         )
         self.bt_back = ttk.Button(
-            self.frame,
+            self.frame_menu,
             text="Retour",
-            command=self.do_back_menu,
+            command=self.do_back_main_menu,
             width=10,
             style="back.TButton",
         )
@@ -202,7 +202,21 @@ class Article:
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
-    def create_add_item(self):
+    def show_data_add_item(self):
+        # style and config's
+        universal_label_style = ttk.Style().configure("universal.TLabel",font=("Georgia", 20))
+        universal_entry_style = ttk.Style().configure("universal.TEntry",font=("Georgia",20))
+        bt_back_style = ttk.Style().configure(
+            "back.TButton",
+            background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Georgia", 20),)
+        bt_confirm_style = ttk.Style().configure("confirm.TButton",
+            background="#2ECC71",
+            bordercolor="#2ECC71",
+            relief="flat",
+            font=("Georgia", 20),)
         # split window in multiple frames
         self.add_item_frame = ttk.Frame(self.window)
         top_frame = ttk.Frame(self.add_item_frame)
@@ -216,25 +230,25 @@ class Article:
         top_frame.rowconfigure(0, weight=1)
         top_frame.rowconfigure(5, weight=1)
         # widget button
-        bt_confirm = ttk.Button(bottom_frame, text="CONFIRMATION")
+        bt_confirm = ttk.Button(bottom_frame, text="CONFIRMATION",style="confirm.TButton")
         bt_back = ttk.Button(
             bottom_frame,
             text="RETOUR",
-            command=self.do_back_menu_option,
-            style="danger",
+            command=self.do_back_item_menu,
+            style="back.TButton",
         )
         # widget label
         lb_top_empty = ttk.Label(top_frame)
         lb_bottom_empty = ttk.Label(top_frame)
-        lb_name = ttk.Label(top_frame, text="Nom :")
-        lb_description = ttk.Label(top_frame, text="Description :")
-        lb_prix_htva = ttk.Label(top_frame, text="Prix HTVA :")
-        lb_taux_tva = ttk.Label(top_frame, text="Taux TVA :")
+        lb_name = ttk.Label(top_frame, text="Nom :",style="universal.TLabel")
+        lb_description = ttk.Label(top_frame, text="Description :",style="universal.TLabel")
+        lb_prix_htva = ttk.Label(top_frame, text="Prix HTVA :",style="universal.TLabel")
+        lb_taux_tva = ttk.Label(top_frame, text="Taux TVA :",style="universal.TLabel")
         # widget entry
-        en_name = ttk.Entry(top_frame)
-        en_description = ttk.Entry(top_frame)
-        en_prix_htva = ttk.Entry(top_frame)
-        en_taux_tva = ttk.Entry(top_frame)
+        en_name = ttk.Entry(top_frame,style="universal.TEntry")
+        en_description = ttk.Entry(top_frame,style="universal.TEntry")
+        en_prix_htva = ttk.Entry(top_frame,style="universal.TEntry")
+        en_taux_tva = ttk.Entry(top_frame,style="universal.TEntry")
         # position label
         lb_top_empty.grid(columnspan=2, row=0, sticky=cttk.NSEW)
         lb_name.grid(column=0, row=1, pady=10)
@@ -260,11 +274,11 @@ class Article:
     def do_show_search_item_data(self):
         pass
 
-    def do_back_menu(self):
-        self.frame.pack_forget()
+    def do_back_main_menu(self):
+        self.frame_menu.pack_forget()
         MainView.create_main_menu(self.window)
 
-    def do_back_menu_option(self):
+    def do_back_item_menu(self):
         self.add_item_frame.pack_forget()
 
     def hide_widget(self):
