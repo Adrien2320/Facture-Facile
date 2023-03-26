@@ -163,7 +163,7 @@ class Article:
         self.bt_add = ttk.Button(
             self.frame,
             text="Ajouter",
-            command=self.do_show_add_data,
+            command=self.create_add_item,
             width=10,
             style="add.TButton",
         )
@@ -202,40 +202,39 @@ class Article:
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
-    def do_show_add_data(self):
-        pass
-
-    """
+    def create_add_item(self):
         # split window in multiple frames
-        self.top_frame = ttk.Frame(self.data_Frame)
-        self.bottom_frame = ttk.Frame(self.data_Frame)
+        self.add_item_frame = ttk.Frame(self.window)
+        top_frame = ttk.Frame(self.add_item_frame)
+        bottom_frame = ttk.Frame(self.add_item_frame)
         # position frames
-        self.top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
-        self.bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.X)
+        self.add_item_frame.pack(side=cttk.RIGHT,expand=True,fill=cttk.BOTH)
+        top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
+        bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.X)
         # config position
-        self.top_frame.columnconfigure(1, weight=2)
-        self.top_frame.rowconfigure(0, weight=1)
-        self.top_frame.rowconfigure(5, weight=1)
+        top_frame.columnconfigure(1, weight=2)
+        top_frame.rowconfigure(0, weight=1)
+        top_frame.rowconfigure(5, weight=1)
         # widget button
-        bt_confirm = ttk.Button(self.bottom_frame, text="CONFIRMATION")
+        bt_confirm = ttk.Button(bottom_frame, text="CONFIRMATION")
         bt_back = ttk.Button(
-            self.bottom_frame,
+            bottom_frame,
             text="RETOUR",
             command=self.do_back_menu_option,
             style="danger",
         )
         # widget label
-        lb_top_empty = ttk.Label(self.top_frame)
-        lb_bottom_empty = ttk.Label(self.top_frame)
-        lb_name = ttk.Label(self.top_frame, text="Nom :")
-        lb_description = ttk.Label(self.top_frame, text="Description :")
-        lb_prix_htva = ttk.Label(self.top_frame, text="Prix HTVA :")
-        lb_taux_tva = ttk.Label(self.top_frame, text="Taux TVA :")
+        lb_top_empty = ttk.Label(top_frame)
+        lb_bottom_empty = ttk.Label(top_frame)
+        lb_name = ttk.Label(top_frame, text="Nom :")
+        lb_description = ttk.Label(top_frame, text="Description :")
+        lb_prix_htva = ttk.Label(top_frame, text="Prix HTVA :")
+        lb_taux_tva = ttk.Label(top_frame, text="Taux TVA :")
         # widget entry
-        en_name = ttk.Entry(self.top_frame)
-        en_description = ttk.Entry(self.top_frame)
-        en_prix_htva = ttk.Entry(self.top_frame)
-        en_taux_tva = ttk.Entry(self.top_frame)
+        en_name = ttk.Entry(top_frame)
+        en_description = ttk.Entry(top_frame)
+        en_prix_htva = ttk.Entry(top_frame)
+        en_taux_tva = ttk.Entry(top_frame)
         # position label
         lb_top_empty.grid(columnspan=2, row=0, sticky=cttk.NSEW)
         lb_name.grid(column=0, row=1, pady=10)
@@ -251,7 +250,6 @@ class Article:
         # position button
         bt_confirm.pack(side=cttk.RIGHT, fill=cttk.X, expand=True, padx=20)
         bt_back.pack(side=cttk.LEFT, fill=cttk.X, expand=True, padx=20)
-        """
 
     def do_show_change_data(self):
         pass
@@ -267,7 +265,7 @@ class Article:
         MainView.create_main_menu(self.window)
 
     def do_back_menu_option(self):
-        pass
+        self.add_item_frame.pack_forget()
 
     def hide_widget(self):
         pass
