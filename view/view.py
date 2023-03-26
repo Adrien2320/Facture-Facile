@@ -7,20 +7,49 @@ class MainView(ttk.Window):
         super().__init__(themename="superhero")
         self.title(title)
         self.geometry(f"{width}x{height}")
-        # style
-        bt_item_style = ttk.Style()
-        bt_customer_style = ttk.Style()
-        bt_invoice_style = ttk.Style()
-        bt_apropos_style = ttk.Style()
-        bt_setting_style = ttk.Style()
-        # config style
-        bt_item_style.configure(
-            "item.TButton", background="#E59866", bordercolor="#E59866", relief="flat"
+        # style and config's
+        bt_item_style = ttk.Style().configure(
+            "item.TButton",
+            background="#E59866",
+            bordercolor="#E59866",
+            relief="flat",
+            font=("Helvitica", 20),
         )
-        bt_customer_style.configure("customer.TButton", background="#8BC34A", bordercolor="#8BC34A", relief="flat")
-        bt_invoice_style.configure("invoice.TButton",background="#7E57C2",bordercolor="#7E57C2", relief="flat")
-        bt_apropos_style.configure("apropos.TButton",background="#4DD0E1",bordercolor="#4DD0E1", relief="flat")
-        bt_setting_style.configure("setting.TButton",background="#FFA726",bordercolor="#FFA726", relief="flat")
+        bt_customer_style = ttk.Style().configure(
+            "customer.TButton",
+            background="#8BC34A",
+            bordercolor="#8BC34A",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_invoice_style = ttk.Style().configure(
+            "invoice.TButton",
+            background="#7E57C2",
+            bordercolor="#7E57C2",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_apropos_style = ttk.Style().configure(
+            "apropos.TButton",
+            background="#4DD0E1",
+            bordercolor="#4DD0E1",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_setting_style = ttk.Style().configure(
+            "setting.TButton",
+            background="#FFA726",
+            bordercolor="#FFA726",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_close_style = ttk.Style().configure(
+            "close.TButton",
+            background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
         # split window in multiple frames
         main_menu_frame = ttk.Frame(self)
         self.option_menu_frame = ttk.Frame(self)
@@ -34,31 +63,43 @@ class MainView(ttk.Window):
             main_menu_frame,
             text="Article",
             command=self.do_show_article,
-            width=20,
+            width=10,
             style="item.TButton",
         )
         self.bt_customer = ttk.Button(
-            main_menu_frame, text="Client", command=self.do_show_customer, width=20, style="customer.TButton"
+            main_menu_frame,
+            text="Client",
+            command=self.do_show_customer,
+            width=10,
+            style="customer.TButton",
         )
         self.bt_invoice = ttk.Button(
-            main_menu_frame, text="Facture", command=self.do_show_invoice, width=20, style="invoice.TButton"
+            main_menu_frame,
+            text="Facture",
+            command=self.do_show_invoice,
+            width=10,
+            style="invoice.TButton",
         )
         self.bt_close = ttk.Button(
             main_menu_frame,
             text="Quitter",
             command=self.do_close,
-            width=20,
-            style="danger",
+            width=10,
+            style="close.TButton",
         )
-        self.bt_apropos = ttk.Button(main_menu_frame, text="Apropos", width=20,style="apropos.TButton")
-        self.bt_setting = ttk.Button(main_menu_frame, text="Paramètres", width=20,style="setting.TButton")
+        self.bt_apropos = ttk.Button(
+            main_menu_frame, text="Apropos", width=10, style="apropos.TButton"
+        )
+        self.bt_setting = ttk.Button(
+            main_menu_frame, text="Paramètres", width=10, style="setting.TButton"
+        )
         # position widget
         self.bt_item.pack(side=cttk.TOP, pady=30, padx=10)
         self.bt_customer.pack(side=cttk.TOP, padx=10)
         self.bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
-        self.bt_close.pack(side=cttk.BOTTOM, pady=20, padx=10)
+        self.bt_close.pack(side=cttk.BOTTOM, pady=30, padx=10)
         self.bt_apropos.pack(side=cttk.BOTTOM, padx=10)
-        self.bt_setting.pack(side=cttk.BOTTOM, pady=20, padx=10)
+        self.bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
     def start_main_view(self):
         self.mainloop()
@@ -74,12 +115,7 @@ class MainView(ttk.Window):
             self.bt_apropos,
             self.bt_setting,
         )
-        self.bt_item["state"] = "disable"
-        self.bt_customer["state"] = "disable"
-        self.bt_invoice["state"] = "disable"
-        self.bt_close["state"] = "disable"
-        self.bt_apropos["state"] = "disable"
-        self.bt_setting["state"] = "disable"
+        self.hide_widget()
 
     def do_show_customer(self):
         pass
@@ -89,6 +125,14 @@ class MainView(ttk.Window):
 
     def do_close(self):
         exit()
+
+    def hide_widget(self):
+        self.bt_item["state"] = "disable"
+        self.bt_customer["state"] = "disable"
+        self.bt_invoice["state"] = "disable"
+        self.bt_close["state"] = "disable"
+        self.bt_apropos["state"] = "disable"
+        self.bt_setting["state"] = "disable"
 
 
 class MenuArticle:
@@ -112,43 +156,85 @@ class MenuArticle:
         self.bt_close_main_menu = bt_close
         self.bt_apropos_main_menu = bt_apropos
         self.bt_setting_main_menu = bt_setting
+        # style and
+        bt_add_style = ttk.Style().configure(
+            "add.TButton",
+            background="#8BC34A",
+            bordercolor="#8BC34A",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_change_style = ttk.Style().configure(
+            "change.TButton",
+            background="#E59866",
+            bordercolor="#E59866",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_remove_style = ttk.Style().configure(
+            "remove.TButton",
+            background="#7E57C2",
+            bordercolor="#7E57C2",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_item_search = ttk.Style().configure(
+            "search.TButton",
+            background="#4DD0E1",
+            bordercolor="#4DD0E1",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
+        bt_back_style = ttk.Style().configure(
+            "back.TButton",background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Helvitica", 20),
+        )
         # widget button
         self.bt_add = ttk.Button(
-            menu_frame, text="Ajouter", command=self.do_show_add_data, width=20
+            menu_frame,
+            text="Ajouter",
+            command=self.do_show_add_data,
+            width=10,
+            style="add.TButton",
         )
         self.bt_change = ttk.Button(
-            menu_frame, text="Modifier", command=self.do_show_change_data, width=20
+            menu_frame,
+            text="Modifier",
+            command=self.do_show_change_data,
+            width=10,
+            style="change.TButton",
         )
         self.bt_remove = ttk.Button(
-            menu_frame, text="Supprimer", command=self.do_show_remove_data, width=20
+            menu_frame,
+            text="Supprimer",
+            command=self.do_show_remove_data,
+            width=10,
+            style="remove.TButton",
         )
         self.bt_item_search = ttk.Button(
             menu_frame,
             text="Rechercher",
             command=self.do_show_search_item_data,
-            width=20,
+            width=10,
+            style="search.TButton",
         )
         self.bt_back = ttk.Button(
             menu_frame,
             text="Retour",
             command=self.do_back_menu,
-            width=20,
-            style="danger",
+            width=10,
+            style="back.TButton",
         )
         # position button
-        self.bt_add.pack(side=cttk.TOP, padx=10, pady=20)
+        self.bt_add.pack(side=cttk.TOP, padx=10, pady=30)
         self.bt_change.pack(side=cttk.TOP, padx=10)
-        self.bt_remove.pack(side=cttk.TOP, padx=10, pady=20)
+        self.bt_remove.pack(side=cttk.TOP, padx=10, pady=30)
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
-        self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=20)
+        self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def do_show_add_data(self):
-        # hide the menu frame
-        self.bt_add["state"] = "disable"
-        self.bt_change["state"] = "disable"
-        self.bt_remove["state"] = "disable"
-        self.bt_item_search["state"] = "disable"
-        self.bt_back["state"] = "disable"
         # split window in multiple frames
         self.top_frame = ttk.Frame(self.data_Frame)
         self.bottom_frame = ttk.Frame(self.data_Frame)
@@ -225,3 +311,11 @@ class MenuArticle:
         self.bt_remove["state"] = "normal"
         self.bt_item_search["state"] = "normal"
         self.bt_back["state"] = "normal"
+
+    def hide_widget(self):
+        # hide the menu frame
+        self.bt_add["state"] = "disable"
+        self.bt_change["state"] = "disable"
+        self.bt_remove["state"] = "disable"
+        self.bt_item_search["state"] = "disable"
+        self.bt_back["state"] = "disable"
