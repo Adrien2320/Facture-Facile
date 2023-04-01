@@ -125,7 +125,8 @@ class MainView(ttk.Window):
     def do_show_invoice(self):
         pass
 
-    def do_close(self):
+    @staticmethod
+    def do_close():
         exit()
 
     @property
@@ -133,7 +134,7 @@ class MainView(ttk.Window):
         """controller"""
         try:
             return self._controller
-        except AttributeError as aer:
+        except AttributeError:
             dialogs.Messagebox.show_error("No controller set", title="ERROR")
             self.do_close()
 
@@ -238,13 +239,25 @@ class Article:
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def show_data_add_item(self):
+        self.data_item()
+
+    def data_item(
+        self,
+        name: str = "",
+        description: str = "",
+        htva_price: float = "",
+        tva_tare: str = "",
+    ):
         # initiate
         self.menu_blocked_state("disabled")
         # variable
         tva_rate = ["21%", "12%", "6%"]
-        sv_name = ttk.StringVar()
+        self.v_name: ttk.StringVar() = name
+        self.v_description: ttk.StringVar() = description
+        self.v_htva_price: ttk.DoubleVar() = htva_price
+        self.v_tva_tare: ttk.StringVar() = tva_tare
         # style
-        frame_menu_bottom_sytle = ttk.Style().configure(
+        frame_menu_bottom_style = ttk.Style().configure(
             "frame.TFrame", background="#283747"
         )
         bt_back_style = ttk.Style().configure(
@@ -252,19 +265,19 @@ class Article:
             background="#C0392B",
             bordercolor="#C0392B",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 25),
         )
         bt_confirm_style = ttk.Style().configure(
             "confirm.TButton",
             background="#2ECC71",
             bordercolor="#2ECC71",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 25),
         )
         # split window in multiple frames
         self.add_item_frame = ttk.Frame(self.window)
         top_frame = ttk.Frame(self.add_item_frame)
-        bottom_frame = ttk.Frame(self.add_item_frame, style="frame.TFrame")
+        bottom_frame = ttk.Frame(self.add_item_frame)
         # position frames
         self.add_item_frame.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
         top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
@@ -288,30 +301,27 @@ class Article:
             width=15,
         )
         # widget label
-        lb_name = ttk.Label(top_frame,
-                            text="Nom :",
-                            font=("Georgia", 25))
-        lb_description = ttk.Label(top_frame,
-                                   text="Description :",
-                                   font=("Georgia",25)
+        lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 25))
+        lb_description = ttk.Label(
+            top_frame, text="Description :", font=("Georgia", 25)
         )
-        lb_prix_htva = ttk.Label(top_frame,
-                                 text="Prix HTVA :",
-                                 font=("Georgia", 25))
-        lb_taux_tva = ttk.Label(top_frame,
-                                text="Taux TVA :",
-                                font=("Georgia", 25))
+        lb_prix_htva = ttk.Label(top_frame, text="Prix HTVA :", font=("Georgia", 25))
+        lb_taux_tva = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 25))
         # widget entry
-        en_name = ttk.Entry(top_frame,
-                            font=("Georgia", 25))
-        en_description = ttk.Entry(top_frame,
-                                   font=("Georgia", 25))
-        en_prix_htva = ttk.Entry(top_frame,
-                                 font=("Georgia", 25))
+        en_name = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.v_name)
+        en_description = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.v_description
+        )
+        en_prix_htva = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.v_htva_price
+        )
         # widget list
-        en_taux_tva = ttk.Combobox(top_frame,
-                                   values=tva_rate,
-                                   font=("Georgia", 25))
+        en_tva_tare = ttk.Combobox(
+            top_frame,
+            values=tva_rate,
+            font=("Georgia", 25),
+            textvariable=self.v_tva_tare,
+        )
         # position label
         lb_name.grid(column=0, row=1, pady=10)
         lb_description.grid(column=0, row=2, pady=10)
@@ -321,7 +331,7 @@ class Article:
         en_name.grid(column=1, row=1, sticky=cttk.EW, pady=10, padx=10)
         en_description.grid(column=1, row=2, sticky=cttk.EW, pady=10, padx=10)
         en_prix_htva.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
-        en_taux_tva.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
+        en_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
         # position button
         bt_confirm.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
