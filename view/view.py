@@ -240,12 +240,12 @@ class Article:
     def show_data_add_item(self):
         # initiate
         self.menu_blocked_state("disabled")
-        # style and config's
-        universal_label_style = ttk.Style().configure(
-            "universal.TLabel", font=("Georgia", 20)
-        )
-        universal_entry_style = ttk.Style().configure(
-            "universal.TEntry", font=("Georgia", 20)
+        # variable
+        tva_rate = ["21%", "12%", "6%"]
+        sv_name = ttk.StringVar()
+        # style
+        frame_menu_bottom_sytle = ttk.Style().configure(
+            "frame.TFrame", background="#283747"
         )
         bt_back_style = ttk.Style().configure(
             "back.TButton",
@@ -264,56 +264,67 @@ class Article:
         # split window in multiple frames
         self.add_item_frame = ttk.Frame(self.window)
         top_frame = ttk.Frame(self.add_item_frame)
-        bottom_frame = ttk.Frame(self.add_item_frame)
+        bottom_frame = ttk.Frame(self.add_item_frame, style="frame.TFrame")
         # position frames
         self.add_item_frame.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
         top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
-        bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.X)
+        bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.BOTH)
         # config position
         top_frame.columnconfigure(1, weight=2)
         top_frame.rowconfigure(0, weight=1)
         top_frame.rowconfigure(5, weight=1)
         # widget button
         bt_confirm = ttk.Button(
-            bottom_frame, text="CONFIRMATION", style="confirm.TButton"
+            bottom_frame,
+            text="CONFIRMATION",
+            style="confirm.TButton",
+            width=15,
         )
         bt_back = ttk.Button(
             bottom_frame,
             text="RETOUR",
             command=self.do_back_item_menu,
             style="back.TButton",
+            width=15,
         )
         # widget label
-        lb_top_empty = ttk.Label(top_frame)
-        lb_bottom_empty = ttk.Label(top_frame)
-        lb_name = ttk.Label(top_frame, text="Nom :", style="universal.TLabel")
-        lb_description = ttk.Label(
-            top_frame, text="Description :", style="universal.TLabel"
+        lb_name = ttk.Label(top_frame,
+                            text="Nom :",
+                            font=("Georgia", 25))
+        lb_description = ttk.Label(top_frame,
+                                   text="Description :",
+                                   font=("Georgia",25)
         )
-        lb_prix_htva = ttk.Label(
-            top_frame, text="Prix HTVA :", style="universal.TLabel"
-        )
-        lb_taux_tva = ttk.Label(top_frame, text="Taux TVA :", style="universal.TLabel")
+        lb_prix_htva = ttk.Label(top_frame,
+                                 text="Prix HTVA :",
+                                 font=("Georgia", 25))
+        lb_taux_tva = ttk.Label(top_frame,
+                                text="Taux TVA :",
+                                font=("Georgia", 25))
         # widget entry
-        en_name = ttk.Entry(top_frame, style="universal.TEntry")
-        en_description = ttk.Entry(top_frame, style="universal.TEntry")
-        en_prix_htva = ttk.Entry(top_frame, style="universal.TEntry")
-        en_taux_tva = ttk.Entry(top_frame, style="universal.TEntry")
+        en_name = ttk.Entry(top_frame,
+                            font=("Georgia", 25))
+        en_description = ttk.Entry(top_frame,
+                                   font=("Georgia", 25))
+        en_prix_htva = ttk.Entry(top_frame,
+                                 font=("Georgia", 25))
+        # widget list
+        en_taux_tva = ttk.Combobox(top_frame,
+                                   values=tva_rate,
+                                   font=("Georgia", 25))
         # position label
-        lb_top_empty.grid(columnspan=2, row=0, sticky=cttk.NSEW)
         lb_name.grid(column=0, row=1, pady=10)
         lb_description.grid(column=0, row=2, pady=10)
         lb_prix_htva.grid(column=0, row=3, pady=10)
         lb_taux_tva.grid(column=0, row=4, pady=10)
-        lb_bottom_empty.grid(columnspan=2, row=5, sticky=cttk.NSEW)
         # position entry
         en_name.grid(column=1, row=1, sticky=cttk.EW, pady=10, padx=10)
         en_description.grid(column=1, row=2, sticky=cttk.EW, pady=10, padx=10)
         en_prix_htva.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
         en_taux_tva.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
         # position button
-        bt_confirm.pack(side=cttk.RIGHT, fill=cttk.X, expand=True, padx=20)
-        bt_back.pack(side=cttk.LEFT, fill=cttk.X, expand=True, padx=20)
+        bt_confirm.pack(side=cttk.RIGHT, padx=50)
+        bt_back.pack(side=cttk.LEFT, padx=50)
 
     def do_show_change_data(self):
         pass
