@@ -11,7 +11,8 @@ class MainView(ttk.Window):
         self.create_main_menu()
 
     def create_main_menu(self):
-        # style and config's
+        # style
+        frame_menu_sytle = ttk.Style().configure("frame.TFrame", background="#283747")
         bt_item_style = ttk.Style().configure(
             "item.TButton",
             background="#E59866",
@@ -35,8 +36,8 @@ class MainView(ttk.Window):
         )
         bt_apropos_style = ttk.Style().configure(
             "apropos.TButton",
-            background="#4DD0E1",
-            bordercolor="#4DD0E1",
+            background="#42B7C6",
+            bordercolor="#42B7C6",
             relief="flat",
             font=("Georgia", 20),
         )
@@ -55,9 +56,11 @@ class MainView(ttk.Window):
             font=("Georgia", 20),
         )
         # frame
-        self.main_menu_frame = ttk.Frame(self)
+        self.main_menu_frame = ttk.Frame(self,style="frame.TFrame")
         # position of the frame
         self.main_menu_frame.pack(side=cttk.LEFT, fill=cttk.Y)
+        # widget label
+        lb_tittle = ttk.Label(self.main_menu_frame,text="Menu Principale",font=("Georgia", 20),background="#283747")
         # widget button
         self.bt_item = ttk.Button(
             self.main_menu_frame,
@@ -94,6 +97,8 @@ class MainView(ttk.Window):
             self.main_menu_frame, text="Paramètres", width=10, style="setting.TButton"
         )
         # position widget
+        lb_tittle.pack(side=cttk.TOP,pady=20,padx=10)
+        # position widget
         self.bt_item.pack(side=cttk.TOP, pady=30, padx=10)
         self.bt_customer.pack(side=cttk.TOP, padx=10)
         self.bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
@@ -120,16 +125,15 @@ class MainView(ttk.Window):
 
 class Article:
     def __init__(self, parent):
-        self.window = parent
-        self.frame_menu = ttk.Frame(parent)
-        self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
-        # style and
+        # style
+        frame_menu_sytle =ttk.Style().configure("frame.TFrame",background = "#283747")
         bt_add_style = ttk.Style().configure(
             "add.TButton",
             background="#8BC34A",
             bordercolor="#8BC34A",
             relief="flat",
             font=("Georgia", 20),
+
         )
         bt_change_style = ttk.Style().configure(
             "change.TButton",
@@ -147,8 +151,8 @@ class Article:
         )
         bt_item_search = ttk.Style().configure(
             "search.TButton",
-            background="#4DD0E1",
-            bordercolor="#4DD0E1",
+            background="#42B7C6",
+            bordercolor="#42B7C6",
             relief="flat",
             font=("Georgia", 20),
         )
@@ -159,6 +163,12 @@ class Article:
             relief="flat",
             font=("Georgia", 20),
         )
+        # initiate
+        self.window = parent
+        self.frame_menu = ttk.Frame(parent, style="frame.TFrame")
+        self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
+        # widget label
+        lb_titel = ttk.Label(self.frame_menu,text="Menu Article",font=("Georgia", 20),background="#283747")
         # widget button
         self.bt_add = ttk.Button(
             self.frame_menu,
@@ -195,6 +205,8 @@ class Article:
             width=10,
             style="back.TButton",
         )
+        # position label
+        lb_titel.pack(side=cttk.TOP,padx=10,pady=10)
         # position button
         self.bt_add.pack(side=cttk.TOP, padx=10, pady=30)
         self.bt_change.pack(side=cttk.TOP, padx=10)
@@ -203,6 +215,8 @@ class Article:
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def show_data_add_item(self):
+        # initiate
+        self.menu_blocked_state("disabled")
         # style and config's
         universal_label_style = ttk.Style().configure("universal.TLabel",font=("Georgia", 20))
         universal_entry_style = ttk.Style().configure("universal.TEntry",font=("Georgia",20))
@@ -280,6 +294,14 @@ class Article:
 
     def do_back_item_menu(self):
         self.add_item_frame.pack_forget()
+        self.menu_blocked_state("normal")
 
     def hide_widget(self):
         pass
+
+    def menu_blocked_state(self,state : str):
+        self.bt_add.configure(state=state)
+        self.bt_change.configure(state=state)
+        self.bt_remove.configure(state=state)
+        self.bt_item_search.configure(state=state)
+        self.bt_back.configure(state=state)
