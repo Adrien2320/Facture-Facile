@@ -7,8 +7,8 @@ from contextlib import closing
 class Item:
     name_item: str
     description_item: str
-    prix_htva: float
-    taux_tva: str
+    htva_price: float
+    tva_tare: str
     id_item: int = field(default=-1)
 
 
@@ -37,9 +37,12 @@ class Data:
             cursor.execute(sql)
             self.commit()
 
-    def add_item(self, name: str, description: str, htva_price: float, tva_tare: str):
+    def add_item(self, item: Item):
         sql = """ INSERT INTO T_Items (name_item, description_item, htva_price_item, tva_tare_item) VALUES (?,?,?,?)"""
 
         with closing(self.cursor) as cursor:
-            cursor.execute(sql, [name, description, htva_price, tva_tare])
+            cursor.execute(
+                sql,
+                [item.name_item, item.description_item, item.htva_price, item.tva_tare],
+            )
             self.commit()

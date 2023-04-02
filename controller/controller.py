@@ -7,6 +7,10 @@ class Controller:
         self.view = view
         self.data = data
 
-    def add_item(self, name: str, description: str, htva_price: float, tva_tare: str):
+    def add_item(self, name, description, htva_price, tva_tare):
         if name != "" and htva_price != "" and tva_tare != "":
-            self.data.add_item(name, description, htva_price, tva_tare)
+            item = Item(name, description, htva_price, tva_tare)
+            self.data.add_item(item)
+            self.view.show_message_success("L'article a bien été enregistré.")
+        else:
+            self.view.show_message_failure("Veuillez remplire les données")

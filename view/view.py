@@ -13,43 +13,43 @@ class MainView(ttk.Window):
 
     def create_main_menu(self):
         # style
-        frame_menu_sytle = ttk.Style().configure("frame.TFrame", background="#283747")
-        bt_item_style = ttk.Style().configure(
+        ttk.Style().configure("frame.TFrame", background="#283747")
+        ttk.Style().configure(
             "item.TButton",
             background="#E59866",
             bordercolor="#E59866",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_customer_style = ttk.Style().configure(
+        ttk.Style().configure(
             "customer.TButton",
             background="#8BC34A",
             bordercolor="#8BC34A",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_invoice_style = ttk.Style().configure(
+        ttk.Style().configure(
             "invoice.TButton",
             background="#7E57C2",
             bordercolor="#7E57C2",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_apropos_style = ttk.Style().configure(
+        ttk.Style().configure(
             "apropos.TButton",
             background="#42B7C6",
             bordercolor="#42B7C6",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_setting_style = ttk.Style().configure(
+        ttk.Style().configure(
             "setting.TButton",
             background="#FFA726",
             bordercolor="#FFA726",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_close_style = ttk.Style().configure(
+        ttk.Style().configure(
             "close.TButton",
             background="#C0392B",
             bordercolor="#C0392B",
@@ -71,7 +71,7 @@ class MainView(ttk.Window):
         self.bt_item = ttk.Button(
             self.main_menu_frame,
             text="Article",
-            command=self.do_show_article,
+            command=self.show_article,
             width=10,
             style="item.TButton",
         )
@@ -115,9 +115,9 @@ class MainView(ttk.Window):
     def start_main_view(self):
         self.mainloop()
 
-    def do_show_article(self):
+    def show_article(self):
         self.main_menu_frame.pack_forget()
-        Article(self, self.controller)
+        ItemMenu(self, self.controller)
 
     def do_show_customer(self):
         pass
@@ -135,47 +135,59 @@ class MainView(ttk.Window):
         try:
             return self._controller
         except AttributeError:
-            dialogs.Messagebox.show_error("No controller set", title="ERROR")
+            self.show_message_error("No controller set")
             self.do_close()
 
     @controller.setter
     def controller(self, value):
         self._controller = value
 
+    @staticmethod
+    def show_message_success(text: str):
+        dialogs.Messagebox.show_info(text, "Réussi")
 
-class Article:
+    @staticmethod
+    def show_message_failure(text: str):
+        dialogs.Messagebox.show_info(text, "Echec")
+
+    @staticmethod
+    def show_message_error(text: str):
+        dialogs.Messagebox.show_error(text, title="ERROR")
+
+
+class ItemMenu:
     def __init__(self, parent, controller):
         # style
-        frame_menu_sytle = ttk.Style().configure("frame.TFrame", background="#283747")
-        bt_add_style = ttk.Style().configure(
+        ttk.Style().configure("frame.TFrame", background="#283747")
+        ttk.Style().configure(
             "add.TButton",
             background="#8BC34A",
             bordercolor="#8BC34A",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_change_style = ttk.Style().configure(
+        ttk.Style().configure(
             "change.TButton",
             background="#E59866",
             bordercolor="#E59866",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_remove_style = ttk.Style().configure(
+        ttk.Style().configure(
             "remove.TButton",
             background="#7E57C2",
             bordercolor="#7E57C2",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_item_search = ttk.Style().configure(
+        ttk.Style().configure(
             "search.TButton",
             background="#42B7C6",
             bordercolor="#42B7C6",
             relief="flat",
             font=("Georgia", 20),
         )
-        bt_back_style = ttk.Style().configure(
+        ttk.Style().configure(
             "back.TButton",
             background="#C0392B",
             bordercolor="#C0392B",
@@ -187,8 +199,13 @@ class Article:
         self.controller = controller
         self.frame_menu = ttk.Frame(parent, style="frame.TFrame")
         self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
+        # variable ttk
+        self.var_name = ttk.StringVar()
+        self.var_description = ttk.StringVar()
+        self.var_tva_tare = ttk.StringVar()
+        self.var_htva_price = ttk.DoubleVar()
         # widget label
-        lb_titel = ttk.Label(
+        lb_title = ttk.Label(
             self.frame_menu,
             text="Menu Article",
             font=("Georgia", 20),
@@ -231,7 +248,7 @@ class Article:
             style="back.TButton",
         )
         # position label
-        lb_titel.pack(side=cttk.TOP, padx=10, pady=10)
+        lb_title.pack(side=cttk.TOP, padx=10, pady=10)
         # position button
         self.bt_add.pack(side=cttk.TOP, padx=10, pady=30)
         self.bt_change.pack(side=cttk.TOP, padx=10)
@@ -239,104 +256,9 @@ class Article:
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
-    def data_item(
-        self,
-        name: str = "",
-        description: str = "",
-        htva_price: float = "",
-        tva_tare: str = "",
-    ):
-        # initiate
-        self.menu_blocked_state("disabled")
-        # variable
-        tva_rate = ["21%", "12%", "6%"]
-        self.v_name: ttk.StringVar() = name
-        self.v_description: ttk.StringVar() = description
-        self.v_htva_price: ttk.DoubleVar() = htva_price
-        self.v_tva_tare: ttk.StringVar() = tva_tare
-        # style
-        frame_menu_bottom_style = ttk.Style().configure(
-            "frame.TFrame", background="#283747"
-        )
-        bt_back_style = ttk.Style().configure(
-            "back.TButton",
-            background="#C0392B",
-            bordercolor="#C0392B",
-            relief="flat",
-            font=("Georgia", 25),
-        )
-        bt_confirm_style = ttk.Style().configure(
-            "confirm.TButton",
-            background="#2ECC71",
-            bordercolor="#2ECC71",
-            relief="flat",
-            font=("Georgia", 25),
-        )
-        # split window in multiple frames
-        self.add_item_frame = ttk.Frame(self.window)
-        top_frame = ttk.Frame(self.add_item_frame)
-        bottom_frame = ttk.Frame(self.add_item_frame)
-        # position frames
-        self.add_item_frame.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
-        top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
-        bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.BOTH)
-        # config position
-        top_frame.columnconfigure(1, weight=2)
-        top_frame.rowconfigure(0, weight=1)
-        top_frame.rowconfigure(5, weight=1)
-        # widget button
-        bt_confirm = ttk.Button(
-            bottom_frame,
-            text="CONFIRMATION",
-            command=self.save_item,
-            style="confirm.TButton",
-            width=15,
-        )
-        bt_back = ttk.Button(
-            bottom_frame,
-            text="RETOUR",
-            command=self.back_item_menu,
-            style="back.TButton",
-            width=15,
-        )
-        # widget label
-        lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 25))
-        lb_description = ttk.Label(
-            top_frame, text="Description :", font=("Georgia", 25)
-        )
-        lb_prix_htva = ttk.Label(top_frame, text="Prix HTVA :", font=("Georgia", 25))
-        lb_taux_tva = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 25))
-        # widget entry
-        en_name = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.v_name)
-        en_description = ttk.Entry(
-            top_frame, font=("Georgia", 25), textvariable=self.v_description
-        )
-        en_prix_htva = ttk.Entry(
-            top_frame, font=("Georgia", 25), textvariable=self.v_htva_price
-        )
-        # widget list
-        en_tva_tare = ttk.Combobox(
-            top_frame,
-            values=tva_rate,
-            font=("Georgia", 25),
-            textvariable=self.v_tva_tare,
-        )
-        # position label
-        lb_name.grid(column=0, row=1, pady=10)
-        lb_description.grid(column=0, row=2, pady=10)
-        lb_prix_htva.grid(column=0, row=3, pady=10)
-        lb_taux_tva.grid(column=0, row=4, pady=10)
-        # position entry
-        en_name.grid(column=1, row=1, sticky=cttk.EW, pady=10, padx=10)
-        en_description.grid(column=1, row=2, sticky=cttk.EW, pady=10, padx=10)
-        en_prix_htva.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
-        en_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
-        # position button
-        bt_confirm.pack(side=cttk.RIGHT, padx=50)
-        bt_back.pack(side=cttk.LEFT, padx=50)
-
     def show_data_add_item(self):
-        self.data_item()
+        self.state_item_menu("disabled")
+        self.data_item(self.add_item)
 
     def do_show_change_data(self):
         pass
@@ -351,18 +273,108 @@ class Article:
         self.frame_menu.pack_forget()
         MainView.create_main_menu(self.window)
 
-    def back_item_menu(self):
-        self.add_item_frame.pack_forget()
-        self.menu_blocked_state("normal")
-
-    def menu_blocked_state(self, state: str):
+    def state_item_menu(self, state: str):
         self.bt_add.configure(state=state)
         self.bt_change.configure(state=state)
         self.bt_remove.configure(state=state)
         self.bt_item_search.configure(state=state)
         self.bt_back.configure(state=state)
 
-    def save_item(self):
+    def add_item(self):
         self.controller.add_item(
-            self.v_name, self.v_description, self.v_htva_price, self.v_tva_tare
+            str(self.var_name.get()),
+            str(self.var_description.get()),
+            float(str(self.var_htva_price.get())),
+            str(self.var_tva_tare.get()))
+        self.add_item_frame.pack_forget()
+        self.state_item_menu("normal")
+
+    def data_item(self,command_confirm):
+        # variable
+        tva_rate = ["21%", "12%", "6%"]
+        # style
+        ttk.Style().configure("frame.TFrame", background="#283747")
+        ttk.Style().configure(
+            "back.TButton",
+            background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Georgia", 25),
         )
+        ttk.Style().configure(
+            "confirm.TButton",
+            background="#2ECC71",
+            bordercolor="#2ECC71",
+            relief="flat",
+            font=("Georgia", 25),
+        )
+        # split window in multiple frames
+        self.add_item_frame = ttk.Frame(self.window)
+        top_frame = ttk.Frame(self.add_item_frame)
+        bottom_frame = ttk.Frame(self.add_item_frame)
+        # position frames
+        self.add_item_frame.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
+        top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
+        bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.BOTH)
+        # config of columns and rows
+        top_frame.columnconfigure(1, weight=2)
+        top_frame.rowconfigure(0, weight=1)
+        top_frame.rowconfigure(5, weight=1)
+        # widget button
+        bt_confirm = ttk.Button(
+            bottom_frame,
+            text="Confirmation",
+            command=command_confirm,
+            style="confirm.TButton",
+            width=15,
+        )
+        bt_back = ttk.Button(
+            bottom_frame,
+            text="Retour",
+            command=self.back_item_menu,
+            style="back.TButton",
+            width=15,
+        )
+        # widget label
+        lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 25))
+        lb_description = ttk.Label(
+            top_frame, text="Description :", font=("Georgia", 25)
+        )
+        lb_htva_price = ttk.Label(
+            top_frame, text="Prix HTVA :", font=("Georgia", 25)
+        )
+        lb_tva_tare = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 25))
+        # widget entry
+        en_name = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_name
+        )
+        en_description = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_description
+        )
+        en_htva_price = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_htva_price
+        )
+        # widget list
+        en_tva_tare = ttk.Combobox(
+            top_frame,
+            values=tva_rate,
+            font=("Georgia", 25),
+            textvariable=self.var_tva_tare,
+        )
+        # position label
+        lb_name.grid(column=0, row=1, pady=10)
+        lb_description.grid(column=0, row=2, pady=10)
+        lb_htva_price.grid(column=0, row=3, pady=10)
+        lb_tva_tare.grid(column=0, row=4, pady=10)
+        # position entry
+        en_name.grid(column=1, row=1, sticky=cttk.EW, pady=10, padx=10)
+        en_description.grid(column=1, row=2, sticky=cttk.EW, pady=10, padx=10)
+        en_htva_price.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
+        en_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
+        # position button
+        bt_confirm.pack(side=cttk.RIGHT, padx=50)
+        bt_back.pack(side=cttk.LEFT, padx=50)
+
+    def back_item_menu(self):
+        self.add_item_frame.pack_forget()
+        self.state_item_menu("normal")
