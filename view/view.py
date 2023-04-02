@@ -117,7 +117,7 @@ class MainView(ttk.Window):
 
     def do_show_article(self):
         self.main_menu_frame.pack_forget()
-        Article(self)
+        Article(self, self.controller)
 
     def do_show_customer(self):
         pass
@@ -144,7 +144,7 @@ class MainView(ttk.Window):
 
 
 class Article:
-    def __init__(self, parent):
+    def __init__(self, parent, controller):
         # style
         frame_menu_sytle = ttk.Style().configure("frame.TFrame", background="#283747")
         bt_add_style = ttk.Style().configure(
@@ -184,6 +184,7 @@ class Article:
         )
         # initiate
         self.window = parent
+        self.controller = controller
         self.frame_menu = ttk.Frame(parent, style="frame.TFrame")
         self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
         # widget label
@@ -225,7 +226,7 @@ class Article:
         self.bt_back = ttk.Button(
             self.frame_menu,
             text="Retour",
-            command=self.do_back_main_menu,
+            command=self.back_main_menu,
             width=10,
             style="back.TButton",
         )
@@ -237,9 +238,6 @@ class Article:
         self.bt_remove.pack(side=cttk.TOP, padx=10, pady=30)
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
-
-    def show_data_add_item(self):
-        self.data_item()
 
     def data_item(
         self,
@@ -290,13 +288,14 @@ class Article:
         bt_confirm = ttk.Button(
             bottom_frame,
             text="CONFIRMATION",
+            command=self.save_item,
             style="confirm.TButton",
             width=15,
         )
         bt_back = ttk.Button(
             bottom_frame,
             text="RETOUR",
-            command=self.do_back_item_menu,
+            command=self.back_item_menu,
             style="back.TButton",
             width=15,
         )
@@ -336,6 +335,9 @@ class Article:
         bt_confirm.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
 
+    def show_data_add_item(self):
+        self.data_item()
+
     def do_show_change_data(self):
         pass
 
@@ -345,16 +347,13 @@ class Article:
     def do_show_search_item_data(self):
         pass
 
-    def do_back_main_menu(self):
+    def back_main_menu(self):
         self.frame_menu.pack_forget()
         MainView.create_main_menu(self.window)
 
-    def do_back_item_menu(self):
+    def back_item_menu(self):
         self.add_item_frame.pack_forget()
         self.menu_blocked_state("normal")
-
-    def hide_widget(self):
-        pass
 
     def menu_blocked_state(self, state: str):
         self.bt_add.configure(state=state)
@@ -362,3 +361,8 @@ class Article:
         self.bt_remove.configure(state=state)
         self.bt_item_search.configure(state=state)
         self.bt_back.configure(state=state)
+
+    def save_item(self):
+        self.controller.add_item(
+            self.v_name, self.v_description, self.v_htva_price, self.v_tva_tare
+        )
