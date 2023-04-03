@@ -8,12 +8,17 @@ class MainView(ttk.Window):
         super().__init__(themename="superhero")
         self.title(title)
         self.minsize(width, height)
+        # style frame
+        ttk.Style().configure("frame.TFrame", background="#283747")
+        # frame
+        self.main_menu_frame = ttk.Frame(self, style="frame.TFrame")
+        # position of the frame
+        self.main_menu_frame.pack(side=cttk.LEFT, fill=cttk.Y)
 
         self.create_main_menu()
 
     def create_main_menu(self):
         # style
-        ttk.Style().configure("frame.TFrame", background="#283747")
         ttk.Style().configure(
             "item.TButton",
             background="#E59866",
@@ -56,10 +61,6 @@ class MainView(ttk.Window):
             relief="flat",
             font=("Georgia", 20),
         )
-        # frame
-        self.main_menu_frame = ttk.Frame(self, style="frame.TFrame")
-        # position of the frame
-        self.main_menu_frame.pack(side=cttk.LEFT, fill=cttk.Y)
         # widget label
         lb_tittle = ttk.Label(
             self.main_menu_frame,
@@ -68,56 +69,56 @@ class MainView(ttk.Window):
             background="#283747",
         )
         # widget button
-        self.bt_item = ttk.Button(
+        bt_item = ttk.Button(
             self.main_menu_frame,
             text="Article",
             command=self.show_article,
             width=10,
             style="item.TButton",
         )
-        self.bt_customer = ttk.Button(
+        bt_customer = ttk.Button(
             self.main_menu_frame,
             text="Client",
             command=self.do_show_customer,
             width=10,
             style="customer.TButton",
         )
-        self.bt_invoice = ttk.Button(
+        bt_invoice = ttk.Button(
             self.main_menu_frame,
             text="Facture",
             command=self.do_show_invoice,
             width=10,
             style="invoice.TButton",
         )
-        self.bt_close = ttk.Button(
+        bt_close = ttk.Button(
             self.main_menu_frame,
             text="Quitter",
-            command=self.do_close,
+            command=self.quit,
             width=10,
             style="close.TButton",
         )
-        self.bt_apropos = ttk.Button(
+        bt_apropos = ttk.Button(
             self.main_menu_frame, text="Apropos", width=10, style="apropos.TButton"
         )
-        self.bt_setting = ttk.Button(
+        bt_setting = ttk.Button(
             self.main_menu_frame, text="Paramètres", width=10, style="setting.TButton"
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
         # position widget
-        self.bt_item.pack(side=cttk.TOP, pady=30, padx=10)
-        self.bt_customer.pack(side=cttk.TOP, padx=10)
-        self.bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
-        self.bt_close.pack(side=cttk.BOTTOM, pady=30, padx=10)
-        self.bt_apropos.pack(side=cttk.BOTTOM, padx=10)
-        self.bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
+        bt_item.pack(side=cttk.TOP, pady=30, padx=10)
+        bt_customer.pack(side=cttk.TOP, padx=10)
+        bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
+        bt_close.pack(side=cttk.BOTTOM, pady=30, padx=10)
+        bt_apropos.pack(side=cttk.BOTTOM, padx=10)
+        bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
     def start_main_view(self):
         self.mainloop()
 
     def show_article(self):
-        self.main_menu_frame.pack_forget()
-        ItemMenu(self, self.controller)
+        self.clean_widget_frame(self.main_menu_frame)
+        ItemMenu(self, self.controller, self.main_menu_frame)
 
     def do_show_customer(self):
         pass
@@ -125,9 +126,9 @@ class MainView(ttk.Window):
     def do_show_invoice(self):
         pass
 
-    @staticmethod
-    def do_close():
-        exit()
+    def clean_widget_frame(self, frame):
+        for widget in frame.winfo_children():
+            widget.destroy()
 
     @property
     def controller(self):
@@ -136,7 +137,7 @@ class MainView(ttk.Window):
             return self._controller
         except AttributeError:
             self.show_message_error("No controller set")
-            self.do_close()
+            self.quit()
 
     @controller.setter
     def controller(self, value):
@@ -156,7 +157,7 @@ class MainView(ttk.Window):
 
 
 class ItemMenu:
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, frame_menu):
         # style
         ttk.Style().configure("frame.TFrame", background="#283747")
         ttk.Style().configure(
@@ -197,8 +198,11 @@ class ItemMenu:
         # initiate
         self.window = parent
         self.controller = controller
-        self.frame_menu = ttk.Frame(parent, style="frame.TFrame")
-        self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
+        # frame
+        self.frame_menu = frame_menu
+        self.frame_data = ttk.Frame(parent)
+        self.frame_data.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
+
         # variable ttk
         self.var_name = ttk.StringVar()
         self.var_description = ttk.StringVar()
@@ -270,7 +274,7 @@ class ItemMenu:
         pass
 
     def back_main_menu(self):
-        self.frame_menu.pack_forget()
+        self.clean_widget_frame(self.frame_menu)
         MainView.create_main_menu(self.window)
 
     def state_item_menu(self, state: str):
@@ -285,11 +289,16 @@ class ItemMenu:
             str(self.var_name.get()),
             str(self.var_description.get()),
             float(str(self.var_htva_price.get())),
-            str(self.var_tva_tare.get()))
-        self.add_item_frame.pack_forget()
+            str(self.var_tva_tare.get()),
+        )
+        self.clean_widget_frame(self.frame_data)
         self.state_item_menu("normal")
 
-    def data_item(self,command_confirm):
+    def clean_widget_frame(self, frame):
+        for widget in frame.winfo_children():
+            widget.destroy()
+
+    def data_item(self, command_confirm):
         # variable
         tva_rate = ["21%", "12%", "6%"]
         # style
@@ -309,11 +318,9 @@ class ItemMenu:
             font=("Georgia", 25),
         )
         # split window in multiple frames
-        self.add_item_frame = ttk.Frame(self.window)
-        top_frame = ttk.Frame(self.add_item_frame)
-        bottom_frame = ttk.Frame(self.add_item_frame)
+        top_frame = ttk.Frame(self.frame_data)
+        bottom_frame = ttk.Frame(self.frame_data)
         # position frames
-        self.add_item_frame.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
         top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
         bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.BOTH)
         # config of columns and rows
@@ -340,14 +347,10 @@ class ItemMenu:
         lb_description = ttk.Label(
             top_frame, text="Description :", font=("Georgia", 25)
         )
-        lb_htva_price = ttk.Label(
-            top_frame, text="Prix HTVA :", font=("Georgia", 25)
-        )
+        lb_htva_price = ttk.Label(top_frame, text="Prix HTVA :", font=("Georgia", 25))
         lb_tva_tare = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 25))
         # widget entry
-        en_name = ttk.Entry(
-            top_frame, font=("Georgia", 25), textvariable=self.var_name
-        )
+        en_name = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.var_name)
         en_description = ttk.Entry(
             top_frame, font=("Georgia", 25), textvariable=self.var_description
         )
@@ -375,6 +378,16 @@ class ItemMenu:
         bt_confirm.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
 
+    def show_item_database(self):
+        # frame
+        bottom_frame = ttk.Frame(self.frame_data)
+        top_frame = ttk.Frame(self.frame_data)
+        # treeview
+        scrollbar = ttk.Scrollbar(top_frame)
+        table = ttk.Treeview(top_frame,columns=["Code Article","Nom"],yscrollcommand=scrollbar.set,selectmode="extended")
+
+
+
     def back_item_menu(self):
-        self.add_item_frame.pack_forget()
+        self.clean_widget_frame(self.frame_data)
         self.state_item_menu("normal")
