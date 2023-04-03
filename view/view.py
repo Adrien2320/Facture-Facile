@@ -271,7 +271,8 @@ class ItemMenu:
         pass
 
     def do_show_search_item_data(self):
-        pass
+        self.state_item_menu("disabled")
+        self.show_item_database()
 
     def back_main_menu(self):
         self.clean_widget_frame(self.frame_menu)
@@ -379,13 +380,51 @@ class ItemMenu:
         bt_back.pack(side=cttk.LEFT, padx=50)
 
     def show_item_database(self):
+        # style
+        ttk.Style().configure(
+            "back.TButton",
+            background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Georgia", 25),
+        )
+        ttk.Style().configure(
+            "confirm.TButton",
+            background="#2ECC71",
+            bordercolor="#2ECC71",
+            relief="flat",
+            font=("Georgia", 25),
+        )
         # frame
         bottom_frame = ttk.Frame(self.frame_data)
         top_frame = ttk.Frame(self.frame_data)
-        # treeview
-        scrollbar = ttk.Scrollbar(top_frame)
-        table = ttk.Treeview(top_frame,columns=["Code Article","Nom"],yscrollcommand=scrollbar.set,selectmode="extended")
-
+        table_frame = ttk.Frame(top_frame)
+        # position frame
+        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X, expand=True)
+        top_frame.pack(side=cttk.TOP,fill=cttk.BOTH,expand=True)
+        table_frame.pack(pady=30,padx=40,fill=cttk.BOTH,expand=True)
+        # view table
+        scrollbar = ttk.Scrollbar(table_frame,orient=cttk.VERTICAL)
+        table = ttk.Treeview(table_frame,columns=["id","name"],yscrollcommand=scrollbar.set,selectmode=cttk.BROWSE)
+        # config the scrollbar
+        scrollbar.config(command=table.yview)
+        # format column
+        table.column("#0",anchor=cttk.W,stretch=False, width=0)
+        table.column("id",anchor=cttk.W,stretch=False, width=100)
+        table.column("name",anchor=cttk.CENTER,stretch=False)
+        # heading column
+        table.heading("#0",anchor=cttk.W)
+        table.heading("id",text="Code Article",anchor=cttk.CENTER)
+        table.heading("name",text="Nom",anchor=cttk.CENTER)
+        # position view table
+        scrollbar.pack(side=cttk.RIGHT,fill=cttk.Y,padx=5)
+        table.pack(side=cttk.LEFT,fill=cttk.BOTH,expand=True)
+        # button widget
+        bt_back = ttk.Button(bottom_frame,text="Retour",style="back.TButton",command = self.back_item_menu,width = 15,)
+        bt_confirm = ttk.Button(bottom_frame,text="Confirmer",style="confirm.TButton",width = 15)
+        # button position
+        bt_back.pack(side=cttk.LEFT,padx=20,pady=10)
+        bt_confirm.pack(side=cttk.RIGHT,padx=20,pady=10)
 
 
     def back_item_menu(self):
