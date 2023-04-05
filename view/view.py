@@ -399,7 +399,7 @@ class ItemMenu:
             font=("Georgia", 25),
         )
         ttk.Style().configure(
-            "my.Treeview", background="#d3d3d3", foreground="black", rowheight=25
+            "my.Treeview", background="#283747", rowheight=25
         )
         # frame
         bottom_frame = ttk.Frame(self.frame_data)
@@ -408,7 +408,7 @@ class ItemMenu:
         # position frame
         bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X, expand=True)
         top_frame.pack(side=cttk.TOP, fill=cttk.BOTH, expand=True)
-        table_frame.pack(pady=30, padx=40, fill=cttk.BOTH, expand=True)
+        table_frame.pack(pady=50, padx=50, fill=cttk.BOTH, expand=True)
         # view table
         scrollbar = ttk.Scrollbar(table_frame, orient=cttk.VERTICAL)
         self.table = ttk.Treeview(
@@ -416,21 +416,21 @@ class ItemMenu:
             columns=["id", "name"],
             yscrollcommand=scrollbar.set,
             selectmode=cttk.BROWSE,
-            style="my.Treeview",
+            style="my.Treeview"
         )
         # config the scrollbar
         scrollbar.config(command=self.table.yview)
         # format column
         self.table.column("#0", anchor=cttk.W, stretch=False, width=0, minwidth=0)
         self.table.column("id", anchor=cttk.W, stretch=False, width=100)
-        self.table.column("name", anchor=cttk.CENTER, stretch=True, width=100)
+        self.table.column("name", anchor=cttk.W, stretch=True, width=200)
         # heading column
         self.table.heading("#0", anchor=cttk.W)
-        self.table.heading("id", text="Code Article", anchor=cttk.CENTER)
-        self.table.heading("name", text="Nom", anchor=cttk.CENTER)
+        self.table.heading("id", text="Code Article", anchor=cttk.W)
+        self.table.heading("name", text="Nom", anchor=cttk.W)
         # position view table
-        scrollbar.pack(side=cttk.RIGHT, fill=cttk.Y, padx=5)
         self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
+        scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
         # button widget
         bt_back = ttk.Button(
             bottom_frame,
@@ -440,7 +440,7 @@ class ItemMenu:
             width=15,
         )
         bt_confirm = ttk.Button(
-            bottom_frame, text="Confirmer", style="confirm.TButton", width=15
+            bottom_frame, text="Confirmer", style="confirm.TButton", width=15, command=self.show_slected
         )
         # button position
         bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
@@ -455,3 +455,17 @@ class ItemMenu:
 
         for item in items:
             self.table.insert("",ttk.END, values=(item.id_item,item.name_item))
+
+    def get_selected_row(self)-> int:
+        try:
+            for selected_item in self.table.selection():
+                item = self.table.item(selected_item)
+                print(item)
+        except IndexError:
+            pass
+            #Todo si il n'y a pas de selection
+
+
+    def show_slected(self):
+        index = self.get_selected_row()
+        print(index)
