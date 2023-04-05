@@ -14,3 +14,7 @@ class Controller:
             self.view.show_message_success("L'article a bien été enregistré.")
         else:
             self.view.show_message_failure("Veuillez remplire les données")
+
+    def load_data_items(self):
+        result = self.data.load_items()
+        return result

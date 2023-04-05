@@ -46,3 +46,17 @@ class Data:
                 [item.name_item, item.description_item, item.htva_price, item.tva_tare],
             )
             self.commit()
+
+    def load_items(self):
+        sql = """ SELECT * FROM T_Items"""
+
+        with closing(self.cursor) as cursor:
+            result = cursor.execute(sql)
+            result.row_factory = lambda cursor, row: Item(
+                id_item=row[0],
+                name_item=row[1],
+                description_item=row[2],
+                htva_price=row[3],
+                tva_tare=row[4],
+            )
+            return result.fetchall()
