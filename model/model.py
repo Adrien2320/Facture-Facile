@@ -25,7 +25,7 @@ class Data:
         self.database.commit()
 
     def create_table(self):
-        """ Crée la table items"""
+        """Crée la table items"""
         sql = """ CREATE TABLE IF NOT EXISTS T_Items (
         id_item INTEGER PRIMARY KEY AUTOINCREMENT,
         name_item TEXT NOT NULL ,
@@ -39,7 +39,7 @@ class Data:
             self.commit()
 
     def add_item(self, item: Item):
-        """ Crée un item dans la table items"""
+        """Crée un item dans la table items"""
         sql = """ INSERT INTO T_Items (name_item, description_item, htva_price_item, tva_tare_item) VALUES (?,?,?,?)"""
 
         with closing(self.cursor) as cursor:
@@ -50,7 +50,7 @@ class Data:
             self.commit()
 
     def load_items(self):
-        """ Récupère tous les articles dans la table items"""
+        """Récupère tous les articles dans la table items"""
         sql = """ SELECT * FROM T_Items"""
 
         with closing(self.cursor) as cursor:
@@ -65,7 +65,7 @@ class Data:
             return result.fetchall()
 
     def load_item(self, id_item: int):
-        """ Récupère un article dans la table items"""
+        """Récupère un article dans la table items"""
         sql = """ SELECT id_item,name_item,description_item,htva_price_item,tva_tare_item FROM T_Items WHERE id_item = ?"""
 
         with closing(self.cursor) as cursor:

@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import ttkbootstrap.dialogs as dialogs
+from model.model import Item
 
 
 class MainView(ttk.Window):
@@ -402,6 +403,7 @@ class ItemMenu:
     def back_item_menu(self):
         """Reviens sur le menu article"""
         self.clean_frame(self.frame_data)
+        self.clean_variable_ttk()
         self.state_item_menu("normal")
 
     def show_item_database(self, command_confirm):
@@ -492,8 +494,17 @@ class ItemMenu:
         """Affiche l'article, sélectionnez"""
         item = self.get_data_of_selected_item()
         self.clean_frame(self.frame_data)
+        self.set_variable_ttk(item)
+        self.data_item("")
+
+    def clean_variable_ttk(self) -> None:
+        self.var_name.set("")
+        self.var_description.set("")
+        self.var_htva_price.set("")
+        self.var_tva_tare.set("")
+
+    def set_variable_ttk(self, item: Item) -> None:
         self.var_name.set(item.name_item)
         self.var_description.set(item.description_item)
         self.var_htva_price.set(item.htva_price)
         self.var_tva_tare.set(item.tva_tare)
-        self.data_item("")
