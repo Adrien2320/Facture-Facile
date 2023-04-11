@@ -270,7 +270,7 @@ class ItemMenu:
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
-    def data_item(self, command_confirm):
+    def data_item(self):
         """Crée les widgets pour les formulaires"""
         # variable
         tva_rate = ["21%", "12%", "6%"]
@@ -301,10 +301,9 @@ class ItemMenu:
         top_frame.rowconfigure(0, weight=1)
         top_frame.rowconfigure(5, weight=1)
         # widget button
-        bt_confirm = ttk.Button(
+        self.bt_confirm_item = ttk.Button(
             bottom_frame,
             text="Confirmation",
-            command=command_confirm,
             style="confirm.TButton",
             width=15,
         )
@@ -348,13 +347,14 @@ class ItemMenu:
         en_htva_price.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
         en_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
         # position button
-        bt_confirm.pack(side=cttk.RIGHT, padx=50)
+        self.bt_confirm_item.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
 
     def show_new_item(self):
         """Affiche formulaire pour créer un article"""
         self.state_item_menu("disabled")
-        self.data_item(self.new_item)
+        self.data_item()
+        self.bt_confirm_item["command"] = self.new_item
 
     def show_modif_item(self):
         """Affiche le formulaire pour changer un article"""
@@ -367,6 +367,7 @@ class ItemMenu:
     def show_search_item(self):
         """Affiche les données d'un article"""
         self.state_item_menu("disabled")
+        self.clean_frame(self.frame_data)
         self.show_item_database(self.set_show_search_item)
         self.insert_item_in_view_item_database()
 
@@ -482,25 +483,29 @@ class ItemMenu:
 
     def get_data_of_selected_item(self):
         """Récupère les données de l'article, sélectionnez"""
-        try:
-            for selected_item in self.table.selection():
-                select = self.table.item(selected_item)
-                item = select["values"]
-                return self.controller.load_data_item(item[0])
-        except IndexError:
-            MainView.show_message_failure("Veuillez sélectionnez un élément!")
+        for selected_item in self.table.selection():
+            select = self.table.item(selected_item)
+            item = select["values"]
+            return self.controller.load_data_item(item[0])
+
 
     def set_show_search_item(self):
         """Affiche l'article, sélectionnez"""
-        item = self.get_data_of_selected_item()
-        self.clean_frame(self.frame_data)
-        self.set_variable_ttk(item)
-        self.data_item("")
+        try:
+            item = self.get_data_of_selected_item()
+            self.clean_frame(self.frame_data)
+            self.set_variable_ttk(item)
+            self.data_item()
+            self.bt_confirm_item.destroy()
+        except AttributeError:
+            self.show_search_item()
+            MainView.show_message_failure("Veuillez sélectionnez un élément!")
+
 
     def clean_variable_ttk(self) -> None:
         self.var_name.set("")
         self.var_description.set("")
-        self.var_htva_price.set("")
+        self.var_htva_price.set(00.00)
         self.var_tva_tare.set("")
 
     def set_variable_ttk(self, item: Item) -> None:
