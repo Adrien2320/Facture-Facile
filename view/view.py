@@ -498,8 +498,8 @@ class ItemMenu:
             self.data_item()
             self.bt_confirm_item.destroy()
         except AttributeError:
-            self.show_search_item()
             MainView.show_message_failure("Veuillez sélectionnez un élément!")
+            self.state_item_menu("normal")
 
 
     def clean_variable_ttk(self) -> None:
