@@ -11,14 +11,14 @@ class MainView(ttk.Window):
         # style frame
         ttk.Style().configure("frame.TFrame", background="#283747")
         # frame
-        self.main_menu_frame = ttk.Frame(self, style="frame.TFrame")
+        self.frame_menu = ttk.Frame(self, style="frame.TFrame")
         # position of the frame
-        self.main_menu_frame.pack(side=cttk.LEFT, fill=cttk.Y)
-
+        self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
+        # création du menu
         self.create_main_menu()
 
     def create_main_menu(self):
-        # style
+        # style of widgets
         ttk.Style().configure(
             "item.TButton",
             background="#E59866",
@@ -63,49 +63,48 @@ class MainView(ttk.Window):
         )
         # widget label
         lb_tittle = ttk.Label(
-            self.main_menu_frame,
+            self.frame_menu,
             text="Menu Principale",
             font=("Georgia", 20),
             background="#283747",
         )
         # widget button
         bt_item = ttk.Button(
-            self.main_menu_frame,
+            self.frame_menu,
             text="Article",
             command=self.show_article,
             width=10,
             style="item.TButton",
         )
         bt_customer = ttk.Button(
-            self.main_menu_frame,
+            self.frame_menu,
             text="Client",
             command=self.do_show_customer,
             width=10,
             style="customer.TButton",
         )
         bt_invoice = ttk.Button(
-            self.main_menu_frame,
+            self.frame_menu,
             text="Facture",
             command=self.do_show_invoice,
             width=10,
             style="invoice.TButton",
         )
         bt_close = ttk.Button(
-            self.main_menu_frame,
+            self.frame_menu,
             text="Quitter",
             command=self.quit,
             width=10,
             style="close.TButton",
         )
         bt_apropos = ttk.Button(
-            self.main_menu_frame, text="Apropos", width=10, style="apropos.TButton"
+            self.frame_menu, text="Apropos", width=10, style="apropos.TButton"
         )
         bt_setting = ttk.Button(
-            self.main_menu_frame, text="Paramètres", width=10, style="setting.TButton"
+            self.frame_menu, text="Paramètres", width=10, style="setting.TButton"
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
-        # position widget
         bt_item.pack(side=cttk.TOP, pady=30, padx=10)
         bt_customer.pack(side=cttk.TOP, padx=10)
         bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
@@ -114,20 +113,26 @@ class MainView(ttk.Window):
         bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
     def start_main_view(self):
+        # start l'interface
         self.mainloop()
 
     def show_article(self):
-        self.clean_widget_frame(self.main_menu_frame)
-        ItemMenu(self, self.controller, self.main_menu_frame)
+        # vide la frame_main_menu
+        self.clean_widget_frame(self.frame_menu)
+        # affiche le menu article
+        ItemMenu(self, self.controller, self.frame_menu)
 
     def do_show_customer(self):
+        # affiche le menu client
         pass
 
     def do_show_invoice(self):
+        # affiche le menu facture
         pass
 
     @staticmethod
     def clean_widget_frame(frame):
+        # boucle qui supprime tous les éléments de la frame
         for widget in frame.winfo_children():
             widget.destroy()
 
@@ -142,24 +147,28 @@ class MainView(ttk.Window):
 
     @controller.setter
     def controller(self, value):
+        # assigne le paramètre controller
         self._controller = value
 
     @staticmethod
     def show_message_success(text: str):
+        # message pour confirmer une action
         dialogs.Messagebox.show_info(text, "Réussi")
 
     @staticmethod
     def show_message_failure(text: str):
+        # message pour avertir qu'une action à échouer
         dialogs.Messagebox.show_info(text, "Echec")
 
     @staticmethod
     def show_message_error(text: str):
+        # message qui avertir qu'il y a un bug dans l'application
         dialogs.Messagebox.show_error(text, title="ERROR")
 
 
 class ItemMenu:
     def __init__(self, parent, controller, frame_menu):
-        # style
+        # style du menu article
         ttk.Style().configure("frame.TFrame", background="#283747")
         ttk.Style().configure(
             "add.TButton",
@@ -196,14 +205,13 @@ class ItemMenu:
             relief="flat",
             font=("Georgia", 20),
         )
-        # initiate
+        # variable de récupération
         self.window = parent
         self.controller = controller
         # frame
         self.frame_menu = frame_menu
         self.frame_data = ttk.Frame(parent)
         self.frame_data.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
-
         # variable ttk
         self.var_name = ttk.StringVar()
         self.var_description = ttk.StringVar()
@@ -220,28 +228,28 @@ class ItemMenu:
         self.bt_add = ttk.Button(
             self.frame_menu,
             text="Ajouter",
-            command=self.show_data_add_item,
+            command=self.show_new_item,
             width=10,
             style="add.TButton",
         )
         self.bt_change = ttk.Button(
             self.frame_menu,
             text="Modifier",
-            command=self.do_show_change_data,
+            command=self.show_modif_item,
             width=10,
             style="change.TButton",
         )
         self.bt_remove = ttk.Button(
             self.frame_menu,
             text="Supprimer",
-            command=self.do_show_remove_data,
+            command=self.show_delete_item,
             width=10,
             style="remove.TButton",
         )
         self.bt_item_search = ttk.Button(
             self.frame_menu,
             text="Rechercher",
-            command=self.do_show_search_item_data,
+            command=self.show_search_item,
             width=10,
             style="search.TButton",
         )
@@ -261,48 +269,8 @@ class ItemMenu:
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
-    def show_data_add_item(self):
-        self.state_item_menu("disabled")
-        self.data_item(self.add_item)
-
-    def do_show_change_data(self):
-        pass
-
-    def do_show_remove_data(self):
-        pass
-
-    def do_show_search_item_data(self):
-        self.state_item_menu("disabled")
-        self.show_item_database()
-        self.insert_item_in_view_item_database()
-
-    def back_main_menu(self):
-        self.clean_widget_frame(self.frame_menu)
-        MainView.create_main_menu(self.window)
-
-    def state_item_menu(self, state: str):
-        self.bt_add.configure(state=state)
-        self.bt_change.configure(state=state)
-        self.bt_remove.configure(state=state)
-        self.bt_item_search.configure(state=state)
-        self.bt_back.configure(state=state)
-
-    def add_item(self):
-        self.controller.add_item(
-            str(self.var_name.get()),
-            str(self.var_description.get()),
-            float(str(self.var_htva_price.get())),
-            str(self.var_tva_tare.get()),
-        )
-        self.clean_widget_frame(self.frame_data)
-        self.state_item_menu("normal")
-
-    @staticmethod
-    def clean_widget_frame(frame):
-        for widget in frame.winfo_children():
-            widget.destroy()
-
     def data_item(self, command_confirm):
+        """Crée les widgets pour les formulaires"""
         # variable
         tva_rate = ["21%", "12%", "6%"]
         # style
@@ -382,7 +350,62 @@ class ItemMenu:
         bt_confirm.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
 
-    def show_item_database(self):
+    def show_new_item(self):
+        """Affiche formulaire pour créer un article"""
+        self.state_item_menu("disabled")
+        self.data_item(self.new_item)
+
+    def show_modif_item(self):
+        """Affiche le formulaire pour changer un article"""
+        pass
+
+    def show_delete_item(self):
+        """Affiche le formulaire pour supprimer un article"""
+        pass
+
+    def show_search_item(self):
+        """Affiche les données d'un article"""
+        self.state_item_menu("disabled")
+        self.show_item_database(self.set_show_search_item)
+        self.insert_item_in_view_item_database()
+
+    def back_main_menu(self):
+        """Reviens au menu principale"""
+        self.clean_frame(self.frame_menu)
+        MainView.create_main_menu(self.window)
+
+    def state_item_menu(self, state: str):
+        """Modifie le status des boutons du menu article"""
+        self.bt_add.configure(state=state)
+        self.bt_change.configure(state=state)
+        self.bt_remove.configure(state=state)
+        self.bt_item_search.configure(state=state)
+        self.bt_back.configure(state=state)
+
+    def new_item(self):
+        """Crée un article dans la base de données"""
+        self.controller.new_item(
+            str(self.var_name.get()),
+            str(self.var_description.get()),
+            float(str(self.var_htva_price.get())),
+            str(self.var_tva_tare.get()),
+        )
+        self.clean_frame(self.frame_data)
+        self.state_item_menu("normal")
+
+    @staticmethod
+    def clean_frame(frame):
+        """Vide la frame menu"""
+        for widget in frame.winfo_children():
+            widget.destroy()
+
+    def back_item_menu(self):
+        """Reviens sur le menu article"""
+        self.clean_frame(self.frame_data)
+        self.state_item_menu("normal")
+
+    def show_item_database(self, command_confirm):
+        """Affiche les articles de la base de données"""
         # style
         ttk.Style().configure(
             "back.TButton",
@@ -398,9 +421,7 @@ class ItemMenu:
             relief="flat",
             font=("Georgia", 25),
         )
-        ttk.Style().configure(
-            "my.Treeview", background="#283747", rowheight=25
-        )
+        ttk.Style().configure("my.Treeview", background="#283747", rowheight=25)
         # frame
         bottom_frame = ttk.Frame(self.frame_data)
         top_frame = ttk.Frame(self.frame_data)
@@ -416,7 +437,7 @@ class ItemMenu:
             columns=["id", "name"],
             yscrollcommand=scrollbar.set,
             selectmode=cttk.BROWSE,
-            style="my.Treeview"
+            style="my.Treeview",
         )
         # config the scrollbar
         scrollbar.config(command=self.table.yview)
@@ -440,23 +461,25 @@ class ItemMenu:
             width=15,
         )
         bt_confirm = ttk.Button(
-            bottom_frame, text="Confirmer", style="confirm.TButton", width=15, command=self.show_item_selected
+            bottom_frame,
+            text="Confirmer",
+            style="confirm.TButton",
+            width=15,
+            command=command_confirm,
         )
         # button position
         bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
         bt_confirm.pack(side=cttk.RIGHT, padx=20, pady=10)
 
-    def back_item_menu(self):
-        self.clean_widget_frame(self.frame_data)
-        self.state_item_menu("normal")
-
     def insert_item_in_view_item_database(self):
+        """Ajout chaque article de la basse de données dans la vue"""
         items = self.controller.load_data_items()
 
         for item in items:
-            self.table.insert("",ttk.END, values=(item.id_item,item.name_item))
+            self.table.insert("", ttk.END, values=(item.id_item, item.name_item))
 
-    def get_selected_row(self):
+    def get_data_of_selected_item(self):
+        """Récupère les données de l'article, sélectionnez"""
         try:
             for selected_item in self.table.selection():
                 select = self.table.item(selected_item)
@@ -465,13 +488,12 @@ class ItemMenu:
         except IndexError:
             MainView.show_message_failure("Veuillez sélectionnez un élément!")
 
-
-    def show_item_selected(self):
-        item = self.get_selected_row()
-        self.clean_widget_frame(self.frame_data)
+    def set_show_search_item(self):
+        """Affiche l'article, sélectionnez"""
+        item = self.get_data_of_selected_item()
+        self.clean_frame(self.frame_data)
         self.var_name.set(item.name_item)
-        self.var_description.set( item.description_item)
+        self.var_description.set(item.description_item)
         self.var_htva_price.set(item.htva_price)
         self.var_tva_tare.set(item.tva_tare)
         self.data_item("")
-
