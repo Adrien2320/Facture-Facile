@@ -18,3 +18,6 @@ class Controller:
     def load_data_items(self):
         result = self.data.load_items()
         return result
+
+    def load_data_item(self, id_item):
+        return self.data.load_item(id_item)

@@ -440,7 +440,7 @@ class ItemMenu:
             width=15,
         )
         bt_confirm = ttk.Button(
-            bottom_frame, text="Confirmer", style="confirm.TButton", width=15, command=self.show_slected
+            bottom_frame, text="Confirmer", style="confirm.TButton", width=15, command=self.show_item_selected
         )
         # button position
         bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
@@ -456,16 +456,22 @@ class ItemMenu:
         for item in items:
             self.table.insert("",ttk.END, values=(item.id_item,item.name_item))
 
-    def get_selected_row(self)-> int:
+    def get_selected_row(self):
         try:
             for selected_item in self.table.selection():
-                item = self.table.item(selected_item)
-                print(item)
+                select = self.table.item(selected_item)
+                item = select["values"]
+                return self.controller.load_data_item(item[0])
         except IndexError:
-            pass
-            #Todo si il n'y a pas de selection
+            MainView.show_message_failure("Veuillez sélectionnez un élément!")
 
 
-    def show_slected(self):
-        index = self.get_selected_row()
-        print(index)
+    def show_item_selected(self):
+        item = self.get_selected_row()
+        self.clean_widget_frame(self.frame_data)
+        self.var_name.set(item.name_item)
+        self.var_description.set( item.description_item)
+        self.var_htva_price.set(item.htva_price)
+        self.var_tva_tare.set(item.tva_tare)
+        self.data_item("")
+

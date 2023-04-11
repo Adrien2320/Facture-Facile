@@ -60,3 +60,17 @@ class Data:
                 tva_tare=row[4],
             )
             return result.fetchall()
+
+    def load_item(self, id_item: int):
+        sql=""" SELECT id_item,name_item,description_item,htva_price_item,tva_tare_item FROM T_Items WHERE id_item = ?"""
+
+        with closing(self.cursor) as cursor:
+            result = cursor.execute(sql,[id_item])
+            result.row_factory = lambda cursor, row: Item(
+                id_item=row[0],
+                name_item=row[1],
+                description_item=row[2],
+                htva_price=row[3],
+                tva_tare=row[4],
+            )
+            return result.fetchone()
