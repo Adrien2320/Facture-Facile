@@ -214,6 +214,7 @@ class ItemMenu:
         self.frame_data = ttk.Frame(parent)
         self.frame_data.pack(side=cttk.RIGHT, expand=True, fill=cttk.BOTH)
         # variable ttk
+        self.var_id = ttk.IntVar()
         self.var_name = ttk.StringVar()
         self.var_description = ttk.StringVar()
         self.var_tva_tare = ttk.StringVar()
@@ -358,7 +359,12 @@ class ItemMenu:
 
     def show_modif_item(self):
         """Affiche le formulaire pour changer un article"""
-        pass
+        self.state_item_menu("disabled")
+        self.clean_frame(self.frame_data)
+        self.show_item_table()
+        self.insert_item_in_table()
+        self.bt_confirm_selected["command"] = self.set_show_modif_item
+
 
     def show_delete_item(self):
         """Affiche le formulaire pour supprimer un article"""
@@ -368,8 +374,9 @@ class ItemMenu:
         """Affiche les données d'un article"""
         self.state_item_menu("disabled")
         self.clean_frame(self.frame_data)
-        self.show_item_database(self.set_show_search_item)
-        self.insert_item_in_view_item_database()
+        self.show_item_table()
+        self.insert_item_in_table()
+        self.bt_confirm_selected["command"] = self.set_show_search_item
 
     def back_main_menu(self):
         """Reviens au menu principale"""
@@ -407,7 +414,7 @@ class ItemMenu:
         self.clean_variable_ttk()
         self.state_item_menu("normal")
 
-    def show_item_database(self, command_confirm):
+    def show_item_table(self):
         """Affiche les articles de la base de données"""
         # style
         ttk.Style().configure(
@@ -463,36 +470,34 @@ class ItemMenu:
             command=self.back_item_menu,
             width=15,
         )
-        bt_confirm = ttk.Button(
+        self.bt_confirm_selected = ttk.Button(
             bottom_frame,
             text="Confirmer",
             style="confirm.TButton",
             width=15,
-            command=command_confirm,
         )
         # button position
         bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
-        bt_confirm.pack(side=cttk.RIGHT, padx=20, pady=10)
+        self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
 
-    def insert_item_in_view_item_database(self):
+    def insert_item_in_table(self):
         """Ajout chaque article de la basse de données dans la vue"""
         items = self.controller.load_data_items()
 
         for item in items:
             self.table.insert("", ttk.END, values=(item.id_item, item.name_item))
 
-    def get_data_of_selected_item(self):
+    def get_selected(self)->Item:
         """Récupère les données de l'article, sélectionnez"""
         for selected_item in self.table.selection():
             select = self.table.item(selected_item)
             item = select["values"]
             return self.controller.load_data_item(item[0])
 
-
     def set_show_search_item(self):
         """Affiche l'article, sélectionnez"""
         try:
-            item = self.get_data_of_selected_item()
+            item = self.get_selected()
             self.clean_frame(self.frame_data)
             self.set_variable_ttk(item)
             self.data_item()
@@ -501,7 +506,6 @@ class ItemMenu:
             MainView.show_message_failure("Veuillez sélectionnez un élément!")
             self.state_item_menu("normal")
 
-
     def clean_variable_ttk(self) -> None:
         self.var_name.set("")
         self.var_description.set("")
@@ -509,7 +513,30 @@ class ItemMenu:
         self.var_tva_tare.set("")
 
     def set_variable_ttk(self, item: Item) -> None:
+        self.var_id.set(item.id_item)
         self.var_name.set(item.name_item)
         self.var_description.set(item.description_item)
         self.var_htva_price.set(item.htva_price)
         self.var_tva_tare.set(item.tva_tare)
+
+    def set_show_modif_item(self):
+        try:
+            item = self.get_selected()
+            self.clean_frame(self.frame_data)
+            self.set_variable_ttk(item)
+            self.data_item()
+            self.bt_confirm_item["command"]= self.modif_item
+        except AttributeError:
+            MainView.show_message_failure("Veuillez sélectionnez un élément!")
+            self.state_item_menu("normal")
+
+    def modif_item(self):
+        self.controller.modif_item(
+            int(self.var_id.get()),
+            str(self.var_name.get()),
+            str(self.var_description.get()),
+            float(str(self.var_htva_price.get())),
+            str(self.var_tva_tare.get()),
+        )
+        self.clean_frame(self.frame_data)
+        self.state_item_menu("normal")

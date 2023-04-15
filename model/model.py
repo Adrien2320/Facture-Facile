@@ -39,7 +39,7 @@ class Data:
             self.commit()
 
     def add_item(self, item: Item):
-        """Crée un item dans la table items"""
+        """Crée un item dans la table T_items"""
         sql = """ INSERT INTO T_Items (name_item, description_item, htva_price_item, tva_tare_item) VALUES (?,?,?,?)"""
 
         with closing(self.cursor) as cursor:
@@ -49,6 +49,16 @@ class Data:
             )
             self.commit()
 
+    def modif_item(self, item):
+        """ modifie un item dans la table T_items"""
+        sql = """ UPDATE T_Items SET name_item = ?,description_item = ?,htva_price_item = ?,tva_tare_item=?   WHERE id_item = ? """
+
+        with closing(self.cursor) as cursor:
+            cursor.execute(
+                sql,
+                [item.name_item,item.description_item,item.htva_price,item.tva_tare,item.id_item]
+            )
+            self.commit()
     def load_items(self):
         """Récupère tous les articles dans la table items"""
         sql = """ SELECT * FROM T_Items"""
@@ -78,3 +88,5 @@ class Data:
                 tva_tare=row[4],
             )
             return result.fetchone()
+
+
