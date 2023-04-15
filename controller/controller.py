@@ -24,7 +24,7 @@ class Controller:
     def modif_item(
         self, id: int, name: str, description: str, htva_price: float, tva_tare: str
     ):
-        """Modifie un item dans la base de données"""
+        """Modifie un article dans la base de données"""
         if name != "" and htva_price != "" and tva_tare != "":
             item = Item(
                 id_item=id,
@@ -34,6 +34,21 @@ class Controller:
                 tva_tare=tva_tare,
             )
             self.data.modif_item(item)
+            self.view.show_message_success("L'article a bien été enregistré.")
+        else:
+            self.view.show_message_failure("Veuillez remplire les données")
+
+    def delete_item(self, id: int, name: str, description: str, htva_price: float, tva_tare: str):
+        """ Supprime un article de la base de données"""
+        if id != "":
+            item = Item(
+                id_item=id,
+                name_item=name,
+                description_item=description,
+                htva_price=htva_price,
+                tva_tare=tva_tare,
+            )
+            self.data.delete_item(item)
             self.view.show_message_success("L'article a bien été enregistré.")
         else:
             self.view.show_message_failure("Veuillez remplire les données")
