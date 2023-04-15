@@ -371,7 +371,7 @@ class ItemMenu:
         self.clean_frame(self.frame_data)
         self.show_item_table()
         self.insert_item_in_table()
-        self.bt_confirm_selected["command"] = self.set_show_delete_item
+        self.bt_confirm_selected["command"] = self.delete_item
 
     def show_search_item(self):
         """Affiche les données d'un article"""
@@ -544,24 +544,16 @@ class ItemMenu:
         self.clean_frame(self.frame_data)
         self.state_item_menu("normal")
 
-    def set_show_delete_item(self):
+    def delete_item(self):
         try:
             item = self.get_selected()
             self.clean_frame(self.frame_data)
-            self.set_variable_ttk(item)
-            self.data_item()
-            self.bt_confirm_item["command"] = self.delete_item
+            self.controller.delete_item(item
+            )
+            self.clean_frame(self.frame_data)
+            self.state_item_menu("normal")
         except AttributeError:
             MainView.show_message_failure("Veuillez sélectionnez un élément!")
             self.state_item_menu("normal")
 
-    def delete_item(self):
-        self.controller.delete_item(
-            int(self.var_id.get()),
-            str(self.var_name.get()),
-            str(self.var_description.get()),
-            float(str(self.var_htva_price.get())),
-            str(self.var_tva_tare.get()),
-        )
-        self.clean_frame(self.frame_data)
-        self.state_item_menu("normal")
+

@@ -38,18 +38,11 @@ class Controller:
         else:
             self.view.show_message_failure("Veuillez remplire les données")
 
-    def delete_item(self, id: int, name: str, description: str, htva_price: float, tva_tare: str):
+    def delete_item(self, item: Item):
         """ Supprime un article de la base de données"""
-        if id != "":
-            item = Item(
-                id_item=id,
-                name_item=name,
-                description_item=description,
-                htva_price=htva_price,
-                tva_tare=tva_tare,
-            )
+        if item.id_item != "":
             self.data.delete_item(item)
-            self.view.show_message_success("L'article a bien été enregistré.")
+            self.view.show_message_success("L'article a bien été supprimé.")
         else:
             self.view.show_message_failure("Veuillez remplire les données")
 
