@@ -365,7 +365,6 @@ class ItemMenu:
         self.insert_item_in_table()
         self.bt_confirm_selected["command"] = self.set_show_modif_item
 
-
     def show_delete_item(self):
         """Affiche le formulaire pour supprimer un article"""
         pass
@@ -487,7 +486,7 @@ class ItemMenu:
         for item in items:
             self.table.insert("", ttk.END, values=(item.id_item, item.name_item))
 
-    def get_selected(self)->Item:
+    def get_selected(self) -> Item:
         """Récupère les données de l'article, sélectionnez"""
         for selected_item in self.table.selection():
             select = self.table.item(selected_item)
@@ -525,7 +524,7 @@ class ItemMenu:
             self.clean_frame(self.frame_data)
             self.set_variable_ttk(item)
             self.data_item()
-            self.bt_confirm_item["command"]= self.modif_item
+            self.bt_confirm_item["command"] = self.modif_item
         except AttributeError:
             MainView.show_message_failure("Veuillez sélectionnez un élément!")
             self.state_item_menu("normal")
