@@ -97,8 +97,9 @@ class Data:
             return result.fetchone()
 
     def delete_item(self, item):
-        """ Supprime un article de la table T_items"""
+        """Supprime un article de la table T_items"""
         sql = """ DELETE FROM T_Items WHERE id_item = ? """
 
         with closing(self.cursor) as cursor:
-            cursor.execute(sql,[item.id_item])
+            cursor.execute(sql, [item.id_item])
+            self.commit()
