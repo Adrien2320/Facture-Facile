@@ -1,11 +1,14 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
-import views.menuItemView
+import views.menuItemView as menuItem
+import views.windowView as windowView
+
 
 class DataItem(ttk.Frame):
     bt_confirm_item: ttk.Button
 
-    def __init__(self, window,parent):
+    def __init__(self, window, parent):
+        """Constructeur"""
         # style Frame
         ttk.Style().configure("frame.TFrame", background="#283747")
         # paramètre de la frame
@@ -105,7 +108,7 @@ class DataItem(ttk.Frame):
         """Reviens sur le menu article"""
         self.destroy()
         self.clean_variable_ttk()
-        views.menuItemView.MenuItem.state_item_menu(self.parent,"normal")
+        menuItem.MenuItem.state_item_menu(self.parent, "normal")
 
     def clean_variable_ttk(self) -> None:
         """Vide les variables"""
@@ -114,7 +117,9 @@ class DataItem(ttk.Frame):
         self.var_htva_price.set(00.00)
         self.var_tva_tare.set("")
 
-    def set_variable_ttk(self, id:int,name :str,description : str,htva_price : float,tva_tare : str) -> None:
+    def set_variable_ttk(
+        self, id: int, name: str, description: str, htva_price: float, tva_tare: str
+    ) -> None:
         """Assigne les variables"""
         self.var_id.set(id)
         self.var_name.set(name)
@@ -125,6 +130,7 @@ class DataItem(ttk.Frame):
     def show_new_item(self):
         self.create_data_item(self)
         self.bt_confirm_item["command"] = self.new_item
+
     def show_modif_item(self):
         pass
 
@@ -134,7 +140,7 @@ class DataItem(ttk.Frame):
     def show_search_item(self):
         pass
 
-    # command button
+    # method pour command button
     def new_item(self):
         """Crée un article dans la base de données"""
         self.controller.new_item(
@@ -144,7 +150,7 @@ class DataItem(ttk.Frame):
             str(self.var_tva_tare.get()),
         )
         self.destroy()
-        views.menuItemView.MenuItem.state_item_menu(self.parent,"normal")
+        menuItem.MenuItem.state_item_menu(self.parent, "normal")
 
     def modif_item(self):
         """Modifie un article"""
@@ -176,4 +182,14 @@ class DataItem(ttk.Frame):
             self.state_item_menu("normal")
         """
 
+    @property
+    def controller(self):
+        try:
+            return self._controller
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur")
+            self.quit()
 
+    @controller.setter
+    def controller(self, value):
+        self._controller = value

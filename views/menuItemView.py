@@ -1,7 +1,9 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
-import views.mainMenuView as main_menu
-import views.dataItemView as data_item
+import views.mainMenuView as mainMenu
+import views.dataItemView as dataItem
+import controllers.itemController as controller
+import models.itemModel as model
 
 
 class MenuItem(ttk.Frame):
@@ -116,33 +118,31 @@ class MenuItem(ttk.Frame):
     def new_item(self):
         """Affiche formulaire pour créer un article"""
         self.state_item_menu("disabled")
-        data_item.DataItem(self.window,self).show_new_item()
+        dataItem.DataItem(self.window, self).show_new_item()
+        dataItem.DataItem.controller = controller.ItemController(model.Data())
 
     def modif_item(self):
         """Affiche le formulaire pour changer un article"""
-        pass
-        """
         self.state_item_menu("disabled")
-        views.dataItemView.DataItem.modif_item()
-        """
+        dataItem.DataItem(self.window, self).show_modif_item()
+        dataItem.DataItem.controller = controller.ItemController(model.Data())
+
     def delete_item(self):
         """Affiche le formulaire pour supprimer un article"""
-        pass
-        """
         self.state_item_menu("disabled")
-        views.dataItemView.DataItem.delete_item()
-        """
+        dataItem.DataItem(self.window, self).show_delete_item()
+        dataItem.DataItem.controller = controller.ItemController(model.Data())
+
     def search_item(self):
         """Affiche les données d'un article"""
-        pass
-        """
         self.state_item_menu("disabled")
-        views.dataItemView.DataItem.search_item()
-        """
+        dataItem.DataItem(self.window, self).show_search_item()
+        dataItem.DataItem.controller = controller.ItemController(model.Data())
+
     def back_main_menu(self):
         """Reviens au menu principale"""
         self.destroy()
-        main_menu.MainMenu(self.window)
+        mainMenu.MainMenu(self.window)
 
     def state_item_menu(self, state: str):
         """Modifie le status des boutons du menu article"""
@@ -151,5 +151,4 @@ class MenuItem(ttk.Frame):
         self.bt_remove.configure(state=state)
         self.bt_item_search.configure(state=state)
         self.bt_back.configure(state=state)
-
 
