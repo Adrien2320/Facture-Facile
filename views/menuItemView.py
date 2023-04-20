@@ -124,20 +124,22 @@ class MenuItem(ttk.Frame):
     def modif_item(self):
         """Affiche le formulaire pour changer un article"""
         self.state_item_menu("disabled")
-        dataItem.DataItem(self.window, self).show_modif_item()
         dataItem.DataItem.controller = controller.ItemController(model.Data())
+        dataItem.DataItem(self.window, self).show_modif_item()
+
 
     def delete_item(self):
         """Affiche le formulaire pour supprimer un article"""
         self.state_item_menu("disabled")
-        dataItem.DataItem(self.window, self).show_delete_item()
         dataItem.DataItem.controller = controller.ItemController(model.Data())
+        dataItem.DataItem(self.window, self).show_delete_item()
+
 
     def search_item(self):
         """Affiche les données d'un article"""
         self.state_item_menu("disabled")
-        dataItem.DataItem(self.window, self).show_search_item()
         dataItem.DataItem.controller = controller.ItemController(model.Data())
+        dataItem.DataItem(self.window, self).show_search_item()
 
     def back_main_menu(self):
         """Reviens au menu principale"""
