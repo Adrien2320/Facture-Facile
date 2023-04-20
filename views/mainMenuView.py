@@ -1,24 +1,22 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
-import ttkbootstrap.dialogs as dialogs
+import views.menuItemView
 
 
-class MainView(ttk.Window):
-    def __init__(self, title: str, height: int, width: int):
-        # Paramètre object lui-même
-        super().__init__(themename="superhero")
-        self.title(title)
-        self.minsize(width, height)
+class MainMenu(ttk.Frame):
+    def __init__(self, window):
         # style frame
         ttk.Style().configure("frame.TFrame", background="#283747")
-        # frame
-        self.frame_menu = ttk.Frame(self, style="frame.TFrame")
+        super().__init__(window, style="frame.TFrame")
         # position of the frame
-        self.frame_menu.pack(side=cttk.LEFT, fill=cttk.Y)
-        # création du menu
-        self.create_main_menu()
+        self.pack(side=cttk.LEFT, fill=cttk.Y)
+        # creation du menu
+        self.create_main_menu(self)
+        # variable
+        self.window = window
 
-    def create_main_menu(self):
+    def create_main_menu(self, frame):
+        """ Créer les widgets du menu principal """
         # style of widgets
         ttk.Style().configure(
             "item.TButton",
@@ -64,45 +62,45 @@ class MainView(ttk.Window):
         )
         # widget label
         lb_tittle = ttk.Label(
-            self.frame_menu,
+            frame,
             text="Menu Principale",
             font=("Georgia", 20),
             background="#283747",
         )
         # widget button
         bt_item = ttk.Button(
-            self.frame_menu,
+            frame,
             text="Article",
             command=self.show_article,
             width=10,
             style="item.TButton",
         )
         bt_customer = ttk.Button(
-            self.frame_menu,
+            frame,
             text="Client",
             command=self.do_show_customer,
             width=10,
             style="customer.TButton",
         )
         bt_invoice = ttk.Button(
-            self.frame_menu,
+            frame,
             text="Facture",
             command=self.do_show_invoice,
             width=10,
             style="invoice.TButton",
         )
         bt_close = ttk.Button(
-            self.frame_menu,
+            frame,
             text="Quitter",
             command=self.quit,
             width=10,
             style="close.TButton",
         )
         bt_apropos = ttk.Button(
-            self.frame_menu, text="Apropos", width=10, style="apropos.TButton"
+            frame, text="Apropos", width=10, style="apropos.TButton"
         )
         bt_setting = ttk.Button(
-            self.frame_menu, text="Paramètres", width=10, style="setting.TButton"
+            frame, text="Paramètres", width=10, style="setting.TButton"
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
@@ -113,35 +111,19 @@ class MainView(ttk.Window):
         bt_apropos.pack(side=cttk.BOTTOM, padx=10)
         bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
-    def start_main(self):
-        # start l'interface
-        self.mainloop()
-
     def show_article(self):
-        # vide la frame_main_menu
-        self.frame_menu.destroy()
+        """ Lance le menu article """
+        # détruit la fenêtre
+        self.destroy()
         # affiche le menu article
-        # TODO lancer le menu item
+        views.menuItemView.MenuItem(self.window)
 
     def do_show_customer(self):
+        """  Lance le menu client"""
         # affiche le menu client
         pass
 
     def do_show_invoice(self):
+        """ Lance la menu facture """
         # affiche le menu facture
         pass
-
-    @staticmethod
-    def show_message_success(text: str):
-        # message pour confirmer une action
-        dialogs.Messagebox.show_info(text, "Réussi")
-
-    @staticmethod
-    def show_message_failure(text: str):
-        # message pour avertir qu'une action à échouer
-        dialogs.Messagebox.show_info(text, "Echec")
-
-    @staticmethod
-    def show_message_error(text: str):
-        # message qui avertir qu'il y a un bug dans l'application
-        dialogs.Messagebox.show_error(text, title="ERROR")

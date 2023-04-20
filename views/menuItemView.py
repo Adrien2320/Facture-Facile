@@ -1,15 +1,27 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
+import views.mainMenuView as main_menu
+import views.dataItemView as data_item
+
 
 class MenuItem(ttk.Frame):
-    def __init__(self, parent):
+    bt_add: ttk.Button
+    bt_change: ttk.Button
+    bt_remove: ttk.Button
+    bt_item_search: ttk.Button
+    bt_back: ttk.Button
+
+    def __init__(self, window):
         # style frame
         ttk.Style().configure("frame.TFrame", background="#283747")
         # paramètre object lui-même
-        super().__init__(parent,style="frame.TFrame")
+        super().__init__(window, style="frame.TFrame")
         # position self
         self.pack(side=cttk.LEFT, fill=cttk.Y)
+        # create widgets
         self.create_menu_item()
+        # variable
+        self.window = window
 
     def create_menu_item(self):
         # style du menu article
@@ -51,42 +63,42 @@ class MenuItem(ttk.Frame):
         )
         # widget label
         lb_title = ttk.Label(
-            self.frame_menu,
+            self,
             text="Menu Article",
             font=("Georgia", 20),
             background="#283747",
         )
         # widget button
         self.bt_add = ttk.Button(
-            self.frame_menu,
+            self,
             text="Ajouter",
-            command=self.show_new_item,
+            command=self.new_item,
             width=10,
             style="add.TButton",
         )
         self.bt_change = ttk.Button(
-            self.frame_menu,
+            self,
             text="Modifier",
-            command=self.show_modif_item,
+            command=self.modif_item,
             width=10,
             style="change.TButton",
         )
         self.bt_remove = ttk.Button(
-            self.frame_menu,
+            self,
             text="Supprimer",
-            command=self.show_delete_item,
+            command=self.delete_item,
             width=10,
             style="remove.TButton",
         )
         self.bt_item_search = ttk.Button(
-            self.frame_menu,
+            self,
             text="Rechercher",
-            command=self.show_search_item,
+            command=self.search_item,
             width=10,
             style="search.TButton",
         )
         self.bt_back = ttk.Button(
-            self.frame_menu,
+            self,
             text="Retour",
             command=self.back_main_menu,
             width=10,
@@ -101,40 +113,36 @@ class MenuItem(ttk.Frame):
         self.bt_item_search.pack(side=cttk.TOP, padx=10)
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
-    def show_new_item(self):
+    def new_item(self):
         """Affiche formulaire pour créer un article"""
         self.state_item_menu("disabled")
-        self.data_item()
-        self.bt_confirm_item["command"] = self.new_item
+        data_item.DataItem(self.window,self).show_new_item()
 
-    def show_modif_item(self):
+    def modif_item(self):
         """Affiche le formulaire pour changer un article"""
+        pass
+        """
         self.state_item_menu("disabled")
-        self.clean_frame(self.frame_data)
-        self.show_item_table()
-        self.insert_item_in_table()
-        self.bt_confirm_selected["command"] = self.set_show_modif_item
-
-    def show_delete_item(self):
+        views.dataItemView.DataItem.modif_item()
+        """
+    def delete_item(self):
         """Affiche le formulaire pour supprimer un article"""
+        pass
+        """
         self.state_item_menu("disabled")
-        self.clean_frame(self.frame_data)
-        self.show_item_table()
-        self.insert_item_in_table()
-        self.bt_confirm_selected["command"] = self.delete_item
-
-    def show_search_item(self):
+        views.dataItemView.DataItem.delete_item()
+        """
+    def search_item(self):
         """Affiche les données d'un article"""
+        pass
+        """
         self.state_item_menu("disabled")
-        self.clean_frame(self.frame_data)
-        self.show_item_table()
-        self.insert_item_in_table()
-        self.bt_confirm_selected["command"] = self.set_show_search_item
-
+        views.dataItemView.DataItem.search_item()
+        """
     def back_main_menu(self):
         """Reviens au menu principale"""
-        self.clean_frame(self.frame_menu)
-        Main.create_main_menu(self.window)
+        self.destroy()
+        main_menu.MainMenu(self.window)
 
     def state_item_menu(self, state: str):
         """Modifie le status des boutons du menu article"""
@@ -143,3 +151,5 @@ class MenuItem(ttk.Frame):
         self.bt_remove.configure(state=state)
         self.bt_item_search.configure(state=state)
         self.bt_back.configure(state=state)
+
+

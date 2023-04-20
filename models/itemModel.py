@@ -38,31 +38,34 @@ class Data:
             cursor.execute(sql)
             self.commit()
 
-    def add_item(self, item: Item):
+    def add_item(
+        self, name_item: str, description_item: str, htva_price: float, tva_tare: str
+    ):
         """Crée un article dans la table T_items"""
         sql = """ INSERT INTO T_Items (name_item, description_item, htva_price_item, tva_tare_item) VALUES (?,?,?,?)"""
 
         with closing(self.cursor) as cursor:
             cursor.execute(
                 sql,
-                [item.name_item, item.description_item, item.htva_price, item.tva_tare],
+                [name_item, description_item, htva_price, tva_tare],
             )
             self.commit()
 
-    def modif_item(self, item):
-        """modifie un article dans la table T_items"""
+    def modif_item(
+        self,
+        id_item: int,
+        name_item: str,
+        description_item: str,
+        htva_price: float,
+        tva_tare: str,
+    ):
+        """Modifie un article dans la table T_items"""
         sql = """ UPDATE T_Items SET name_item = ?,description_item = ?,htva_price_item = ?,tva_tare_item=?   WHERE id_item = ? """
 
         with closing(self.cursor) as cursor:
             cursor.execute(
                 sql,
-                [
-                    item.name_item,
-                    item.description_item,
-                    item.htva_price,
-                    item.tva_tare,
-                    item.id_item,
-                ],
+                [name_item, description_item, htva_price, tva_tare, id_item],
             )
             self.commit()
 
@@ -96,10 +99,10 @@ class Data:
             )
             return result.fetchone()
 
-    def delete_item(self, item):
+    def delete_item(self, id_item: int):
         """Supprime un article de la table T_items"""
         sql = """ DELETE FROM T_Items WHERE id_item = ? """
 
         with closing(self.cursor) as cursor:
-            cursor.execute(sql, [item.id_item])
+            cursor.execute(sql, [id_item])
             self.commit()
