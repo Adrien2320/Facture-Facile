@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.mainMenuView as mainMenu
+import views.customer.dataCustomerView as dataCustomer
 
 
 class MenuCustomer(ttk.Frame):
@@ -114,7 +115,8 @@ class MenuCustomer(ttk.Frame):
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def new_customer(self):
-        pass
+        self.state_customer_menu("disabled")
+        dataCustomer.DataCustomer(self.window, self).create_data_customer()
 
     def modif_customer(self):
         pass
@@ -129,3 +131,10 @@ class MenuCustomer(ttk.Frame):
         """Reviens au menu principale"""
         self.destroy()
         mainMenu.MainMenu(self.window)
+
+    def state_customer_menu(self, state: str):
+        self.bt_add.configure(state=state)
+        self.bt_change.configure(state=state)
+        self.bt_remove.configure(state=state)
+        self.bt_item_search.configure(state=state)
+        self.bt_back.configure(state=state)
