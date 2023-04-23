@@ -1,6 +1,6 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
-import views.menuItemView as menuItem
+import views.items.menuItemView as menuItem
 import views.windowView as windowView
 from models.itemModel import Item
 

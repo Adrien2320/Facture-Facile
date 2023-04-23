@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
-import views.menuItemView
+import views.items.menuItemView as menuItem
+import views.customer.menuCustomerView as menuCustomer
 
 
 class MainMenu(ttk.Frame):
@@ -116,12 +117,13 @@ class MainMenu(ttk.Frame):
         # détruit le menu principal
         self.destroy()
         # affiche le menu article
-        views.menuItemView.MenuItem(self.window)
+        menuItem.MenuItem(self.window)
 
     def do_show_customer(self):
         """Lance le menu client"""
+        self.destroy()
         # affiche le menu client
-        pass
+        menuCustomer.MenuCustomer(self.window)
 
     def do_show_invoice(self):
         """Lance la menu facture"""

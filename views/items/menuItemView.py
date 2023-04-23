@@ -1,7 +1,7 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.mainMenuView as mainMenu
-import views.dataItemView as dataItem
+import views.items.dataItemView as dataItem
 import controllers.itemController as controller
 import models.itemModel as model
 
@@ -29,7 +29,6 @@ class MenuItem(ttk.Frame):
     def create_menu_item(self):
         """Creation du menu article"""
         # style du menu article
-        ttk.Style().configure("frame.TFrame", background="#283747")
         ttk.Style().configure(
             "add.TButton",
             background="#8BC34A",
