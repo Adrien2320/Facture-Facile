@@ -173,6 +173,20 @@ class DataItem(ttk.Frame):
         bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
         self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
 
+    def insert_item_in_table(self):
+        """Ajout chaque article de la basse de données dans la vue"""
+        items = self.controller.load_data_items()
+
+        for item in items:
+            self.table.insert("", ttk.END, values=(item.id_item, item.name_item))
+
+    def get_selected(self) -> Item:
+        """Récupère les données de l'article, sélectionnez"""
+        for selected_item in self.table.selection():
+            select = self.table.item(selected_item)
+            item = select["values"]
+            return self.controller.load_data_item(item[0])
+
     def clean_frame(self):
         """vide la frame"""
         for widget in self.winfo_children():
@@ -217,7 +231,7 @@ class DataItem(ttk.Frame):
         menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
     def show_search_item(self):
-        """Affiche le formulaire pour rechercher un article"""
+        """Affiche la table d'article pour sélectionner l'article à rechercher"""
         self.create_table()
         self.insert_item_in_table()
         self.bt_confirm_selected["command"] = self.set_search_item
@@ -240,26 +254,30 @@ class DataItem(ttk.Frame):
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
             menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
-    def insert_item_in_table(self):
-        """Ajout chaque article de la basse de données dans la vue"""
-        items = self.controller.load_data_items()
+    def show_modif_item(self):
+        """ Affiche la table d'article pour sélectionner l'article à modifier  """
+        self.create_table()
+        self.insert_item_in_table()
+        self.bt_confirm_selected["command"] = self.set_modif_item
 
-        for item in items:
-            self.table.insert("", ttk.END, values=(item.id_item, item.name_item))
-
-    def get_selected(self) -> Item:
-        """Récupère les données de l'article, sélectionnez"""
-        for selected_item in self.table.selection():
-            select = self.table.item(selected_item)
-            item = select["values"]
-            return self.controller.load_data_item(item[0])
-
-    # method pour command button
+    def set_modif_item(self):
+        """ Insert les données dans le formulaire pour modifier un article """
+        try:
+            item = self.get_selected()
+            self.set_variable_ttk(item.id_item,
+                item.name_item,
+                item.description_item,
+                item.htva_price,
+                item.tva_tare,)
+            self.clean_frame()
+            self.create_data_item()
+            self.bt_confirm_item["command"] = self.modif_item
+        except AttributeError:
+            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
     def modif_item(self):
         """Modifie un article"""
-        pass
-        """
         self.controller.modif_item(
             int(self.var_id.get()),
             str(self.var_name.get()),
@@ -267,24 +285,25 @@ class DataItem(ttk.Frame):
             float(str(self.var_htva_price.get())),
             str(self.var_tva_tare.get()),
         )
-        self.clean_frame(self.frame_data)
-        self.state_item_menu("normal")
-        """
+        self.destroy()
+        menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
+
+    def show_delete_item(self):
+        """ Affiche la table d'article pour sélectionner l'article à supprimer """
+        self.create_table()
+        self.insert_item_in_table()
+        self.bt_confirm_selected["command"] = self.delete_item
 
     def delete_item(self):
         """Supprime un article"""
-        pass
-        """
         try:
             item = self.get_selected()
-            self.clean_frame(self.frame_data)
-            self.controller.delete_item(item)
-            self.clean_frame(self.frame_data)
-            self.state_item_menu("normal")
+            self.controller.delete_item(item.id_item)
+            self.destroy()
+            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
         except AttributeError:
-            Main.show_message_failure("Veuillez sélectionnez un élément!")
-            self.state_item_menu("normal")
-        """
+            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
     @property
     def controller(self):
