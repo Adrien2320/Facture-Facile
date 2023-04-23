@@ -29,7 +29,7 @@ class DataItem(ttk.Frame):
         self.menu_item = menu_item
 
     def create_data_item(self):
-        """Crée les widgets pour les formulaires"""
+        """Création des widgets pour le formulaire article"""
         # variable
         tva_rate = ["21%", "12%", "6%"]
         # style
@@ -108,7 +108,7 @@ class DataItem(ttk.Frame):
         bt_back.pack(side=cttk.LEFT, padx=50)
 
     def create_table(self):
-        """Affiche les articles de la base de données"""
+        """Affiche tous les articles dans une treeview"""
         # style
         ttk.Style().configure(
             "back.TButton",
@@ -174,7 +174,7 @@ class DataItem(ttk.Frame):
         self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
 
     def insert_item_in_table(self):
-        """Ajout chaque article de la basse de données dans la vue"""
+        """Ajout chaque article de la table"""
         items = self.controller.load_data_items()
 
         for item in items:
@@ -206,7 +206,12 @@ class DataItem(ttk.Frame):
         self.var_tva_tare.set("")
 
     def set_variable_ttk(
-        self, id_item: int, name: str, description: str, htva_price: float, tva_tare: str
+        self,
+        id_item: int,
+        name: str,
+        description: str,
+        htva_price: float,
+        tva_tare: str,
     ) -> None:
         """Assigne les variables"""
         self.var_id.set(id_item)
@@ -216,6 +221,7 @@ class DataItem(ttk.Frame):
         self.var_tva_tare.set(tva_tare)
 
     def show_new_item(self):
+        """Affiche le formulaire pour créer un article"""
         self.create_data_item()
         self.bt_confirm_item["command"] = self.new_item
 
@@ -237,7 +243,7 @@ class DataItem(ttk.Frame):
         self.bt_confirm_selected["command"] = self.set_search_item
 
     def set_search_item(self):
-        """Insert les données récolté dans la vue dataItem"""
+        """Insert les données récolté dans le formulaire de recherche d'un article"""
         try:
             item = self.get_selected()
             self.set_variable_ttk(
@@ -255,20 +261,22 @@ class DataItem(ttk.Frame):
             menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
     def show_modif_item(self):
-        """ Affiche la table d'article pour sélectionner l'article à modifier  """
+        """Affiche la table pour sélectionner l'article à modifier"""
         self.create_table()
         self.insert_item_in_table()
         self.bt_confirm_selected["command"] = self.set_modif_item
 
     def set_modif_item(self):
-        """ Insert les données dans le formulaire pour modifier un article """
+        """Insert les données dans le formulaire pour modifier un article"""
         try:
             item = self.get_selected()
-            self.set_variable_ttk(item.id_item,
+            self.set_variable_ttk(
+                item.id_item,
                 item.name_item,
                 item.description_item,
                 item.htva_price,
-                item.tva_tare,)
+                item.tva_tare,
+            )
             self.clean_frame()
             self.create_data_item()
             self.bt_confirm_item["command"] = self.modif_item
@@ -289,7 +297,7 @@ class DataItem(ttk.Frame):
         menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
     def show_delete_item(self):
-        """ Affiche la table d'article pour sélectionner l'article à supprimer """
+        """Affiche la table pour sélectionner l'article à supprimer"""
         self.create_table()
         self.insert_item_in_table()
         self.bt_confirm_selected["command"] = self.delete_item
@@ -307,6 +315,7 @@ class DataItem(ttk.Frame):
 
     @property
     def controller(self):
+        """Créer le paramètre controller"""
         try:
             return self._controller
         except AttributeError:
@@ -315,4 +324,5 @@ class DataItem(ttk.Frame):
 
     @controller.setter
     def controller(self, value):
+        """Assigne le paramètre controller"""
         self._controller = value

@@ -5,18 +5,20 @@ import views.menuItemView
 
 class MainMenu(ttk.Frame):
     def __init__(self, window):
+        """constructeur"""
         # style frame
         ttk.Style().configure("frame.TFrame", background="#283747")
+        # paramètre de la frame
         super().__init__(window, style="frame.TFrame")
         # position of the frame
         self.pack(side=cttk.LEFT, fill=cttk.Y)
         # creation du menu
-        self.create_main_menu(self)
+        self.create_main_menu()
         # variable
         self.window = window
 
-    def create_main_menu(self, frame):
-        """ Créer les widgets du menu principal """
+    def create_main_menu(self):
+        """Création des widgets du menu principal"""
         # style of widgets
         ttk.Style().configure(
             "item.TButton",
@@ -62,45 +64,43 @@ class MainMenu(ttk.Frame):
         )
         # widget label
         lb_tittle = ttk.Label(
-            frame,
+            self,
             text="Menu Principale",
             font=("Georgia", 20),
             background="#283747",
         )
         # widget button
         bt_item = ttk.Button(
-            frame,
+            self,
             text="Article",
             command=self.show_article,
             width=10,
             style="item.TButton",
         )
         bt_customer = ttk.Button(
-            frame,
+            self,
             text="Client",
             command=self.do_show_customer,
             width=10,
             style="customer.TButton",
         )
         bt_invoice = ttk.Button(
-            frame,
+            self,
             text="Facture",
             command=self.do_show_invoice,
             width=10,
             style="invoice.TButton",
         )
         bt_close = ttk.Button(
-            frame,
+            self,
             text="Quitter",
             command=self.quit,
             width=10,
             style="close.TButton",
         )
-        bt_apropos = ttk.Button(
-            frame, text="Apropos", width=10, style="apropos.TButton"
-        )
+        bt_apropos = ttk.Button(self, text="Apropos", width=10, style="apropos.TButton")
         bt_setting = ttk.Button(
-            frame, text="Paramètres", width=10, style="setting.TButton"
+            self, text="Paramètres", width=10, style="setting.TButton"
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
@@ -112,18 +112,18 @@ class MainMenu(ttk.Frame):
         bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
     def show_article(self):
-        """ Lance le menu article """
-        # détruit la fenêtre
+        """Lance le menu article"""
+        # détruit le menu principal
         self.destroy()
         # affiche le menu article
         views.menuItemView.MenuItem(self.window)
 
     def do_show_customer(self):
-        """  Lance le menu client"""
+        """Lance le menu client"""
         # affiche le menu client
         pass
 
     def do_show_invoice(self):
-        """ Lance la menu facture """
+        """Lance la menu facture"""
         # affiche le menu facture
         pass

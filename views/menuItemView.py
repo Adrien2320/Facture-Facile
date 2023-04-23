@@ -14,18 +14,20 @@ class MenuItem(ttk.Frame):
     bt_back: ttk.Button
 
     def __init__(self, window):
+        """Constructeur"""
         # style frame
         ttk.Style().configure("frame.TFrame", background="#283747")
-        # paramètre object lui-même
+        # paramètre de la frame
         super().__init__(window, style="frame.TFrame")
-        # position self
+        # position de la frame
         self.pack(side=cttk.LEFT, fill=cttk.Y)
-        # create widgets
+        # creation du menu article
         self.create_menu_item()
         # variable
         self.window = window
 
     def create_menu_item(self):
+        """Creation du menu article"""
         # style du menu article
         ttk.Style().configure("frame.TFrame", background="#283747")
         ttk.Style().configure(
@@ -116,27 +118,25 @@ class MenuItem(ttk.Frame):
         self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def new_item(self):
-        """Affiche formulaire pour créer un article"""
+        """Lance la procédure pour créer un article"""
         self.state_item_menu("disabled")
         dataItem.DataItem(self.window, self).show_new_item()
         dataItem.DataItem.controller = controller.ItemController(model.Data())
 
     def modif_item(self):
-        """Affiche le formulaire pour changer un article"""
+        """Lance la procédure pour modifier un article"""
         self.state_item_menu("disabled")
         dataItem.DataItem.controller = controller.ItemController(model.Data())
         dataItem.DataItem(self.window, self).show_modif_item()
 
-
     def delete_item(self):
-        """Affiche le formulaire pour supprimer un article"""
+        """Lance la procédure pour supprimer un article"""
         self.state_item_menu("disabled")
         dataItem.DataItem.controller = controller.ItemController(model.Data())
         dataItem.DataItem(self.window, self).show_delete_item()
 
-
     def search_item(self):
-        """Affiche les données d'un article"""
+        """Lance la procédure pour rechercher un article"""
         self.state_item_menu("disabled")
         dataItem.DataItem.controller = controller.ItemController(model.Data())
         dataItem.DataItem(self.window, self).show_search_item()
@@ -153,4 +153,3 @@ class MenuItem(ttk.Frame):
         self.bt_remove.configure(state=state)
         self.bt_item_search.configure(state=state)
         self.bt_back.configure(state=state)
-

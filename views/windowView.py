@@ -5,21 +5,23 @@ import views.mainMenuView
 
 class Window(ttk.Window):
     def __init__(self, title: str, height: int, width: int):
-        """ Constructeur de la fenêtre """
+        """Constructeur de la fenêtre"""
         # Paramètre object lui-même
         super().__init__(themename="superhero")
+        # nomme la fenêtre
         self.title(title)
+        # assigne la taille minimale de la fenêtre
         self.minsize(width, height)
         # création du menu principale
         views.mainMenuView.MainMenu(self)
 
     def start_main(self):
-        """ Lance la fenêtre """
+        """Lance la fenêtre"""
         self.mainloop()
 
     @staticmethod
     def show_message_success(text: str):
-        """Message pour confirmer une action"""
+        """Message pour confirmer la réussite d'une action"""
         dialogs.Messagebox.show_info(text, "Réussi")
 
     @staticmethod
