@@ -66,7 +66,7 @@ class MainMenu(ttk.Frame):
         # widget label
         lb_tittle = ttk.Label(
             self,
-            text="Menu Principale",
+            text="Menu Principal",
             font=("Georgia", 20),
             background="#283747",
         )
@@ -123,7 +123,7 @@ class MainMenu(ttk.Frame):
         """Lance le menu client"""
         self.destroy()
         # affiche le menu client
-        menuCustomer.MenuCustomer(self.window)
+        menuCustomer.MenuCustomer(self.window).create_menu_customer()
 
     def do_show_invoice(self):
         """Lance la menu facture"""

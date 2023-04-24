@@ -108,7 +108,7 @@ class MenuItem(ttk.Frame):
             style="back.TButton",
         )
         # position label
-        lb_title.pack(side=cttk.TOP, padx=10, pady=10)
+        lb_title.pack(side=cttk.TOP, padx=10, pady=20)
         # position button
         self.bt_add.pack(side=cttk.TOP, padx=10, pady=30)
         self.bt_change.pack(side=cttk.TOP, padx=10)

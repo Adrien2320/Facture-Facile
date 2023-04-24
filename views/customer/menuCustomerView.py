@@ -19,8 +19,6 @@ class MenuCustomer(ttk.Frame):
         super().__init__(window, style="frame.TFrame")
         # position de la frame
         self.pack(side=cttk.LEFT, fill=cttk.Y)
-        # creation du menu client
-        self.create_menu_customer()
         # variable
         self.window = window
 
@@ -70,35 +68,35 @@ class MenuCustomer(ttk.Frame):
             background="#283747",
         )
         # widget button
-        self.bt_add = ttk.Button(
+        self.bt_add_customer = ttk.Button(
             self,
             text="Ajouter",
             command=self.new_customer,
             width=10,
             style="add.TButton",
         )
-        self.bt_change = ttk.Button(
+        self.bt_change_customer = ttk.Button(
             self,
             text="Modifier",
             command=self.modif_customer,
             width=10,
             style="change.TButton",
         )
-        self.bt_remove = ttk.Button(
+        self.bt_remove_customer = ttk.Button(
             self,
             text="Supprimer",
             command=self.delete_customer,
             width=10,
             style="remove.TButton",
         )
-        self.bt_item_search = ttk.Button(
+        self.bt_search_customer = ttk.Button(
             self,
             text="Rechercher",
             command=self.search_customer,
             width=10,
             style="search.TButton",
         )
-        self.bt_back = ttk.Button(
+        self.bt_back_customer = ttk.Button(
             self,
             text="Retour",
             command=self.back_main_menu,
@@ -108,15 +106,15 @@ class MenuCustomer(ttk.Frame):
         # position label
         lb_title.pack(side=cttk.TOP, padx=10, pady=10)
         # position button
-        self.bt_add.pack(side=cttk.TOP, padx=10, pady=30)
-        self.bt_change.pack(side=cttk.TOP, padx=10)
-        self.bt_remove.pack(side=cttk.TOP, padx=10, pady=30)
-        self.bt_item_search.pack(side=cttk.TOP, padx=10)
-        self.bt_back.pack(side=cttk.BOTTOM, padx=10, pady=30)
+        self.bt_add_customer.pack(side=cttk.TOP, padx=10, pady=30)
+        self.bt_change_customer.pack(side=cttk.TOP, padx=10)
+        self.bt_remove_customer.pack(side=cttk.TOP, padx=10, pady=30)
+        self.bt_search_customer.pack(side=cttk.TOP, padx=10)
+        self.bt_back_customer.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def new_customer(self):
         self.state_customer_menu("disabled")
-        dataCustomer.DataCustomer(self.window, self).create_data_customer()
+        dataCustomer.DataCustomer(self.window, self).show_new_customer()
 
     def modif_customer(self):
         pass
@@ -133,8 +131,8 @@ class MenuCustomer(ttk.Frame):
         mainMenu.MainMenu(self.window)
 
     def state_customer_menu(self, state: str):
-        self.bt_add.configure(state=state)
-        self.bt_change.configure(state=state)
-        self.bt_remove.configure(state=state)
-        self.bt_item_search.configure(state=state)
-        self.bt_back.configure(state=state)
+        self.bt_add_customer.configure(state=state)
+        self.bt_change_customer.configure(state=state)
+        self.bt_remove_customer.configure(state=state)
+        self.bt_search_customer.configure(state=state)
+        self.bt_back_customer.configure(state=state)
