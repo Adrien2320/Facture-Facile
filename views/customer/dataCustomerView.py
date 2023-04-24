@@ -19,7 +19,10 @@ class DataCustomer(ttk.Frame):
         # variable
         self.window = window
         self.menu_customer = menu_customer
+        self.type = ["Particulier", "Professionnel"]
+        self.postal_code = self.insert_postal_code()
         # variable ttk
+        self.var_id = ttk.IntVar()
         self.var_name = ttk.StringVar()
         self.var_first_name = ttk.StringVar()
         self.var_address = ttk.StringVar()
@@ -28,6 +31,10 @@ class DataCustomer(ttk.Frame):
         self.var_type = ttk.StringVar()
         self.var_email = ttk.StringVar()
         self.var_phone = ttk.StringVar()
+
+    def insert_postal_code(self) -> list:
+        """ Récupère les localités et code postal dans la base de données. Ensuite les retourne sous une liste"""
+        pass
 
     def create_data_customer(self):
         """Création des widgets pour le formulaire client"""
@@ -83,19 +90,55 @@ class DataCustomer(ttk.Frame):
         lb_email = ttk.Label(top_frame, text="Email :", font=("Georgia", 25))
         lb_phone = ttk.Label(top_frame, text="Téléphone :", font=("Georgia", 25))
         # widget Entry
-        en_name = ttk.Entry(top_frame,font=("Georgia", 25), textvariable=self.var_name)
+        en_name = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.var_name)
+        en_first_name = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_first_name
+        )
+        en_address = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_address
+        )
+        en_tva = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.var_tva)
+        en_email = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_email
+        )
+        en_phone = ttk.Entry(
+            top_frame, font=("Georgia", 25), textvariable=self.var_phone
+        )
+        # widget combobox
+        cbb_type = ttk.Combobox(
+            top_frame,
+            font=("Georgia", 25),
+            textvariable=self.var_type,
+            values=self.type,
+        )
+        cbb_postal_code = ttk.Combobox(
+            top_frame,
+            font=("Georgia", 25),
+            textvariable=self.var_postal_code,
+            values=self.postal_code,
+        )
+        # position button
+        self.bt_confirm_customer.pack(side=cttk.RIGHT, padx=50)
+        bt_back.pack(side=cttk.LEFT, padx=50)
         # position Label
         lb_name.grid(column=0, row=1, pady=10)
         lb_first_name.grid(column=0, row=2, pady=10)
         lb_address.grid(column=0, row=3, pady=10)
         lb_postal_code.grid(column=0, row=4, pady=10)
-        lb_tva.grid(column=0, row=5, pady=10,padx=50)
+        lb_tva.grid(column=0, row=5, pady=10, padx=50)
         lb_type.grid(column=0, row=6, pady=10)
         lb_email.grid(column=0, row=7, pady=10)
         lb_phone.grid(column=0, row=8, pady=10)
-        # position button
-        self.bt_confirm_customer.pack(side=cttk.RIGHT, padx=50)
-        bt_back.pack(side=cttk.LEFT, padx=50)
+        # position entry
+        en_name.grid(column=1, row=1, pady=10)
+        en_first_name.grid(column=1, row=2, pady=10)
+        en_address.grid(column=1, row=3, pady=10)
+        en_tva.grid(column=1, row=5, pady=10)
+        en_email.grid(column=1, row=7, pady=10)
+        en_phone.grid(column=1, row=8, pady=10)
+        # position combobox
+        cbb_type.grid(column=1, row=6, pady=10)
+        cbb_postal_code.grid(column=1, row=4, pady=10)
 
     def back_customer_menu(self):
         self.destroy()
