@@ -4,6 +4,7 @@ import views.mainMenuView as mainMenu
 import views.customer.dataCustomerView as dataCustomer
 
 
+
 class MenuCustomer(ttk.Frame):
     bt_add: ttk.Button
     bt_change: ttk.Button
@@ -115,6 +116,7 @@ class MenuCustomer(ttk.Frame):
     def new_customer(self):
         self.state_customer_menu("disabled")
         dataCustomer.DataCustomer(self.window, self).show_new_customer()
+        # dataCustomer.DataCustomer.controller = controller.CustomerController()
 
     def modif_customer(self):
         pass

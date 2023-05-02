@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.customer.menuCustomerView as menuCustomer
+import views.windowView as windowView
 
 
 class DataCustomer(ttk.Frame):
@@ -33,7 +34,7 @@ class DataCustomer(ttk.Frame):
 
     def insert_postal_code(self) -> list:
         """Récupère les localités et code postal dans la base de données. Ensuite les retourne sous une liste"""
-        pass
+        result =
 
     def create_data_customer(self):
         """Création des widgets pour le formulaire client"""
@@ -159,3 +160,17 @@ class DataCustomer(ttk.Frame):
         # envoyer les données vers le controller pour créer client
         menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
         self.destroy()
+
+    @property
+    def controller(self):
+        """Créer le paramètre controller"""
+        try:
+            return self._controller
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour client")
+            self.quit()
+
+    @controller.setter
+    def controller(self, value):
+        """Assigne le paramètre controller"""
+        self._controller = value
