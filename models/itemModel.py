@@ -14,17 +14,17 @@ class Item:
 
 class Data:
     def __init__(self):
-        """ Constructeur """
+        """Constructeur"""
         self.database = sqlite3.connect("data_facture_facile.db")
         self.create_table()
 
     @property
     def cursor(self) -> sqlite3.Cursor:
-        """ Créer le paramètre """
+        """Créer le paramètre"""
         return self.database.cursor()
 
     def commit(self):
-        """ Sauvegarde les modifications appliquée à la table """
+        """Sauvegarde les modifications appliquée à la table"""
         self.database.commit()
 
     def create_table(self):

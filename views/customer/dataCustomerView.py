@@ -32,9 +32,10 @@ class DataCustomer(ttk.Frame):
         self.var_email = ttk.StringVar()
         self.var_phone = ttk.StringVar()
 
-    def insert_postal_code(self) -> list:
+    def insert_postal_code(self):
         """Récupère les localités et code postal dans la base de données. Ensuite les retourne sous une liste"""
-        result =
+        result = self.controllerZipcode.loads_zipcode()
+        print(result)
 
     def create_data_customer(self):
         """Création des widgets pour le formulaire client"""
@@ -162,15 +163,29 @@ class DataCustomer(ttk.Frame):
         self.destroy()
 
     @property
-    def controller(self):
-        """Créer le paramètre controller"""
+    def controllerZipcode(self):
+        """Créer le paramètre controller du zipcode"""
         try:
-            return self._controller
+            return self._controllerZipcode
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour code postal")
+            self.quit()
+
+    @controllerZipcode.setter
+    def controllerZipcode(self, value):
+        """Assigne le paramètre controller du zipcode"""
+        self._controllerZipcode = value
+
+    @property
+    def controllerCustomer(self):
+        """Créer le paramètre controller du customer"""
+        try:
+            return self._controllerCustomer
         except AttributeError:
             windowView.Window.show_message_error("Pas de controlleur pour client")
             self.quit()
 
-    @controller.setter
-    def controller(self, value):
-        """Assigne le paramètre controller"""
-        self._controller = value
+    @controllerCustomer.setter
+    def controllerCustomer(self, value):
+        """Assigne le paramètre controller du customer"""
+        self._controllerCustomer = value

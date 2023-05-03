@@ -17,7 +17,6 @@ class Customer:
 
 
 class Customers:
-
     def __init__(self):
         """Constructeur"""
         self.database = sqlite3.connect("data_facture_facile.db")

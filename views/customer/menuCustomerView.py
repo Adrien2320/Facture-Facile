@@ -2,7 +2,10 @@ import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.mainMenuView as mainMenu
 import views.customer.dataCustomerView as dataCustomer
-
+import controllers.customerController as controllerCustomer
+import models.customerModel as modelCustomer
+import controllers.zipcodeController as controllerZipcode
+import models.zipcodeModel as modelZipcode
 
 
 class MenuCustomer(ttk.Frame):
@@ -115,8 +118,14 @@ class MenuCustomer(ttk.Frame):
 
     def new_customer(self):
         self.state_customer_menu("disabled")
+
+        dataCustomer.DataCustomer.controllerZipcode = (
+            controllerZipcode.ZipCodeController(modelZipcode.ZipCodes())
+        )
+        dataCustomer.DataCustomer.controllerCustomer = (
+            controllerCustomer.CustomerController(modelCustomer.Customers())
+        )
         dataCustomer.DataCustomer(self.window, self).show_new_customer()
-        # dataCustomer.DataCustomer.controller = controller.CustomerController()
 
     def modif_customer(self):
         pass
