@@ -48,3 +48,30 @@ class CustomerController:
         else:
             windowView.Window.show_message_failure("Veuillez remplire les données")
 
+    def modif_item(self,
+            idCustomer:int,
+            nameCustomer: str,
+            firstNameCustomer: str,
+            addressCustomer: str,
+            postalCodeCustomer: int,
+            typeCustomer: str,
+            numberTvaCustomer: str,
+            emailCustomer: str,
+            phoneCustomer: str,
+        ):
+        """Modifie un article dans la table T_items"""
+        if  idCustomer!="" and nameCustomer != "" and firstNameCustomer != "" and addressCustomer != "" and postalCodeCustomer != "" and typeCustomer != "" :
+            self.data.modif_item(
+                idCustomer,
+                nameCustomer,
+                firstNameCustomer,
+                addressCustomer,
+                postalCodeCustomer,
+                typeCustomer,
+                numberTvaCustomer,
+                emailCustomer,
+                phoneCustomer,)
+            windowView.Window.show_message_success("Le client a bien été modifier.")
+        else:
+            windowView.Window.show_message_failure("Veuillez remplire les données")
+

@@ -372,5 +372,39 @@ class DataCustomer(ttk.Frame):
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
             menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
 
+    def show_modif_customer(self):
+        """Affiche la table pour sélectionner le client à modifier"""
+        self.create_table_customer()
+        self.insert_customer_in_table()
+        self.bt_confirm_selected["command"] = self.set_modif_customer
+
+    def set_modif_customer(self):
+        """Insert les données dans le formulaire pour modifier un client"""
+        try:
+            customer = self.get_selected()
+            self.set_variable_ttk(customer.id_customer,customer.name_customer,customer.first_name,customer.address_customer,customer.postalCode_customer,customer.numberTva_customer,customer.type_customer,customer.email_customer,customer.phone_customer)
+            self.clean_frame()
+            self.create_data_customer()
+            self.bt_confirm_customer["command"] = self.modif_customer
+        except AttributeError:
+            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+
+    def modif_customer(self):
+        """Modifie un client"""
+        self.controllerCustomer.modif_item(
+            int(self.var_idCustomer.get()),
+            str(self.var_name.get()),
+            str(self.var_first_name.get()),
+            str(self.var_address.get()),
+            int(self.cbb_postal_code.current() + 1),
+            str(self.var_type.get()),
+            str(self.var_number_tva.get()),
+            str(self.var_email.get()),
+            str(self.var_phone.get()),
+        )
+        self.destroy()
+        menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+
 
 
