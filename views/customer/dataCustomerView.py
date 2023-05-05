@@ -187,6 +187,84 @@ class DataCustomer(ttk.Frame):
         cbb_type.grid(column=1, row=6, sticky=cttk.EW, pady=10, padx=20)
         self.cbb_postal_code.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=20)
 
+    def create_table_customer(self):
+        """Affiche tous les clients dans une treeview"""
+        # style
+        ttk.Style().configure(
+            "back.TButton",
+            background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Georgia", 15),
+        )
+        ttk.Style().configure(
+            "confirm.TButton",
+            background="#2ECC71",
+            bordercolor="#2ECC71",
+            relief="flat",
+            font=("Georgia", 15),
+        )
+        ttk.Style().configure("my.Treeview", background="#283747", rowheight=25)
+        # Frame
+        bottom_frame = ttk.Frame(self)
+        top_frame = ttk.Frame(self)
+        table_frame = ttk.Frame(top_frame)
+        # position frame
+        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X, expand=True)
+        top_frame.pack(side=cttk.TOP, fill=cttk.BOTH, expand=True)
+        table_frame.pack(pady=50, padx=50, fill=cttk.BOTH, expand=True)
+        # views table
+        scrollbar = ttk.Scrollbar(table_frame, orient=cttk.VERTICAL)
+        self.table = ttk.Treeview(
+            table_frame,
+            columns=["id", "name", "firstName", "address"],
+            yscrollcommand=scrollbar.set,
+            selectmode=cttk.BROWSE,
+            style="my.Treeview",
+        )
+        # config the scrollbar
+        scrollbar.config(command=self.table.yview)
+        # format column
+        self.table.column("#0", anchor=cttk.W, stretch=False, width=0, minwidth=0)
+        self.table.column("id", anchor=cttk.W, stretch=False, width=200)
+        self.table.column("name", anchor=cttk.W, stretch=True, width=200)
+        self.table.column("firstName", anchor=cttk.W, stretch=True, width=200)
+        self.table.column("address", anchor=cttk.W, stretch=True, width=200)
+        # heading column
+        self.table.heading("#0", anchor=cttk.W)
+        self.table.heading("id", text="Numéro Client", anchor=cttk.W)
+        self.table.heading("name", text="Nom", anchor=cttk.W)
+        self.table.heading("firstName", text="Prénom", anchor=cttk.W)
+        self.table.heading("address", text="Adresse", anchor=cttk.W)
+        # position views table
+        self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
+        scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
+        # button widget
+        bt_back = ttk.Button(
+            bottom_frame,
+            text="Retour",
+            style="back.TButton",
+            command=self.back_customer_menu,
+            width=15,
+        )
+        self.bt_confirm_selected = ttk.Button(
+            bottom_frame,
+            text="Confirmer",
+            style="confirm.TButton",
+            width=15,
+        )
+        # button position
+        bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
+        self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
+
+    def insert_customer_in_table(self):
+        """Ajout chaque client dans la table"""
+        customers = self.controllerCustomer.load_customers()
+
+        for customer in customers:
+            self.table.insert("", ttk.END, values=(
+            customer.id_customer, customer.name_customer, customer.first_name, customer.address_customer))
+
     def back_customer_menu(self):
         """Supprime la frame data_customer et débloque le menu customer"""
         self.destroy()
@@ -213,6 +291,10 @@ class DataCustomer(ttk.Frame):
         menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
         self.clean_variable_ttk()
         self.destroy()
+
+    def show_search_customer(self):
+        self.create_table_customer()
+        self.insert_customer_in_table()
 
     @property
     def controllerZipcode(self):
