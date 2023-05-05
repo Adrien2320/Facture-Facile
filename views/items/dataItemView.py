@@ -174,7 +174,7 @@ class DataItem(ttk.Frame):
         self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
 
     def insert_item_in_table(self):
-        """Ajout chaque article de la table"""
+        """Ajout chaque article dans la table"""
         items = self.controller.load_data_items()
 
         for item in items:
