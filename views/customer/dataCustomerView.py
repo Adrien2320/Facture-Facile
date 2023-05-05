@@ -8,6 +8,7 @@ class DataCustomer(ttk.Frame):
     bt_confirm_customer: ttk.Button
     table: ttk.Treeview
     bt_confirm_selected: ttk.Button
+    cbb_postal_code: ttk.Combobox
 
     def __init__(self, window, menu_customer):
         """Constructeur"""
@@ -157,10 +158,9 @@ class DataCustomer(ttk.Frame):
             values=types,
             state="readonly",
         )
-        cbb_postal_code = ttk.Combobox(
+        self.cbb_postal_code = ttk.Combobox(
             top_frame,
             font=("Georgia", 15),
-            textvariable=self.var_postal_code,
             values=self.postal_code,
             state="readonly",
         )
@@ -185,7 +185,7 @@ class DataCustomer(ttk.Frame):
         en_phone.grid(column=1, row=8, sticky=cttk.EW, pady=10, padx=20)
         # position combobox
         cbb_type.grid(column=1, row=6, sticky=cttk.EW, pady=10, padx=20)
-        cbb_postal_code.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=20)
+        self.cbb_postal_code.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=20)
 
     def back_customer_menu(self):
         """Supprime la frame data_customer et débloque le menu customer"""
@@ -204,7 +204,7 @@ class DataCustomer(ttk.Frame):
             str(self.var_name.get()),
             str(self.var_first_name.get()),
             str(self.var_address.get()),
-            int(self.var_postal_code.get()),
+            int(self.cbb_postal_code.current()+1),
             str(self.var_type.get()),
             str(self.var_number_tva.get()),
             str(self.var_email.get()),
