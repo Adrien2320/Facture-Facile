@@ -132,7 +132,15 @@ class MenuCustomer(ttk.Frame):
         pass
 
     def delete_customer(self):
-        pass
+        """Lance la procédure pour supprimer un client"""
+        self.state_customer_menu("disabled")
+        dataCustomer.DataCustomer.controllerZipcode = (
+            controllerZipcode.ZipCodeController(modelZipcode.ZipCodes())
+        )
+        dataCustomer.DataCustomer.controllerCustomer = (
+            controllerCustomer.CustomerController(modelCustomer.Customers())
+        )
+        dataCustomer.DataCustomer(self.window, self).show_delete_customer()
 
     def search_customer(self):
         """ Recherche un client """

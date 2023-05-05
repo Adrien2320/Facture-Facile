@@ -355,4 +355,22 @@ class DataCustomer(ttk.Frame):
     def set_cbb_postal_code(self,indexCustomer):
         self.cbb_postal_code.current(int(indexCustomer)-1)
 
+    def show_delete_customer(self):
+        """Affiche la table pour sélectionner un client à supprimer"""
+        self.create_table_customer()
+        self.insert_customer_in_table()
+        self.bt_confirm_selected["command"] = self.delete_item
+
+    def delete_item(self):
+        """Supprime un client"""
+        try:
+            customer = self.get_selected()
+            self.controllerCustomer.delete_item(customer.id_customer)
+            self.destroy()
+            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+        except AttributeError:
+            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+
+
 

@@ -98,3 +98,11 @@ class Customers:
                 phone_customer=row[8],
             )
             return result.fetchone()
+
+    def delete_item(self, id_customer):
+        """Supprime un client"""
+        sql = """ DELETE FROM T_Customers WHERE id_customer = ? """
+
+        with closing(self.cursor) as cursor:
+            cursor.execute(sql, [id_customer])
+            self.commit()

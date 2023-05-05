@@ -40,4 +40,11 @@ class CustomerController:
     def load_customer(self,id_customer):
         """ Rècupère un èlèment de la table client """
         return self.data.load_customer(id_customer)
+    def delete_item(self,id_customer : int):
+        """Supprime un client de la base de donnée"""
+        if id_customer != "":
+            self.data.delete_item(id_customer)
+            windowView.Window.show_message_success("Le client a bien été supprimé.")
+        else:
+            windowView.Window.show_message_failure("Veuillez remplire les données")
 
