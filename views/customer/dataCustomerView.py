@@ -2,6 +2,7 @@ import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.customer.menuCustomerView as menuCustomer
 import views.windowView as windowView
+from models.customerModel import Customer
 
 
 class DataCustomer(ttk.Frame):
@@ -32,6 +33,34 @@ class DataCustomer(ttk.Frame):
         self.var_type = ttk.StringVar()
         self.var_email = ttk.StringVar()
         self.var_phone = ttk.StringVar()
+
+    @property
+    def controllerZipcode(self):
+        """Créer le paramètre controller du zipcode"""
+        try:
+            return self._controllerZipcode
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour code postal")
+            self.quit()
+
+    @controllerZipcode.setter
+    def controllerZipcode(self, value):
+        """Assigne le paramètre controller du zipcode"""
+        self._controllerZipcode = value
+
+    @property
+    def controllerCustomer(self):
+        """Créer le paramètre controller du customer"""
+        try:
+            return self._controllerCustomer
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour client")
+            self.quit()
+
+    @controllerCustomer.setter
+    def controllerCustomer(self, value):
+        """Assigne le paramètre controller du customer"""
+        self._controllerCustomer = value
 
     def insert_postal_code(self) -> list:
         """Récupère les localités et code postal dans la base de données. Ensuite les retourne sous une liste"""
@@ -77,6 +106,11 @@ class DataCustomer(ttk.Frame):
         self.var_type.set("")
         self.var_email.set("")
         self.var_phone.set("")
+
+    def clean_frame(self):
+        """vide la frame"""
+        for widget in self.winfo_children():
+            widget.destroy()
 
     def create_data_customer(self):
         """Création des widgets pour le formulaire client"""
@@ -293,33 +327,32 @@ class DataCustomer(ttk.Frame):
         self.destroy()
 
     def show_search_customer(self):
+        """Affiche la table de client pour sélectionner le client à rechercher"""
         self.create_table_customer()
         self.insert_customer_in_table()
+        self.bt_confirm_selected['command'] = self.set_search_customer
 
-    @property
-    def controllerZipcode(self):
-        """Créer le paramètre controller du zipcode"""
+    def set_search_customer(self):
+        """Insert les données récolté dans le formulaire de recherche d'un client"""
         try:
-            return self._controllerZipcode
+            customer = self.get_selected()
+            self.set_variable_ttk(customer.id_customer,customer.name_customer,customer.first_name,customer.address_customer,customer.postalCode_customer,customer.numberTva_customer,customer.type_customer,customer.email_customer,customer.phone_customer)
+            self.clean_frame()
+            self.create_data_customer()
+            self.set_cbb_postal_code(customer.postalCode_customer)
+            self.bt_confirm_customer.destroy()
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour code postal")
-            self.quit()
+            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
 
-    @controllerZipcode.setter
-    def controllerZipcode(self, value):
-        """Assigne le paramètre controller du zipcode"""
-        self._controllerZipcode = value
+    def get_selected(self) -> Customer:
+        """Récupère les données de l'article, sélectionnez"""
+        for selected_item in self.table.selection():
+            select = self.table.item(selected_item)
+            customer = select["values"]
+            return self.controllerCustomer.load_customer(customer[0])
 
-    @property
-    def controllerCustomer(self):
-        """Créer le paramètre controller du customer"""
-        try:
-            return self._controllerCustomer
-        except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour client")
-            self.quit()
+    def set_cbb_postal_code(self,indexCustomer):
+        self.cbb_postal_code.current(int(indexCustomer)-1)
 
-    @controllerCustomer.setter
-    def controllerCustomer(self, value):
-        """Assigne le paramètre controller du customer"""
-        self._controllerCustomer = value
+

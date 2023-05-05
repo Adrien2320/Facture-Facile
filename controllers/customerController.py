@@ -37,3 +37,7 @@ class CustomerController:
         result = self.data.load_customers()
         return result
 
+    def load_customer(self,id_customer):
+        """ Rècupère un èlèment de la table client """
+        return self.data.load_customer(id_customer)
+

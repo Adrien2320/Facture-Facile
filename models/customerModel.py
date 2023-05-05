@@ -62,7 +62,7 @@ class Customers:
             self.commit()
 
     def load_customers(self):
-        """Récupère tous les articles dans la table T_items"""
+        """Récupère tous les articles dans la table T_Customer"""
         sql = """ SELECT * FROM T_Customers"""
 
         with closing(self.cursor) as cursor:
@@ -79,3 +79,22 @@ class Customers:
                 phone_customer=row[8],
             )
             return result.fetchall()
+
+    def load_customer(self, id_customer):
+        """Récupère un client dans la table T_Customer"""
+        sql = """ SELECT id_customer, name_customer, first_name_customer, address_customer, postal_code, type_customer, number_tva, email_customer, phone_customer FROM T_Customers WHERE id_customer = ?"""
+
+        with closing(self.cursor) as cursor:
+            result = cursor.execute(sql, [id_customer])
+            result.row_factory = lambda cursor, row: Customer(
+                id_customer=row[0],
+                name_customer=row[1],
+                first_name=row[2],
+                address_customer=row[3],
+                postalCode_customer=row[4],
+                type_customer=row[5],
+                numberTva_customer=row[6],
+                email_customer=row[7],
+                phone_customer=row[8],
+            )
+            return result.fetchone()
