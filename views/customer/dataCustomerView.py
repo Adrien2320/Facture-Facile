@@ -1,5 +1,3 @@
-from typing import Type
-
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.customer.menuCustomerView as menuCustomer
@@ -24,23 +22,60 @@ class DataCustomer(ttk.Frame):
         self.menu_customer = menu_customer
         self.postal_code = self.insert_postal_code()
         # variable ttk
-        self.var_id = ttk.IntVar()
+        self.var_idCustomer = ttk.IntVar()
         self.var_name = ttk.StringVar()
         self.var_first_name = ttk.StringVar()
         self.var_address = ttk.StringVar()
-        self.var_postal_code = ttk.StringVar()
-        self.var_tva = ttk.StringVar()
+        self.var_postal_code = ttk.IntVar()
+        self.var_number_tva = ttk.StringVar()
         self.var_type = ttk.StringVar()
         self.var_email = ttk.StringVar()
         self.var_phone = ttk.StringVar()
 
-    def insert_postal_code(self)-> list:
+    def insert_postal_code(self) -> list:
         """Récupère les localités et code postal dans la base de données. Ensuite les retourne sous une liste"""
         result = self.controllerZipcode.loads_zipcode()
-        list_zipcode : list = []
+        list_zipcode: list = []
         for zipcode in result:
-            list_zipcode.append(f"{zipcode.codePostal_zipcode} {zipcode.locality_zipcode}")
+            list_zipcode.append(
+                f"{zipcode.codePostal_zipcode} {zipcode.locality_zipcode}"
+            )
         return list_zipcode
+
+    def set_variable_ttk(
+        self,
+        id_customer: int,
+        name_customer: str,
+        first_name_customer: str,
+        address_customer: str,
+        postal_code_customer: int,
+        number_tva_customer: str,
+        type_customer: str,
+        email_customer: str,
+        phone_customer: str,
+    ):
+        """Assigne les variables ttk"""
+        self.var_idCustomer.set(id_customer)
+        self.var_name.set(name_customer)
+        self.var_first_name.set(first_name_customer)
+        self.var_address.set(address_customer)
+        self.var_postal_code.set(postal_code_customer)
+        self.var_number_tva.set(number_tva_customer)
+        self.var_type.set(type_customer)
+        self.var_email.set(email_customer)
+        self.var_phone.set(phone_customer)
+
+    def clean_variable_ttk(self):
+        """Nettoie les variables ttk"""
+        self.var_idCustomer.set(int())
+        self.var_name.set("")
+        self.var_first_name.set("")
+        self.var_address.set("")
+        self.var_postal_code.set(int())
+        self.var_number_tva.set("")
+        self.var_type.set("")
+        self.var_email.set("")
+        self.var_phone.set("")
 
     def create_data_customer(self):
         """Création des widgets pour le formulaire client"""
@@ -105,7 +140,9 @@ class DataCustomer(ttk.Frame):
         en_address = ttk.Entry(
             top_frame, font=("Georgia", 15), textvariable=self.var_address
         )
-        en_tva = ttk.Entry(top_frame, font=("Georgia", 15), textvariable=self.var_tva)
+        en_tva = ttk.Entry(
+            top_frame, font=("Georgia", 15), textvariable=self.var_number_tva
+        )
         en_email = ttk.Entry(
             top_frame, font=("Georgia", 15), textvariable=self.var_email
         )
@@ -163,8 +200,18 @@ class DataCustomer(ttk.Frame):
 
     def new_customer(self):
         """Créer un nouveau client"""
-        # envoyer les données vers le controller pour créer client
+        self.controllerCustomer.new_customer(
+            str(self.var_name.get()),
+            str(self.var_first_name.get()),
+            str(self.var_address.get()),
+            int(self.var_postal_code.get()),
+            str(self.var_type.get()),
+            str(self.var_number_tva.get()),
+            str(self.var_email.get()),
+            str(self.var_phone.get()),
+        )
         menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+        self.clean_variable_ttk()
         self.destroy()
 
     @property

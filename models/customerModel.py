@@ -20,7 +20,43 @@ class Customers:
     def __init__(self):
         """Constructeur"""
         self.database = sqlite3.connect("data_facture_facile.db")
-        self.create_table()
 
-    def create_table(self):
-        pass
+    @property
+    def cursor(self) -> sqlite3.Cursor:
+        """Créer le paramètre"""
+        return self.database.cursor()
+
+    def commit(self):
+        """Sauvegarde les modifications appliquée à la table"""
+        self.database.commit()
+
+    def new_customer(
+        self,
+        nameCustomer: str,
+        firstNameCustomer: str,
+        addressCustomer: str,
+        postalCodeCustomer: int,
+        typeCustomer: str,
+        numberTvaCustomer: str,
+        emailCustomer: str,
+        phoneCustomer: str,
+    ):
+        """Créer un nouveau client"""
+
+        sql = """ INSERT INTO T_Customers(name_customer, first_name_customer, address_customer, postal_code, type_customer, number_tva, email_customer, phone_customer) VALUES (?,?,?,?,?,?,?,?)"""
+
+        with closing(self.cursor) as cursor:
+            cursor.execute(
+                sql,
+                [
+                    nameCustomer,
+                    firstNameCustomer,
+                    addressCustomer,
+                    postalCodeCustomer,
+                    typeCustomer,
+                    numberTvaCustomer,
+                    emailCustomer,
+                    phoneCustomer,
+                ],
+            )
+            self.commit()
