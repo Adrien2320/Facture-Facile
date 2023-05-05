@@ -1,3 +1,5 @@
+from typing import Type
+
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.customer.menuCustomerView as menuCustomer
@@ -32,10 +34,13 @@ class DataCustomer(ttk.Frame):
         self.var_email = ttk.StringVar()
         self.var_phone = ttk.StringVar()
 
-    def insert_postal_code(self):
+    def insert_postal_code(self)-> list:
         """Récupère les localités et code postal dans la base de données. Ensuite les retourne sous une liste"""
         result = self.controllerZipcode.loads_zipcode()
-        print(result)
+        list_zipcode : list = []
+        for zipcode in result:
+            list_zipcode.append(f"{zipcode.codePostal_zipcode} {zipcode.locality_zipcode}")
+        return list_zipcode
 
     def create_data_customer(self):
         """Création des widgets pour le formulaire client"""

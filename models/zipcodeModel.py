@@ -26,4 +26,14 @@ class ZipCodes:
         self.database.commit()
 
     def loads_zipcode(self):
-        pass
+        """Récupère tous les articles dans la table T_items"""
+        sql = """ SELECT * FROM T_Zipcodes"""
+
+        with closing(self.cursor) as cursor:
+            result = cursor.execute(sql)
+            result.row_factory = lambda cursor, row: ZipCode(
+                id_zipcode=row[0],
+                codePostal_zipcode=row[1],
+                locality_zipcode=row[2],
+            )
+            return result.fetchall()
