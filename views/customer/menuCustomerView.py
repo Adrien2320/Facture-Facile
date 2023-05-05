@@ -134,15 +134,7 @@ class MenuCustomer(ttk.Frame):
         pass
 
     def search_customer(self):
-        self.state_customer_menu("disabled")
-
-        dataCustomer.DataCustomer.controllerZipcode = (
-            controllerZipcode.ZipCodeController(modelZipcode.ZipCodes())
-        )
-        dataCustomer.DataCustomer.controllerCustomer = (
-            controllerCustomer.CustomerController(modelCustomer.Customers())
-        )
-        dataCustomer.DataCustomer(self.window, self).show_search_customer()
+        pass
 
     def back_main_menu(self):
         """Reviens au menu principale"""

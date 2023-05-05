@@ -60,22 +60,3 @@ class Customers:
                 ],
             )
             self.commit()
-
-    def load_customers(self):
-        """Récupère tous les articles dans la table T_items"""
-        sql = """ SELECT * FROM T_Customers"""
-
-        with closing(self.cursor) as cursor:
-            result = cursor.execute(sql)
-            result.row_factory = lambda cursor, row: Customer(
-                id_customer=row[0],
-                name_customer=row[1],
-                first_name=row[2],
-                address_customer=row[3],
-                postalCode_customer=row[4],
-                type_customer=row[5],
-                numberTva_customer=row[6],
-                email_customer=row[7],
-                phone_customer=row[8],
-            )
-            return result.fetchall()

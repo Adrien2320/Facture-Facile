@@ -18,22 +18,13 @@ class CustomerController:
         phoneCustomer: str,
     ):
         """ Créer un nouveau client """
-        if nameCustomer != "" and firstNameCustomer != "" and addressCustomer != "" and postalCodeCustomer != "" and typeCustomer != "" :
-            self.data.new_customer(
-                nameCustomer,
-                firstNameCustomer,
-                addressCustomer,
-                postalCodeCustomer,
-                typeCustomer,
-                numberTvaCustomer,
-                emailCustomer,
-                phoneCustomer,
-            )
-            windowView.Window.show_message_success("Le client a bien été enregistré.")
-        else:
-            windowView.Window.show_message_failure("Veuillez remplire les données")
-
-    def load_customers(self):
-        result = self.data.load_customers()
-        return result
-
+        self.data.new_customer(
+            nameCustomer,
+            firstNameCustomer,
+            addressCustomer,
+            postalCodeCustomer,
+            typeCustomer,
+            numberTvaCustomer,
+            emailCustomer,
+            phoneCustomer,
+        )
