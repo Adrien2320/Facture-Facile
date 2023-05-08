@@ -2,6 +2,7 @@ import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.items.menuItemView as menuItem
 import views.customer.menuCustomerView as menuCustomer
+import views.invoices.menuInvoice as menuInvoice
 
 
 class MainMenu(ttk.Frame):
@@ -36,7 +37,7 @@ class MainMenu(ttk.Frame):
             font=("Georgia", 20),
         )
         ttk.Style().configure(
-            "invoice.TButton",
+            "invoices.TButton",
             background="#7E57C2",
             bordercolor="#7E57C2",
             relief="flat",
@@ -90,7 +91,7 @@ class MainMenu(ttk.Frame):
             text="Facture",
             command=self.do_show_invoice,
             width=10,
-            style="invoice.TButton",
+            style="invoices.TButton",
         )
         bt_close = ttk.Button(
             self,
@@ -127,5 +128,7 @@ class MainMenu(ttk.Frame):
 
     def do_show_invoice(self):
         """Lance la menu facture"""
+        # détruit le menu principal
+        self.destroy()
         # affiche le menu facture
-        pass
+        menuInvoice.MenuInvoice(self.window)

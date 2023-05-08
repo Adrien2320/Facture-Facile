@@ -117,7 +117,7 @@ class MenuCustomer(ttk.Frame):
         self.bt_back_customer.pack(side=cttk.BOTTOM, padx=10, pady=30)
 
     def new_customer(self):
-        """ Créer un nouveau client """
+        """Créer un nouveau client"""
         self.state_customer_menu("disabled")
 
         dataCustomer.DataCustomer.controllerZipcode = (
@@ -138,6 +138,7 @@ class MenuCustomer(ttk.Frame):
             controllerCustomer.CustomerController(modelCustomer.Customers())
         )
         dataCustomer.DataCustomer(self.window, self).show_modif_customer()
+
     def delete_customer(self):
         """Lance la procédure pour supprimer un client"""
         self.state_customer_menu("disabled")
@@ -150,7 +151,7 @@ class MenuCustomer(ttk.Frame):
         dataCustomer.DataCustomer(self.window, self).show_delete_customer()
 
     def search_customer(self):
-        """ Recherche un client """
+        """Recherche un client"""
         self.state_customer_menu("disabled")
 
         dataCustomer.DataCustomer.controllerZipcode = (
@@ -167,7 +168,7 @@ class MenuCustomer(ttk.Frame):
         mainMenu.MainMenu(self.window)
 
     def state_customer_menu(self, state: str):
-        """ Modifie le state des widgets du menu """
+        """Modifie le state des widgets du menu"""
         self.bt_add_customer.configure(state=state)
         self.bt_change_customer.configure(state=state)
         self.bt_remove_customer.configure(state=state)

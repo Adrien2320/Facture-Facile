@@ -15,7 +15,6 @@ class ZipCodes:
         """Constructeur"""
         self.database = sqlite3.connect("data_facture_facile.db")
 
-
     @property
     def cursor(self) -> sqlite3.Cursor:
         """Créer le paramètre"""

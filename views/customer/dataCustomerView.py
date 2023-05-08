@@ -296,8 +296,16 @@ class DataCustomer(ttk.Frame):
         customers = self.controllerCustomer.load_customers()
 
         for customer in customers:
-            self.table.insert("", ttk.END, values=(
-            customer.id_customer, customer.name_customer, customer.first_name, customer.address_customer))
+            self.table.insert(
+                "",
+                ttk.END,
+                values=(
+                    customer.id_customer,
+                    customer.name_customer,
+                    customer.first_name,
+                    customer.address_customer,
+                ),
+            )
 
     def back_customer_menu(self):
         """Supprime la frame data_customer et débloque le menu customer"""
@@ -316,7 +324,7 @@ class DataCustomer(ttk.Frame):
             str(self.var_name.get()),
             str(self.var_first_name.get()),
             str(self.var_address.get()),
-            int(self.cbb_postal_code.current()+1),
+            int(self.cbb_postal_code.current() + 1),
             str(self.var_type.get()),
             str(self.var_number_tva.get()),
             str(self.var_email.get()),
@@ -330,13 +338,23 @@ class DataCustomer(ttk.Frame):
         """Affiche la table de client pour sélectionner le client à rechercher"""
         self.create_table_customer()
         self.insert_customer_in_table()
-        self.bt_confirm_selected['command'] = self.set_search_customer
+        self.bt_confirm_selected["command"] = self.set_search_customer
 
     def set_search_customer(self):
         """Insert les données récolté dans le formulaire de recherche d'un client"""
         try:
             customer = self.get_selected()
-            self.set_variable_ttk(customer.id_customer,customer.name_customer,customer.first_name,customer.address_customer,customer.postalCode_customer,customer.numberTva_customer,customer.type_customer,customer.email_customer,customer.phone_customer)
+            self.set_variable_ttk(
+                customer.id_customer,
+                customer.name_customer,
+                customer.first_name,
+                customer.address_customer,
+                customer.postalCode_customer,
+                customer.numberTva_customer,
+                customer.type_customer,
+                customer.email_customer,
+                customer.phone_customer,
+            )
             self.clean_frame()
             self.create_data_customer()
             self.set_cbb_postal_code(customer.postalCode_customer)
@@ -352,8 +370,8 @@ class DataCustomer(ttk.Frame):
             customer = select["values"]
             return self.controllerCustomer.load_customer(customer[0])
 
-    def set_cbb_postal_code(self,indexCustomer):
-        self.cbb_postal_code.current(int(indexCustomer)-1)
+    def set_cbb_postal_code(self, indexCustomer):
+        self.cbb_postal_code.current(int(indexCustomer) - 1)
 
     def show_delete_customer(self):
         """Affiche la table pour sélectionner un client à supprimer"""
@@ -382,7 +400,17 @@ class DataCustomer(ttk.Frame):
         """Insert les données dans le formulaire pour modifier un client"""
         try:
             customer = self.get_selected()
-            self.set_variable_ttk(customer.id_customer,customer.name_customer,customer.first_name,customer.address_customer,customer.postalCode_customer,customer.numberTva_customer,customer.type_customer,customer.email_customer,customer.phone_customer)
+            self.set_variable_ttk(
+                customer.id_customer,
+                customer.name_customer,
+                customer.first_name,
+                customer.address_customer,
+                customer.postalCode_customer,
+                customer.numberTva_customer,
+                customer.type_customer,
+                customer.email_customer,
+                customer.phone_customer,
+            )
             self.clean_frame()
             self.create_data_customer()
             self.bt_confirm_customer["command"] = self.modif_customer
@@ -405,6 +433,3 @@ class DataCustomer(ttk.Frame):
         )
         self.destroy()
         menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
-
-
-

@@ -107,8 +107,9 @@ class Customers:
             cursor.execute(sql, [id_customer])
             self.commit()
 
-    def modif_item(self,
-        id_customer:int,
+    def modif_item(
+        self,
+        id_customer: int,
         nameCustomer: str,
         firstNameCustomer: str,
         addressCustomer: str,
@@ -116,7 +117,8 @@ class Customers:
         typeCustomer: str,
         numberTvaCustomer: str,
         emailCustomer: str,
-        phoneCustomer: str,):
+        phoneCustomer: str,
+    ):
         """Modifie un client"""
         sql = """ UPDATE T_Customers SET name_customer=?, first_name_customer=?, address_customer=?, postal_code=?, type_customer=?, number_tva=?, email_customer=?, phone_customer=?   WHERE id_customer = ? """
 
