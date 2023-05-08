@@ -19,7 +19,7 @@ class MenuInvoice(ttk.Frame):
     def create_menu(self):
         """Création des widgets du menu facture"""
         # style of widgets
-        ttk.Style().configure("TFrame", background="#283747")
+        ttk.Style().configure("under.TFrame", background="#283747")
         ttk.Style().configure(
             "customer.TButton",
             background="#96875A",
@@ -49,8 +49,8 @@ class MenuInvoice(ttk.Frame):
             font=("Georgia", 15),
         )
         # frame
-        frame_customer = ttk.Labelframe(self, text="Client", style="TFrame")
-        frame_item = ttk.Labelframe(self, text="Article", style="TFrame")
+        frame_customer = ttk.Labelframe(self, text="Client", style="under.TFrame")
+        frame_item = ttk.Labelframe(self, text="Article", style="under.TFrame")
         # widget label self
         lb_title = ttk.Label(
             self,

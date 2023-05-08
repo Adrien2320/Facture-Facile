@@ -2795,13 +2795,6 @@ accountNumber_company TEXT NOT NULL,
 FOREIGN KEY(postalCode_company) REFERENCES T_Zipcodes(id_zipcode)
 );
 
-
-CREATE TABLE T_Frais (
-id_frais INTEGER PRIMARY KEY AUTOINCREMENT,
-name_frais TEXT NOT NULL,
-price_frais REAL NOT NULL
-);
-
 CREATE TABLE T_Invoices (
 id_invoice INTEGER PRIMARY KEY AUTOINCREMENT,
 date_invoice TEXT NOT NULL,

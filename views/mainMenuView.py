@@ -2,7 +2,8 @@ import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.items.menuItemView as menuItem
 import views.customer.menuCustomerView as menuCustomer
-import views.invoices.menuInvoice as menuInvoice
+import views.invoices.menuInvoiceview as menuInvoice
+import views.invoices.dataInvoiceview as dataInvoice
 
 
 class MainMenu(ttk.Frame):
@@ -132,3 +133,5 @@ class MainMenu(ttk.Frame):
         self.destroy()
         # affiche le menu facture
         menuInvoice.MenuInvoice(self.window)
+        dataInvoice.DataInvoice(self.window)
+
