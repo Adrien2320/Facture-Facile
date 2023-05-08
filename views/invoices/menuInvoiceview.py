@@ -1,6 +1,7 @@
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.mainMenuView as mainMenu
+import views.invoices.dataInvoiceview as dataInvoice
 
 
 class MenuInvoice(ttk.Frame):
@@ -59,21 +60,35 @@ class MenuInvoice(ttk.Frame):
             background="#283747",
         )
         # widget button customer
-        bt_add_customer = ttk.Button(frame_customer, text="Ajouter", style="customer.TButton",width=12)
-        bt_modif_customer = ttk.Button(frame_customer, text="Modifier", style="customer.TButton",width=12)
+        bt_add_customer = ttk.Button(
+            frame_customer, text="Ajouter", style="customer.TButton", width=12
+        )
+        bt_modif_customer = ttk.Button(
+            frame_customer, text="Modifier", style="customer.TButton", width=12
+        )
         bt_delete_customer = ttk.Button(
-            frame_customer, text="Supprimer", style="customer.TButton",width=12
+            frame_customer, text="Supprimer", style="customer.TButton", width=12
         )
         # widget button item
-        bt_add_item = ttk.Button(frame_item, text="Ajouter", style="item.TButton",width=12)
-        bt_modif_item = ttk.Button(frame_item, text="Modifier", style="item.TButton",width=12)
-        bt_delete_item = ttk.Button(frame_item, text="Supprimer", style="item.TButton",width=12)
+        bt_add_item = ttk.Button(
+            frame_item, text="Ajouter", style="item.TButton", width=12
+        )
+        bt_modif_item = ttk.Button(
+            frame_item, text="Modifier", style="item.TButton", width=12
+        )
+        bt_delete_item = ttk.Button(
+            frame_item, text="Supprimer", style="item.TButton", width=12
+        )
         # widget button self
         bt_main_menu = ttk.Button(
-            self, text="Menu Principale", style="main.TButton",width=12, command=self.back_main_menu
+            self,
+            text="Menu Principale",
+            style="main.TButton",
+            width=12,
+            command=self.back_main_menu,
         )
         bt_invoice_overview = ttk.Button(
-            self, text="Aperçu Facture", style="test.TButton",width=12
+            self, text="Aperçu Facture", style="test.TButton", width=12
         )
         # position label self
         lb_title.pack(side=cttk.TOP, padx=15, pady=20)
@@ -94,5 +109,7 @@ class MenuInvoice(ttk.Frame):
 
     def back_main_menu(self):
         """Reviens au menu principale"""
-        self.destroy()
+        for widget in self.window.winfo_children():
+            widget.destroy()
         mainMenu.MainMenu(self.window)
+

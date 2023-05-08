@@ -134,4 +134,3 @@ class MainMenu(ttk.Frame):
         # affiche le menu facture
         menuInvoice.MenuInvoice(self.window)
         dataInvoice.DataInvoice(self.window)
-
