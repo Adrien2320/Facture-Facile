@@ -24,45 +24,45 @@ class MainMenu(ttk.Frame):
         # style of widgets
         ttk.Style().configure(
             "item.TButton",
-            background="#E59866",
-            bordercolor="#E59866",
+            background="#96875A",
+            bordercolor="#96875A",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "customer.TButton",
-            background="#8BC34A",
-            bordercolor="#8BC34A",
+            background="#6E9A3A",
+            bordercolor="#6E9A3A",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "invoices.TButton",
-            background="#7E57C2",
-            bordercolor="#7E57C2",
+            background="#6E5A96",
+            bordercolor="#6E5A96",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "apropos.TButton",
-            background="#42B7C6",
-            bordercolor="#42B7C6",
+            background="#2F818B",
+            bordercolor="#2F818B",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "setting.TButton",
-            background="#FFA726",
-            bordercolor="#FFA726",
+            background="#B17F35",
+            bordercolor="#B17F35",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "close.TButton",
             background="#C0392B",
             bordercolor="#C0392B",
             relief="flat",
-            font=("Georgia", 20),
+            font=("Georgia", 15),
         )
         # widget label
         lb_tittle = ttk.Label(
@@ -76,33 +76,33 @@ class MainMenu(ttk.Frame):
             self,
             text="Article",
             command=self.show_article,
-            width=10,
+            width=12,
             style="item.TButton",
         )
         bt_customer = ttk.Button(
             self,
             text="Client",
             command=self.do_show_customer,
-            width=10,
+            width=12,
             style="customer.TButton",
         )
         bt_invoice = ttk.Button(
             self,
             text="Facture",
             command=self.do_show_invoice,
-            width=10,
+            width=12,
             style="invoices.TButton",
         )
         bt_close = ttk.Button(
             self,
             text="Quitter",
             command=self.quit,
-            width=10,
+            width=12,
             style="close.TButton",
         )
-        bt_apropos = ttk.Button(self, text="Apropos", width=10, style="apropos.TButton")
+        bt_apropos = ttk.Button(self, text="Apropos", width=12, style="apropos.TButton")
         bt_setting = ttk.Button(
-            self, text="Paramètres", width=10, style="setting.TButton"
+            self, text="Paramètres", width=12, style="setting.TButton"
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
