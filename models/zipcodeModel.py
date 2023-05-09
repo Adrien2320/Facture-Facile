@@ -36,3 +36,17 @@ class ZipCodes:
                 locality_zipcode=row[2],
             )
             return result.fetchall()
+
+    def load_zipcode(self, index_zipCode):
+        """Récupère une localité et code postal"""
+        sql = """ SELECT id_zipcode, postal_code_zipcode, locality_zipcode FROM T_Zipcodes WHERE id_zipcode = ? """
+
+        with closing(self.cursor) as cursor:
+            result = cursor.execute(sql ,[index_zipCode])
+            result.row_factory = lambda cursor, row: ZipCode(
+                    id_zipcode=row[0],
+                    codePostal_zipcode=row[1],
+                    locality_zipcode=row[2],
+            )
+            return result.fetchone()
+

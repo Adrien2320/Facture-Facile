@@ -9,3 +9,6 @@ class ZipCodeController:
     def loads_zipcode(self):
         """Récupère toutes les données de la table T_Zipcode"""
         return self.data.loads_zipcode()
+
+    def load_zipcode(self,index_zipCode):
+        return self.data.load_zipcode(index_zipCode)
