@@ -6,6 +6,8 @@ import controllers.customerController as customerController
 import models.customerModel as customerModel
 import controllers.zipcodeController as zipCodeController
 import models.zipcodeModel as zipCodeModel
+import controllers.itemController as itemController
+import models.itemModel as itemModel
 
 
 class MenuInvoice(ttk.Frame):
@@ -26,8 +28,13 @@ class MenuInvoice(ttk.Frame):
         self.state_bt_delete_customer("disabled")
         #
         self.data_invoice = invoiceView.DataInvoice(self.window)
-        self.data_invoice.controllerCustomer = customerController.CustomerController(customerModel.Customers())
-        self.data_invoice.controllerZipcode = zipCodeController.ZipCodeController(zipCodeModel.ZipCodes())
+        self.data_invoice.controllerCustomer = customerController.CustomerController(
+            customerModel.Customers()
+        )
+        self.data_invoice.controllerZipcode = zipCodeController.ZipCodeController(
+            zipCodeModel.ZipCodes()
+        )
+        self.data_invoice.controllerItem = itemController.ItemController(itemModel.Data())
 
     def create_menu(self):
         """Création des widgets du menu facture"""
@@ -84,7 +91,11 @@ class MenuInvoice(ttk.Frame):
             justify=cttk.CENTER,
         )
         bt_add_customer = ttk.Button(
-            frame_customer, text="Ajouter", style="customer.TButton", width=13, command=self.add_customer
+            frame_customer,
+            text="Ajouter",
+            style="customer.TButton",
+            width=13,
+            command=self.add_customer,
         )
         self.bt_delete_customer = ttk.Button(
             frame_customer, text="Supprimer", style="customer.TButton", width=13
@@ -100,7 +111,11 @@ class MenuInvoice(ttk.Frame):
             justify=cttk.CENTER,
         )
         bt_add_item = ttk.Button(
-            frame_item, text="Ajouter", style="item.TButton", width=13
+            frame_item,
+            text="Ajouter",
+            style="item.TButton",
+            width=13,
+            command=self.add_item,
         )
         bt_modif_item = ttk.Button(
             frame_item, text="Modifier", style="item.TButton", width=13
@@ -160,5 +175,7 @@ class MenuInvoice(ttk.Frame):
         self.bt_delete_customer.configure(state=state)
 
     def add_customer(self):
-        self.data_invoice.start_add_client()
+        self.data_invoice.add_client()
 
+    def add_item(self):
+        self.data_invoice.add_item()

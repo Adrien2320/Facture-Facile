@@ -1,12 +1,20 @@
+from tkinter import PhotoImage
+
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.windowView as windowView
-from models.zipcodeModel import ZipCode
 
 
 class DataInvoice(ttk.Frame):
+
     tableCustomer: ttk.Treeview
-    tableWindow: ttk.Toplevel
+    table_invoice : ttk.Treeview
+    tableItem : ttk.Treeview
+
+    tableCustomerWindow: ttk.Toplevel
+    tableItemWindow: ttk.Toplevel
+
+    en_quantityItem: ttk.Entry
 
     def __init__(self, window):
         """Constructeur"""
@@ -47,6 +55,48 @@ class DataInvoice(ttk.Frame):
 
         # set variable ttk company
         self.set_variable_ttk_company()
+
+    @property
+    def controllerCustomer(self):
+        """Créer le paramètre controller du customer"""
+        try:
+            return self._controllerCustomer
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour client")
+            self.quit()
+
+    @controllerCustomer.setter
+    def controllerCustomer(self, value):
+        """Assigne le paramètre controller du customer"""
+        self._controllerCustomer = value
+
+    @property
+    def controllerZipcode(self):
+        """Créer le paramètre controller du zipcode"""
+        try:
+            return self._controllerZipcode
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour code postal")
+            self.quit()
+
+    @controllerZipcode.setter
+    def controllerZipcode(self, value):
+        """Assigne le paramètre controller du zipcode"""
+        self._controllerZipcode = value
+
+    @property
+    def controllerItem(self):
+        """Créer le paramètre controller du customer"""
+        try:
+            return self._controllerItem
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour Article")
+            self.quit()
+
+    @controllerItem.setter
+    def controllerItem(self, value):
+        """Assigne le paramètre controller du customer"""
+        self._controllerItem = value
 
     def create_dataInvoice(self):
         """Créer les widgets"""
@@ -181,7 +231,7 @@ class DataInvoice(ttk.Frame):
         scrollbar = ttk.Scrollbar(table_invoice_frame, orient=cttk.VERTICAL)
         self.table_invoice = ttk.Treeview(
             table_invoice_frame,
-            columns=["itemCode", "item", "tvaRate", "priceHtva", "quantity"],
+            columns=["itemCode", "item", "tvaRate", "priceHtva", "priceTvac","quantity"],
             yscrollcommand=scrollbar.set,
             selectmode=cttk.NONE,
             style="item.Treeview",
@@ -214,6 +264,7 @@ class DataInvoice(ttk.Frame):
             anchor=cttk.W,
             stretch=True,
         )
+        self.table_invoice.column("priceTvac",anchor=cttk.W,stretch=True)
         self.table_invoice.column(
             "quantity",
             anchor=cttk.W,
@@ -225,8 +276,9 @@ class DataInvoice(ttk.Frame):
         self.table_invoice.heading("itemCode", text="Numéro Article", anchor=cttk.W)
         self.table_invoice.heading("item", text="Produit", anchor=cttk.W)
         self.table_invoice.heading("tvaRate", text="Taux Tva", anchor=cttk.W)
-        self.table_invoice.heading("priceHtva", text="Prix Htva", anchor=cttk.W)
-        self.table_invoice.heading("quantity", text="Quantité")
+        self.table_invoice.heading("priceHtva", text="Prix HTVA", anchor=cttk.W)
+        self.table_invoice.heading("priceTvac",text="Prix TVAC", anchor=cttk.W)
+        self.table_invoice.heading("quantity", text="Quantité", anchor=cttk.W)
 
         # position views table
         lb_title_item.grid(columnspan=2, row=0, sticky=cttk.EW)
@@ -236,13 +288,16 @@ class DataInvoice(ttk.Frame):
     def create_table_customer(self):
         """Affiche tous les clients dans une treeview"""
         # create toplevel
-        self.tableWindow = ttk.Toplevel()
-        self.tableWindow.minsize(480, 480)
+        self.tableCustomerWindow = ttk.Toplevel()
+        self.tableCustomerWindow.minsize(480, 480)
+        icon = PhotoImage(file="pictures/logo.png")
+        self.tableCustomerWindow.iconphoto(False,icon)
+        self.tableCustomerWindow.title("Recherche Client")
 
-        self.tableWindow.columnconfigure(2, weight=1)
-        self.tableWindow.columnconfigure(1, weight=1)
-        self.tableWindow.columnconfigure(3, weight=1)
-        self.tableWindow.rowconfigure(1, weight=1)
+        self.tableCustomerWindow.columnconfigure(2, weight=1)
+        self.tableCustomerWindow.columnconfigure(1, weight=1)
+        self.tableCustomerWindow.columnconfigure(3, weight=1)
+        self.tableCustomerWindow.rowconfigure(1, weight=1)
 
         # style
         ttk.Style().configure(
@@ -266,14 +321,14 @@ class DataInvoice(ttk.Frame):
 
         # title
         lb_title = ttk.Label(
-            self.tableWindow,
+            self.tableCustomerWindow,
             text="Recherche Client",
             anchor=cttk.CENTER,
             font=("Georgia", 20),
         )
 
         # frame
-        table_frame = ttk.Frame(self.tableWindow)
+        table_frame = ttk.Frame(self.tableCustomerWindow)
 
         # views table
         scrollbar = ttk.Scrollbar(table_frame, orient=cttk.VERTICAL)
@@ -304,14 +359,14 @@ class DataInvoice(ttk.Frame):
 
         # button widget
         bt_back = ttk.Button(
-            self.tableWindow,
+            self.tableCustomerWindow,
             text="Retour",
             style="back.TButton",
-            command=self.tableWindow.destroy,
+            command=self.tableCustomerWindow.destroy,
             width=15,
         )
         bt_confirm_selected = ttk.Button(
-            self.tableWindow,
+            self.tableCustomerWindow,
             text="Confirmer",
             style="confirm.TButton",
             command=self.insert_customer_into_invoice,
@@ -329,42 +384,42 @@ class DataInvoice(ttk.Frame):
         bt_confirm_selected.grid(column=3, row=2, padx=20, pady=20)
 
     def set_variable_ttk_customer(
-        self,
-        id_customer: int = -1,
-        name_customer: str = " ",
-        address_customer: str = " ",
-        postalCode_customer: str = " ",
-        numberTva_customer: str = " ",
-        numberPhone_customer: str = " ",
+            self,
+            id_customer: int = -1,
+            name_customer: str = " ",
+            address_customer: str = " ",
+            postalCode_customer: str = " ",
+            numberTva_customer: str = " ",
+            numberPhone_customer: str = " ",
     ):
         """Assigne les variables clients de ttk"""
         self.id_customer = id_customer
-        self.var_full_name_customer.set(f"Nom: {name_customer}")
-        self.var_address_customer.set(f"Adresse: {address_customer}")
-        self.var_postal_code_customer.set(f"Code Postale: {postalCode_customer}")
-        self.var_number_tva_customer.set(f"TVA: {numberTva_customer}")
-        self.var_phone_customer.set(f"Téléphone: {numberPhone_customer}")
+        self.var_full_name_customer.set(f" {name_customer}")
+        self.var_address_customer.set(f" {address_customer}")
+        self.var_postal_code_customer.set(f" {postalCode_customer}")
+        self.var_number_tva_customer.set(f" {numberTva_customer}")
+        self.var_phone_customer.set(f" {numberPhone_customer}")
 
     def set_variable_ttk_company(
-        self,
-        name_company: str = " ",
-        address_company: str = " ",
-        postalCode_company: str = " ",
-        numberTva_company: str = " ",
-        email_company: str = " ",
-        numberPhone_company: str = " ",
-        accountNumber_company: str = " ",
+            self,
+            name_company: str = " ",
+            address_company: str = " ",
+            postalCode_company: str = " ",
+            numberTva_company: str = " ",
+            email_company: str = " ",
+            numberPhone_company: str = " ",
+            accountNumber_company: str = " ",
     ):
         """Assigne les variables entreprises de ttk"""
-        self.var_name_company.set(f"Nom:{name_company}")
-        self.var_address_company.set(f"Adresse:{address_company}")
-        self.var_postal_code_company.set(f"Code Postale:{postalCode_company}")
-        self.var_number_tva_company.set(f"TVA:{numberTva_company}")
-        self.var_email_company.set(f"Email:{email_company}")
-        self.var_phone_company.set(f"Téléphone:{numberPhone_company}")
-        self.var_account_number_company.set(f"Numéro De Compte:{accountNumber_company}")
+        self.var_name_company.set(f" {name_company}")
+        self.var_address_company.set(f" {address_company}")
+        self.var_postal_code_company.set(f" {postalCode_company}")
+        self.var_number_tva_company.set(f" {numberTva_company}")
+        self.var_email_company.set(f" {email_company}")
+        self.var_phone_company.set(f" {numberPhone_company}")
+        self.var_account_number_company.set(f" {accountNumber_company}")
 
-    def insert_data_in_table(self):
+    def insert_data_in_tableCustomer(self):
         """Ajout chaque client dans la table"""
         customers = self.controllerCustomer.load_customers()
 
@@ -379,42 +434,13 @@ class DataInvoice(ttk.Frame):
                 ),
             )
 
-    @property
-    def controllerCustomer(self):
-        """Créer le paramètre controller du customer"""
-        try:
-            return self._controllerCustomer
-        except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour client")
-            self.quit()
-
-    @controllerCustomer.setter
-    def controllerCustomer(self, value):
-        """Assigne le paramètre controller du customer"""
-        self._controllerCustomer = value
-
-    @property
-    def controllerZipcode(self):
-        """Créer le paramètre controller du zipcode"""
-        try:
-            return self._controllerZipcode
-        except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour code postal")
-            self.quit()
-
-    @controllerZipcode.setter
-    def controllerZipcode(self, value):
-        """Assigne le paramètre controller du zipcode"""
-        self._controllerZipcode = value
-
-    def start_add_client(self):
+    def add_client(self):
         self.create_table_customer()
-        self.insert_data_in_table()
+        self.insert_data_in_tableCustomer()
 
     def insert_customer_into_invoice(self):
         try:
             customer = self.get_selected_customer()
-            print(customer.postalCode_customer)
             code_postal_customer = self.get_postalCode_customer(
                 customer.postalCode_customer
             )
@@ -426,7 +452,7 @@ class DataInvoice(ttk.Frame):
                 customer.numberTva_customer,
                 customer.phone_customer,
             )
-            self.tableWindow.destroy()
+            self.tableCustomerWindow.destroy()
         except AttributeError:
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
 
@@ -437,9 +463,172 @@ class DataInvoice(ttk.Frame):
             customer = select["values"]
             return self.controllerCustomer.load_customer(customer[0])
 
-    def get_postalCode_customer(self, index_zipCode) -> ZipCode:
+    def get_postalCode_customer(self, index_zipCode):
         """Récupère le code postal et la localité et la retourne sous un string"""
         return self.controllerZipcode.load_zipcode(index_zipCode)
 
+    def create_table_item(self):
+        """Affiche tous les articles dans une treeview"""
+        # create toplevel
+        self.tableItemWindow = ttk.Toplevel()
+        self.tableItemWindow.minsize(480, 480)
+        self.tableItemWindow.title("Recherche Article")
+        icon = PhotoImage(file="pictures/logo.png")
+        self.tableItemWindow.iconphoto(False,icon)
 
+        self.tableItemWindow.columnconfigure(2, weight=1)
+        self.tableItemWindow.columnconfigure(1, weight=1)
+        self.tableItemWindow.columnconfigure(3, weight=1)
+        self.tableItemWindow.rowconfigure(1, weight=1)
 
+        # style
+        ttk.Style().configure(
+            "back.TButton",
+            background="#C0392B",
+            bordercolor="#C0392B",
+            relief="flat",
+            font=("Georgia", 15),
+        )
+        ttk.Style().configure(
+            "confirm.TButton",
+            background="#2ECC71",
+            bordercolor="#2ECC71",
+            relief="flat",
+            font=("Georgia", 15),
+        )
+        ttk.Style().configure("my.Treeview", background="#283747", rowheight=25)
+        ttk.Style().configure(
+            "quantity.TEntry", background="#283747", font=("Georgia", 15)
+        )
+
+        # title
+        lb_title = ttk.Label(
+            self.tableItemWindow,
+            text="Recherche Article",
+            anchor=cttk.CENTER,
+            font=("Georgia", 20)
+        )
+
+        # frame
+        table_frame = ttk.Frame(self.tableItemWindow)
+        quantity_frame = ttk.Frame(self.tableItemWindow)
+
+        # views table
+        scrollbar = ttk.Scrollbar(table_frame, orient=cttk.VERTICAL)
+        self.tableItem = ttk.Treeview(
+            table_frame,
+            columns=["id", "name", "htva", "tvac"],
+            yscrollcommand=scrollbar.set,
+            selectmode=cttk.BROWSE,
+            style="my.Treeview",
+        )
+
+        # config the scrollbar
+        scrollbar.config(command=self.tableItem.yview)
+
+        # format column
+        self.tableItem.column(
+            "#0", anchor=cttk.W, stretch=False, width=0, minwidth=0
+        )
+        self.tableItem.column("id", anchor=cttk.W, stretch=False, width=200)
+        self.tableItem.column("name", anchor=cttk.W, stretch=True, width=200)
+        self.tableItem.column("htva", anchor=cttk.W, stretch=True, width=200)
+        self.tableItem.column("tvac", anchor=cttk.W, stretch=True, width=200)
+
+        # heading column
+        self.tableItem.heading("#0", anchor=cttk.W)
+        self.tableItem.heading("id", text="Code Article", anchor=cttk.W)
+        self.tableItem.heading("name", text="Nom", anchor=cttk.W)
+        self.tableItem.heading("htva", text="Prix HTVA", anchor=cttk.W)
+        self.tableItem.heading("tvac",text="Prix TVAC",anchor=cttk.W)
+
+        # quanty widget
+        lb_quantity = ttk.Label(
+            quantity_frame, text="Quantité:", font=("Georgia", 15)
+        )
+        self.en_quantityItem = ttk.Entry(quantity_frame, style="quantity.TEntry")
+
+        # button widget
+        bt_back = ttk.Button(
+            self.tableItemWindow,
+            text="Retour",
+            style="back.TButton",
+            command=self.tableItemWindow.destroy,
+            width=15,
+        )
+        bt_confirm_selected = ttk.Button(
+            self.tableItemWindow,
+            text="Confirmer",
+            style="confirm.TButton",
+            command=self.insert_Item_into_invoice,
+            width=15,
+        )
+
+        # position views table
+        lb_title.grid(column=2, row=0, padx=10, pady=20)
+        table_frame.grid(columnspan=5, row=1, sticky=cttk.NSEW, padx=20, pady=30)
+        quantity_frame.grid(column=2, row=2, sticky=cttk.EW)
+        self.tableItem.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
+        scrollbar.pack(side=cttk.LEFT, fill=cttk.Y)
+
+        # quantity widget position
+        lb_quantity.pack(side=cttk.LEFT, fill=cttk.X, expand=True)
+        self.en_quantityItem.pack(side=cttk.LEFT, fill=cttk.X, expand=True)
+
+        # button position
+        bt_back.grid(column=1, row=3, padx=20, pady=20)
+        bt_confirm_selected.grid(column=3, row=3, padx=20, pady=20)
+
+    def insert_Item_into_invoice(self):
+        """Insert l'article choisit dans la facture"""
+        tva_tare_int: int
+        try:
+            item = self.get_selected_item()
+            match item.tva_tare:
+                case "21%":
+                    tva_tare_int = 21
+                case "12%":
+                    tva_tare_int = 12
+                case _:
+                    tva_tare_int = 6
+            self.table_invoice.insert("",ttk.END,values=(item.id_item,item.name_item,item.tva_tare,item.htva_price,round (item.htva_price +(item.htva_price / 100 * tva_tare_int), 2),self.en_quantityItem.get()))
+            self.tableItemWindow.destroy()
+        except AttributeError:
+            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+
+    def insert_data_in_tableItem(self):
+        print(1)
+        """Ajout chaque client dans la table"""
+        items = self.controllerItem.load_data_items()
+        tva_tare_int : int
+
+        for item in items:
+            match item.tva_tare:
+                case "21%":
+                    tva_tare_int = 21
+                case "12%":
+                    tva_tare_int = 12
+                case _:
+                    tva_tare_int = 6
+
+            self.tableItem.insert(
+                "",
+                ttk.END,
+                values=(
+                    item.id_item,
+                    item.name_item,
+                    item.htva_price,
+                    round (item.htva_price +(item.htva_price / 100 * tva_tare_int), 2),
+                ),
+            )
+
+    def add_item(self):
+        self.create_table_item()
+        self.insert_data_in_tableItem()
+
+    def get_selected_item(self):
+        """Récupère les données de l'article, sélectionnez"""
+        for selected_item in self.tableItem.selection():
+            select = self.tableItem.item(selected_item)
+            item = select["values"]
+            return self.controllerItem.load_data_item(item[0])
