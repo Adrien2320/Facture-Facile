@@ -6,10 +6,9 @@ import views.windowView as windowView
 
 
 class DataInvoice(ttk.Frame):
-
     tableCustomer: ttk.Treeview
-    table_invoice : ttk.Treeview
-    tableItem : ttk.Treeview
+    table_invoice: ttk.Treeview
+    tableItem: ttk.Treeview
 
     tableCustomerWindow: ttk.Toplevel
     tableItemWindow: ttk.Toplevel
@@ -231,7 +230,14 @@ class DataInvoice(ttk.Frame):
         scrollbar = ttk.Scrollbar(table_invoice_frame, orient=cttk.VERTICAL)
         self.table_invoice = ttk.Treeview(
             table_invoice_frame,
-            columns=["itemCode", "item", "tvaRate", "priceHtva", "priceTvac","quantity"],
+            columns=[
+                "itemCode",
+                "item",
+                "tvaRate",
+                "priceHtva",
+                "priceTvac",
+                "quantity",
+            ],
             yscrollcommand=scrollbar.set,
             selectmode=cttk.NONE,
             style="item.Treeview",
@@ -264,7 +270,7 @@ class DataInvoice(ttk.Frame):
             anchor=cttk.W,
             stretch=True,
         )
-        self.table_invoice.column("priceTvac",anchor=cttk.W,stretch=True)
+        self.table_invoice.column("priceTvac", anchor=cttk.W, stretch=True)
         self.table_invoice.column(
             "quantity",
             anchor=cttk.W,
@@ -277,7 +283,7 @@ class DataInvoice(ttk.Frame):
         self.table_invoice.heading("item", text="Produit", anchor=cttk.W)
         self.table_invoice.heading("tvaRate", text="Taux Tva", anchor=cttk.W)
         self.table_invoice.heading("priceHtva", text="Prix HTVA", anchor=cttk.W)
-        self.table_invoice.heading("priceTvac",text="Prix TVAC", anchor=cttk.W)
+        self.table_invoice.heading("priceTvac", text="Prix TVAC", anchor=cttk.W)
         self.table_invoice.heading("quantity", text="Quantité", anchor=cttk.W)
 
         # position views table
@@ -291,7 +297,7 @@ class DataInvoice(ttk.Frame):
         self.tableCustomerWindow = ttk.Toplevel()
         self.tableCustomerWindow.minsize(480, 480)
         icon = PhotoImage(file="pictures/logo.png")
-        self.tableCustomerWindow.iconphoto(False,icon)
+        self.tableCustomerWindow.iconphoto(False, icon)
         self.tableCustomerWindow.title("Recherche Client")
 
         self.tableCustomerWindow.columnconfigure(2, weight=1)
@@ -384,13 +390,13 @@ class DataInvoice(ttk.Frame):
         bt_confirm_selected.grid(column=3, row=2, padx=20, pady=20)
 
     def set_variable_ttk_customer(
-            self,
-            id_customer: int = -1,
-            name_customer: str = " ",
-            address_customer: str = " ",
-            postalCode_customer: str = " ",
-            numberTva_customer: str = " ",
-            numberPhone_customer: str = " ",
+        self,
+        id_customer: int = -1,
+        name_customer: str = " ",
+        address_customer: str = " ",
+        postalCode_customer: str = " ",
+        numberTva_customer: str = " ",
+        numberPhone_customer: str = " ",
     ):
         """Assigne les variables clients de ttk"""
         self.id_customer = id_customer
@@ -401,14 +407,14 @@ class DataInvoice(ttk.Frame):
         self.var_phone_customer.set(f" {numberPhone_customer}")
 
     def set_variable_ttk_company(
-            self,
-            name_company: str = " ",
-            address_company: str = " ",
-            postalCode_company: str = " ",
-            numberTva_company: str = " ",
-            email_company: str = " ",
-            numberPhone_company: str = " ",
-            accountNumber_company: str = " ",
+        self,
+        name_company: str = " ",
+        address_company: str = " ",
+        postalCode_company: str = " ",
+        numberTva_company: str = " ",
+        email_company: str = " ",
+        numberPhone_company: str = " ",
+        accountNumber_company: str = " ",
     ):
         """Assigne les variables entreprises de ttk"""
         self.var_name_company.set(f" {name_company}")
@@ -474,7 +480,7 @@ class DataInvoice(ttk.Frame):
         self.tableItemWindow.minsize(480, 480)
         self.tableItemWindow.title("Recherche Article")
         icon = PhotoImage(file="pictures/logo.png")
-        self.tableItemWindow.iconphoto(False,icon)
+        self.tableItemWindow.iconphoto(False, icon)
 
         self.tableItemWindow.columnconfigure(2, weight=1)
         self.tableItemWindow.columnconfigure(1, weight=1)
@@ -506,7 +512,7 @@ class DataInvoice(ttk.Frame):
             self.tableItemWindow,
             text="Recherche Article",
             anchor=cttk.CENTER,
-            font=("Georgia", 20)
+            font=("Georgia", 20),
         )
 
         # frame
@@ -527,9 +533,7 @@ class DataInvoice(ttk.Frame):
         scrollbar.config(command=self.tableItem.yview)
 
         # format column
-        self.tableItem.column(
-            "#0", anchor=cttk.W, stretch=False, width=0, minwidth=0
-        )
+        self.tableItem.column("#0", anchor=cttk.W, stretch=False, width=0, minwidth=0)
         self.tableItem.column("id", anchor=cttk.W, stretch=False, width=200)
         self.tableItem.column("name", anchor=cttk.W, stretch=True, width=200)
         self.tableItem.column("htva", anchor=cttk.W, stretch=True, width=200)
@@ -540,12 +544,10 @@ class DataInvoice(ttk.Frame):
         self.tableItem.heading("id", text="Code Article", anchor=cttk.W)
         self.tableItem.heading("name", text="Nom", anchor=cttk.W)
         self.tableItem.heading("htva", text="Prix HTVA", anchor=cttk.W)
-        self.tableItem.heading("tvac",text="Prix TVAC",anchor=cttk.W)
+        self.tableItem.heading("tvac", text="Prix TVAC", anchor=cttk.W)
 
         # quanty widget
-        lb_quantity = ttk.Label(
-            quantity_frame, text="Quantité:", font=("Georgia", 15)
-        )
+        lb_quantity = ttk.Label(quantity_frame, text="Quantité:", font=("Georgia", 15))
         self.en_quantityItem = ttk.Entry(quantity_frame, style="quantity.TEntry")
 
         # button widget
@@ -582,6 +584,7 @@ class DataInvoice(ttk.Frame):
     def insert_Item_into_invoice(self):
         """Insert l'article choisit dans la facture"""
         tva_tare_int: int
+        quantity : int
         try:
             item = self.get_selected_item()
             match item.tva_tare:
@@ -591,7 +594,20 @@ class DataInvoice(ttk.Frame):
                     tva_tare_int = 12
                 case _:
                     tva_tare_int = 6
-            self.table_invoice.insert("",ttk.END,values=(item.id_item,item.name_item,item.tva_tare,item.htva_price,round (item.htva_price +(item.htva_price / 100 * tva_tare_int), 2),self.en_quantityItem.get()))
+
+            quantity = int(self.en_quantityItem.get())
+            self.table_invoice.insert(
+                "",
+                ttk.END,
+                values=(
+                    item.id_item,
+                    item.name_item,
+                    item.tva_tare,
+                    item.htva_price,
+                    round((item.htva_price * quantity)+(item.htva_price * quantity / 100 * tva_tare_int), 2),
+                    quantity,
+                ),
+            )
             self.tableItemWindow.destroy()
         except AttributeError:
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
@@ -600,7 +616,7 @@ class DataInvoice(ttk.Frame):
         print(1)
         """Ajout chaque client dans la table"""
         items = self.controllerItem.load_data_items()
-        tva_tare_int : int
+        tva_tare_int: int
 
         for item in items:
             match item.tva_tare:
@@ -618,7 +634,7 @@ class DataInvoice(ttk.Frame):
                     item.id_item,
                     item.name_item,
                     item.htva_price,
-                    round (item.htva_price +(item.htva_price / 100 * tva_tare_int), 2),
+                    round(item.htva_price + (item.htva_price / 100 * tva_tare_int), 2),
                 ),
             )
 

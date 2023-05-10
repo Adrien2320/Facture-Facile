@@ -34,7 +34,9 @@ class MenuInvoice(ttk.Frame):
         self.data_invoice.controllerZipcode = zipCodeController.ZipCodeController(
             zipCodeModel.ZipCodes()
         )
-        self.data_invoice.controllerItem = itemController.ItemController(itemModel.Data())
+        self.data_invoice.controllerItem = itemController.ItemController(
+            itemModel.Data()
+        )
 
     def create_menu(self):
         """Création des widgets du menu facture"""

@@ -14,7 +14,7 @@ class Window(ttk.Window):
         self.minsize(width, height)
         # icon
         icon = ttk.PhotoImage(file="pictures/logo.png")
-        self.iconphoto(False,icon)
+        self.iconphoto(False, icon)
         # création du menu principale
         views.mainMenuView.MainMenu(self)
 
