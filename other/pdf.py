@@ -50,8 +50,8 @@ class PDF(FPDF):
         self.cell(0, 0, zipcode_customer, 0, 1, "L")
         self.cell(0, 0, zipcode_company, 0, 1, "R")
         self.ln(5)
-        self.cell(0, 0, f"TVA:{numberTva_customer}", 0, 1, "L")
-        self.cell(0, 0, f"TVA:{numberTva_company}", 0, 1, "R")
+        self.cell(0, 0, f"TVA:{numberTva_customer}" if numberTva_customer=="" else "" , 0, 1, "L")
+        self.cell(0, 0, f"TVA:{numberTva_company}" if numberTva_company=="" else "" , 0, 1, "R")
         self.ln(5)
         self.cell(0, 0, email_customer, 0, 1, "L")
         self.cell(0, 0, email_company, 0, 1, "R")
@@ -89,7 +89,7 @@ class PDF(FPDF):
         # Données des éléments de la facture
         self.set_font("Arial", "", 12)
         for item in items:
-            self.cell(30, 10, item["numéroArticle"], 1, 0, "L")
+            self.cell(30, 10, str(item["numéroArticle"]), 1, 0, "L")
             self.cell(65, 10, item["product"], 1, 0, "L")
             self.cell(20, 10, str(item["tauxTva"]), 1, 0, "R")
             self.cell(10, 10, str(item["quantity"]), 1, 0, "R")
@@ -139,9 +139,9 @@ class PDF(FPDF):
         # Données en desous du tableau a gauche
         for element in elements:
             if not element == {}:
-                self.cell(30, 10, str(element["tauxTva"]), 1, 0, "L")
-                self.cell(35, 10, str(element["totalHt"]), 1, 0, "L")
-                self.cell(30, 10, str(element["totalTaxe"]), 1, 0, "L")
+                self.cell(30, 10,str(element["tauxTva"]) , 1, 0, "L")
+                self.cell(35, 10,str(element["totalHt"]) , 1, 0, "L")
+                self.cell(30, 10,str(element["totalTaxe"]), 1, 0, "L")
                 self.ln()
                 totalHtAll += element["totalHt"]
                 totalTaxeAll += element["totalTaxe"]

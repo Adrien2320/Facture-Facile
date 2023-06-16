@@ -192,7 +192,7 @@ class MenuInvoice(ttk.Frame):
         self.data_invoice.add_item()
 
     def show_facture(self):
-        pass
+        self.data_invoice.record_invoice()
 
     def delete_item(self):
         self.data_invoice.delete_item()

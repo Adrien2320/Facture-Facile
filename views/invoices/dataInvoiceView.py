@@ -1,5 +1,4 @@
 from tkinter import PhotoImage
-
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.windowView as windowView
@@ -652,8 +651,7 @@ class DataInvoice(ttk.Frame):
                     item.tva_tare,
                     item.htva_price,
                     round(
-                        (item.htva_price * quantity)
-                        + (item.htva_price * quantity / 100 * tva_tare_int),
+                        (item.htva_price * quantity),
                         2,
                     ),
                     quantity,
@@ -685,7 +683,7 @@ class DataInvoice(ttk.Frame):
                     item.id_item,
                     item.name_item,
                     item.htva_price,
-                    round(item.htva_price + (item.htva_price / 100 * tva_tare_int), 2),
+                    round(item.htva_price, 2),
                 ),
             )
 
@@ -757,8 +755,53 @@ class DataInvoice(ttk.Frame):
 
         invoice.create_pdf("test.pdf")
 
+    def get_all_items_of_invoice(self)->list:
+        items=[]
+        for selection in self.table_invoice.get_children():
+            select = self.table_invoice.item(selection)
+            item= select["values"]
+            items.append(item)
+            print(item)
+        return items
+
     def record_invoice(self):
         """enregistré les données de la facture dans la base de données"""
+        items = []
+        result = self.get_all_items_of_invoice()
+        for item in result:
+            items.append( {"numéroArticle": item[0],
+                    "product": item[1],
+                    "tauxTva": item[2],
+                    "quantity": item[5],
+                    "price": float(item[3]),
+                    "total": float(item[4]),})
+
+        # pdf
+        invoice = pdf.PDF()
+        invoice.add_page()
+        invoice.add_invoice_header(1, self.get_date()) # modifier le numéro 1 par le numéro de facture
+        invoice.add_invoice_client_and_company(
+            self.var_full_name_customer.get(),
+            self.var_name_company.get(),
+            self.var_address_customer.get(),
+            self.var_address_company.get(),
+            self.var_postal_code_customer.get(),
+            self.var_postal_code_company.get(),
+            self.var_number_tva_customer.get(),
+            self.var_number_tva_company.get(),
+            "",
+            self.var_email_company.get(),
+            self.var_phone_customer.get(),
+            self.var_phone_company.get(),
+            self.id_customer,
+            self.var_account_number_company.get(),
+        )
+        invoice.add_invoice_items(
+            items
+        )
+
+        invoice.create_pdf("Facture.pdf") # nom du pdf
+
 
 
 
