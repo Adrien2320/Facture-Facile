@@ -15,6 +15,7 @@ class DataInvoice(ttk.Frame):
 
     tableCustomerWindow: ttk.Toplevel
     tableItemWindow: ttk.Toplevel
+    tableDeleteWindow : ttk.Toplevel
 
     en_quantityItem: ttk.Entry
 
@@ -23,6 +24,7 @@ class DataInvoice(ttk.Frame):
         # paramètre de la frame
         super().__init__(window)
         # variable
+
         self.window = window
 
         # position de la frame
@@ -284,7 +286,6 @@ class DataInvoice(ttk.Frame):
                 "quantity",
             ],
             yscrollcommand=scrollbar.set,
-            selectmode=cttk.NONE,
             style="item.Treeview",
         )
 
@@ -433,6 +434,7 @@ class DataInvoice(ttk.Frame):
         # button position
         bt_back.grid(column=1, row=2, padx=20, pady=20)
         bt_confirm_selected.grid(column=3, row=2, padx=20, pady=20)
+
 
     def set_variable_ttk_customer(
         self,
@@ -692,8 +694,11 @@ class DataInvoice(ttk.Frame):
         self.insert_data_in_tableItem()
 
     def delete_item(self):
-        self.create_table_item()
-        self.insert_item_data_of_invoice_in_the_table()
+        """Récupère les données de l'article, sélectionnez"""
+        for selected_item in self.table_invoice.selection():
+            self.table_invoice.item(selected_item)
+            self.table_invoice.delete(selected_item)
+
 
     def get_selected_item(self):
         """Récupère les données de l'article, sélectionnez"""
@@ -702,19 +707,12 @@ class DataInvoice(ttk.Frame):
             item = select["values"]
             return self.controllerItem.load_data_item(item[0])
 
-    def insert_item_data_of_invoice_in_the_table(self):
-        # récupère les données de table invoice et les insert dans le table supprimer item
-        pass
-
     @staticmethod
     def get_date() -> str:
         locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
         now = datetime.datetime.now()
         date = now.strftime("%d %B %Y")
         return str(date)
-
-    def show_invoice(self):
-        pass
 
     def create_pdf(self):
         invoice = pdf.PDF()
@@ -761,4 +759,7 @@ class DataInvoice(ttk.Frame):
 
     def record_invoice(self):
         """enregistré les données de la facture dans la base de données"""
+
+
+
 

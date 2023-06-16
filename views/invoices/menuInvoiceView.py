@@ -130,7 +130,7 @@ class MenuInvoice(ttk.Frame):
             command=self.add_item,
         )
         bt_delete_item = ttk.Button(
-            frame_item, text="Supprimer", style="item.TButton", width=13
+            frame_item, text="Supprimer", style="item.TButton", width=13, command=self.delete_item
         )
 
         # widgets for self
@@ -192,4 +192,7 @@ class MenuInvoice(ttk.Frame):
         self.data_invoice.add_item()
 
     def show_facture(self):
-        self.data_invoice.show_invoice()
+        pass
+
+    def delete_item(self):
+        self.data_invoice.delete_item()
