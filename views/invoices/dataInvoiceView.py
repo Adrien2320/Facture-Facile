@@ -100,6 +100,48 @@ class DataInvoice(ttk.Frame):
         """Assigne le paramètre controller du customer"""
         self._controllerItem = value
 
+    @property
+    def controllerInvoice(self):
+        """Créer le paramètre controller"""
+        try:
+            return self._controllerInvoice
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour facture")
+            self.quit()
+
+    @controllerInvoice.setter
+    def controllerInvoice(self, value):
+        """Assigne le paramètre controller"""
+        self._controllerInvoice = value
+
+    @property
+    def controllerItemInvoice(self):
+        """Créer le paramètre controller"""
+        try:
+            return self._controllerItemInvoice
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour Article facturé")
+            self.quit()
+
+    @controllerItemInvoice.setter
+    def controllerItemInvoice(self, value):
+        """Assigne le paramètre controller"""
+        self._controllerItemInvoice = value
+
+    @property
+    def controllerCompany(self):
+        """Créer le paramètre controller du customer"""
+        try:
+            return self._controllerCompany
+        except AttributeError:
+            windowView.Window.show_message_error("Pas de controlleur pour mon entreprise")
+            self.quit()
+
+    @controllerCompany.setter
+    def controllerCompany(self, value):
+        """Assigne le paramètre controller du customer"""
+        self._controllerCompany = value
+
     def create_dataInvoice(self):
         """Créer les widgets"""
 
@@ -719,3 +761,4 @@ class DataInvoice(ttk.Frame):
 
     def record_invoice(self):
         """enregistré les données de la facture dans la base de données"""
+

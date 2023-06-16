@@ -8,6 +8,12 @@ import controllers.zipcodeController as zipCodeController
 import models.zipcodeModel as zipCodeModel
 import controllers.itemController as itemController
 import models.itemModel as itemModel
+import controllers.invoiceController as invoiceController
+import models.invoiceModel as invoiceModel
+import controllers.itemInvoiceController as itemInvoiceController
+import models.itemInvoiceModel as itemInvoiceModel
+import controllers.companyController as companyController
+import models.companyModel as companyModel
 
 
 class MenuInvoice(ttk.Frame):
@@ -34,6 +40,15 @@ class MenuInvoice(ttk.Frame):
         )
         self.data_invoice.controllerItem = itemController.ItemController(
             itemModel.Data()
+        )
+        self.data_invoice.controllerInvoice = invoiceController.InvoiceController(
+            invoiceModel.Invoices()
+        )
+        self.data_invoice.controllerItemInvoice = (
+            itemInvoiceController.ItemInvoiceController(itemInvoiceModel.ItemInvoices())
+        )
+        self.data_invoice.controllerCompany = companyController.CompanyContoller(
+            companyModel.MyCompanys()
         )
 
     def create_menu(self):
