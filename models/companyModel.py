@@ -35,12 +35,12 @@ class MyCompanys:
             cursor.execute(sql,[name,adresse,postalCode,numberPhone,email,tva,accountNumber])
             self.commit()
 
-    def modif_myCompany(self,name,adresse,postalCode,numberPhone,email,tva,accountNumber):
+    def modif_myCompany(self,name,adresse,postalCode,numberPhone,email,tva,accountNumber,old_name):
         """modifie les coordonnées de l'entreprise"""
         sql = """ UPDATE T_MyCompany SET name_company=?, address_company=?, postalCode_company=?, phone_company=?, email_company=?, tva_company=?, accountNumber_company=? WHERE name_company = ?"""
 
         with closing(self.cursor) as cursor :
-            cursor.execute(sql,[name,adresse,postalCode,numberPhone,email,tva,accountNumber,name])
+            cursor.execute(sql,[name,adresse,postalCode,numberPhone,email,tva,accountNumber,old_name])
             self.commit()
 
     def load_myCompany(self):
