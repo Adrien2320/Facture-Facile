@@ -3,7 +3,6 @@ import ttkbootstrap.constants as cttk
 import views.items.menuItemView as menuItem
 import views.customer.menuCustomerView as menuCustomer
 import views.invoices.menuInvoiceView as menuInvoice
-import views.invoices.dataInvoiceView as dataInvoice
 
 
 class MainMenu(ttk.Frame):
@@ -102,8 +101,8 @@ class MainMenu(ttk.Frame):
             style="close.TButton",
         )
         bt_apropos = ttk.Button(self, text="Apropos", width=12, style="apropos.TButton")
-        bt_setting = ttk.Button(
-            self, text="Paramètres", width=12, style="setting.TButton"
+        bt_myCompagny = ttk.Button(
+            self, text="Mon entreprise", width=12, style="setting.TButton"
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
@@ -112,7 +111,7 @@ class MainMenu(ttk.Frame):
         bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
         bt_close.pack(side=cttk.BOTTOM, pady=30, padx=10)
         bt_apropos.pack(side=cttk.BOTTOM, padx=10)
-        bt_setting.pack(side=cttk.BOTTOM, pady=30, padx=10)
+        bt_myCompagny.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
     def show_article(self):
         """Lance le menu article"""

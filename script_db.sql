@@ -2799,20 +2799,17 @@ CREATE TABLE T_Invoices (
 id_invoice INTEGER PRIMARY KEY AUTOINCREMENT,
 date_invoice TEXT NOT NULL,
 customer_invoice INTEGER NOT NULL,
-frais_invoice INTEGER NOT NULL,
 myCompany_invoice TEXT NOT NULL,
 FOREIGN KEY(customer_invoice) REFERENCES T_Customers(id_customer),
-FOREIGN KEY(frais_invoice) REFERENCES T_Frais(id_frais),
 FOREIGN KEY(myCompany_invoice) REFERENCES T_MyCompany(name_company)
 );
 
 CREATE TABLE T_Items_Invoices (
 id_itemInvoice INTEGER PRIMARY KEY AUTOINCREMENT,
-invoice_itemInvoice INTEGER NOT NULL,
-item_itemInvoice INTEGER NOT NULL,
-discount_itemInvoice text,
+idInvoice_itemInvoice INTEGER NOT NULL,
+idItem_itemInvoice INTEGER NOT NULL,
 quantity_itemInvoice INTEGER not NULL,
-FOREIGN KEY (invoice_itemInvoice) REFERENCES T_Invoices(id_invoice),
-FOREIGN KEY (item_itemInvoice) REFERENCES T_Items(id_item)
+FOREIGN KEY (idInvoice_itemInvoice) REFERENCES T_Invoices(id_invoice),
+FOREIGN KEY (idItem_itemInvoice) REFERENCES T_Items(id_item)
 );
 

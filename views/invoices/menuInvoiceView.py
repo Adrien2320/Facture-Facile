@@ -24,8 +24,6 @@ class MenuInvoice(ttk.Frame):
         self.window = window
         # creation du menu
         self.create_menu()
-        # state disabled for button delete customer
-        self.state_bt_delete_customer("disabled")
         #
         self.data_invoice = invoiceView.DataInvoice(self.window)
         self.data_invoice.controllerCustomer = customerController.CustomerController(
@@ -99,9 +97,6 @@ class MenuInvoice(ttk.Frame):
             width=13,
             command=self.add_customer,
         )
-        self.bt_delete_customer = ttk.Button(
-            frame_customer, text="Supprimer", style="customer.TButton", width=13
-        )
 
         # widgets for article
         lb_title_item = ttk.Label(
@@ -118,9 +113,6 @@ class MenuInvoice(ttk.Frame):
             style="item.TButton",
             width=13,
             command=self.add_item,
-        )
-        bt_modif_item = ttk.Button(
-            frame_item, text="Modifier", style="item.TButton", width=13
         )
         bt_delete_item = ttk.Button(
             frame_item, text="Supprimer", style="item.TButton", width=13
@@ -141,7 +133,11 @@ class MenuInvoice(ttk.Frame):
             command=self.back_main_menu,
         )
         bt_invoice_overview = ttk.Button(
-            self, text="Aperçu Facture", style="test.TButton", width=13
+            self,
+            text="Aperçu Facture",
+            style="test.TButton",
+            width=13,
+            command=self.show_facture,
         )
 
         # position label self
@@ -154,12 +150,10 @@ class MenuInvoice(ttk.Frame):
         # position widgets customer
         lb_title_customer.pack(side=cttk.TOP, padx=10, pady=10)
         bt_add_customer.pack(side=cttk.TOP, padx=10, pady=10)
-        self.bt_delete_customer.pack(side=cttk.TOP, padx=10, pady=10)
 
         # position widgets item
         lb_title_item.pack(side=cttk.TOP, padx=10, pady=10)
         bt_add_item.pack(side=cttk.TOP, padx=10, pady=10)
-        bt_modif_item.pack(side=cttk.TOP, padx=10, pady=10)
         bt_delete_item.pack(side=cttk.TOP, padx=10, pady=10)
 
         # position widgets self
@@ -181,3 +175,6 @@ class MenuInvoice(ttk.Frame):
 
     def add_item(self):
         self.data_invoice.add_item()
+
+    def show_facture(self):
+        self.data_invoice.show_invoice()

@@ -150,17 +150,16 @@ class PDF(FPDF):
         self.set_font("Arial", "B", 12)
         self.set_y(135)
         self.set_x(140)
-        self.cell(30,10,"Total (HT)",1,0,"R")
-        self.cell(30,10,str(totalHtAll),1,0,"R")
+        self.cell(30, 10, "Total (HT)", 1, 0, "R")
+        self.cell(30, 10, str(totalHtAll), 1, 0, "R")
         self.ln()
         self.set_x(140)
-        self.cell(30,10,"Total Taxes",1,0,"R")
-        self.cell(30,10,str(totalTaxeAll),1,0,"R")
+        self.cell(30, 10, "Total Taxes", 1, 0, "R")
+        self.cell(30, 10, str(totalTaxeAll), 1, 0, "R")
         self.ln()
         self.set_x(140)
-        self.cell(30,10,"Total",1,0,"R")
-        self.cell(30,10,str(totalHtAll+totalTaxeAll),1,0,"R")
-
+        self.cell(30, 10, "Total", 1, 0, "R")
+        self.cell(30, 10, str(totalHtAll + totalTaxeAll), 1, 0, "R")
 
     def create_pdf(self, name: str):
         self.output(name, "F")

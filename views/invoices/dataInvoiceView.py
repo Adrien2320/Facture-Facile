@@ -3,6 +3,9 @@ from tkinter import PhotoImage
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.windowView as windowView
+import other.pdf as pdf
+import datetime
+import locale
 
 
 class DataInvoice(ttk.Frame):
@@ -584,7 +587,7 @@ class DataInvoice(ttk.Frame):
     def insert_Item_into_invoice(self):
         """Insert l'article choisit dans la facture"""
         tva_tare_int: int
-        quantity : int
+        quantity: int
         try:
             item = self.get_selected_item()
             match item.tva_tare:
@@ -604,7 +607,11 @@ class DataInvoice(ttk.Frame):
                     item.name_item,
                     item.tva_tare,
                     item.htva_price,
-                    round((item.htva_price * quantity)+(item.htva_price * quantity / 100 * tva_tare_int), 2),
+                    round(
+                        (item.htva_price * quantity)
+                        + (item.htva_price * quantity / 100 * tva_tare_int),
+                        2,
+                    ),
                     quantity,
                 ),
             )
@@ -642,9 +649,73 @@ class DataInvoice(ttk.Frame):
         self.create_table_item()
         self.insert_data_in_tableItem()
 
+    def delete_item(self):
+        self.create_table_item()
+        self.insert_item_data_of_invoice_in_the_table()
+
     def get_selected_item(self):
         """Récupère les données de l'article, sélectionnez"""
         for selected_item in self.tableItem.selection():
             select = self.tableItem.item(selected_item)
             item = select["values"]
             return self.controllerItem.load_data_item(item[0])
+
+    def insert_item_data_of_invoice_in_the_table(self):
+        # récupère les données de table invoice et les insert dans le table supprimer item
+        pass
+
+    @staticmethod
+    def get_date() -> str:
+        locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
+        now = datetime.datetime.now()
+        date = now.strftime("%d %B %Y")
+        return str(date)
+
+    def show_invoice(self):
+        pass
+
+    def create_pdf(self):
+        invoice = pdf.PDF()
+        invoice.add_page()
+        invoice.add_invoice_header(1, self.get_date())
+        invoice.add_invoice_client_and_company(
+            "Adrien Mertens",
+            "Zénith Computer",
+            "Rue constant legrève 51",
+            "Rue des battons 25",
+            "1300 Limal",
+            "1300 Wavre",
+            "",
+            "BE17.125.158.4125",
+            "",
+            "Zénith-computer@gmail.com",
+            "",
+            "010.25.69.35.84",
+            124587,
+            "BE56.2587.3695.2547",
+        )
+        invoice.add_invoice_items(
+            [
+                {
+                    "numéroArticle": "1254",
+                    "product": "Produit 1",
+                    "tauxTva": "21%",
+                    "quantity": 2,
+                    "price": 10,
+                    "total": 20,
+                },
+                {
+                    "numéroArticle": "4578",
+                    "product": "Produit 2",
+                    "tauxTva": "12%",
+                    "quantity": 1,
+                    "price": 100,
+                    "total": 100,
+                },
+            ]
+        )
+
+        invoice.create_pdf("test.pdf")
+
+    def record_invoice(self):
+        """enregistré les données de la facture dans la base de données"""

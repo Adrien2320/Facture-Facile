@@ -62,7 +62,7 @@ class Customers:
             self.commit()
 
     def load_customers(self):
-        """Récupère tous les articles dans la table T_Customer"""
+        """Récupère tous les clients dans la table Clients"""
         sql = """ SELECT * FROM T_Customers"""
 
         with closing(self.cursor) as cursor:
