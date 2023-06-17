@@ -28,10 +28,17 @@ class DataItem(ttk.Frame):
         self.window = window
         self.menu_item = menu_item
 
+    def check_htvaPrice(self,event):
+        try:
+            float(self.en_htva_price.get())
+        except ValueError:
+            windowView.Window.show_message_error("Veuillez entré un nombre")
+
     def create_data_item(self):
-        """Création des widgets pour le formulaire article"""
+        """Création du formulaire article"""
         # variable
         tva_rate = ["21%", "12%", "6%"]
+
         # style
         ttk.Style().configure(
             "back.TButton",
@@ -47,16 +54,20 @@ class DataItem(ttk.Frame):
             relief="flat",
             font=("Georgia", 25),
         )
+
         # split window in multiple frames
         top_frame = ttk.Frame(self)
         bottom_frame = ttk.Frame(self)
+
         # position frames
         top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
         bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.BOTH)
+
         # config of columns and rows
         top_frame.columnconfigure(1, weight=2)
         top_frame.rowconfigure(0, weight=1)
         top_frame.rowconfigure(5, weight=1)
+
         # widget button
         self.bt_confirm_item = ttk.Button(
             bottom_frame,
@@ -71,6 +82,7 @@ class DataItem(ttk.Frame):
             style="back.TButton",
             width=15,
         )
+
         # widget label
         lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 25))
         lb_description = ttk.Label(
@@ -78,14 +90,16 @@ class DataItem(ttk.Frame):
         )
         lb_htva_price = ttk.Label(top_frame, text="Prix HTVA :", font=("Georgia", 25))
         lb_tva_tare = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 25))
-        # widget entry
+
+        # entry for item data
         en_name = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.var_name)
         en_description = ttk.Entry(
             top_frame, font=("Georgia", 25), textvariable=self.var_description
         )
-        en_htva_price = ttk.Entry(
+        self.en_htva_price = ttk.Entry(
             top_frame, font=("Georgia", 25), textvariable=self.var_htva_price
         )
+
         # widget list
         en_tva_tare = ttk.Combobox(
             top_frame,
@@ -93,6 +107,10 @@ class DataItem(ttk.Frame):
             font=("Georgia", 25),
             textvariable=self.var_tva_tare,
         )
+
+        # check the contents of entry
+        self.en_htva_price.bind("<FocusOut>", self.check_htvaPrice)
+
         # position label
         lb_name.grid(column=0, row=1, pady=10)
         lb_description.grid(column=0, row=2, pady=10)
@@ -101,7 +119,7 @@ class DataItem(ttk.Frame):
         # position entry
         en_name.grid(column=1, row=1, sticky=cttk.EW, pady=10, padx=10)
         en_description.grid(column=1, row=2, sticky=cttk.EW, pady=10, padx=10)
-        en_htva_price.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
+        self.en_htva_price.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
         en_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
         # position button
         self.bt_confirm_item.pack(side=cttk.RIGHT, padx=50)
