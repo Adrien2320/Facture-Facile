@@ -50,8 +50,22 @@ class PDF(FPDF):
         self.cell(0, 0, zipcode_customer, 0, 1, "L")
         self.cell(0, 0, zipcode_company, 0, 1, "R")
         self.ln(5)
-        self.cell(0, 0, f"TVA:{numberTva_customer}" if numberTva_customer=="" else "" , 0, 1, "L")
-        self.cell(0, 0, f"TVA:{numberTva_company}" if numberTva_company=="" else "" , 0, 1, "R")
+        self.cell(
+            0,
+            0,
+            f"TVA:{numberTva_customer}" if numberTva_customer == "" else "",
+            0,
+            1,
+            "L",
+        )
+        self.cell(
+            0,
+            0,
+            f"TVA:{numberTva_company}" if numberTva_company == "" else "",
+            0,
+            1,
+            "R",
+        )
         self.ln(5)
         self.cell(0, 0, email_customer, 0, 1, "L")
         self.cell(0, 0, email_company, 0, 1, "R")
@@ -139,9 +153,9 @@ class PDF(FPDF):
         # Données en desous du tableau a gauche
         for element in elements:
             if not element == {}:
-                self.cell(30, 10,str(element["tauxTva"]) , 1, 0, "L")
-                self.cell(35, 10,str(element["totalHt"]) , 1, 0, "L")
-                self.cell(30, 10,str(element["totalTaxe"]), 1, 0, "L")
+                self.cell(30, 10, str(element["tauxTva"]), 1, 0, "L")
+                self.cell(35, 10, str(element["totalHt"]), 1, 0, "L")
+                self.cell(30, 10, str(element["totalTaxe"]), 1, 0, "L")
                 self.ln()
                 totalHtAll += element["totalHt"]
                 totalTaxeAll += element["totalTaxe"]

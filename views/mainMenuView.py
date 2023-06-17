@@ -3,6 +3,11 @@ import ttkbootstrap.constants as cttk
 import views.items.menuItemView as menuItem
 import views.customer.menuCustomerView as menuCustomer
 import views.invoices.menuInvoiceView as menuInvoice
+import views.company.dataCompany as dataCompany
+import controllers.zipcodeController as zipcodeController
+import controllers.companyController as companyController
+import models.zipcodeModel as zipcodeModel
+import models.companyModel as companyModel
 
 
 class MainMenu(ttk.Frame):
@@ -44,13 +49,6 @@ class MainMenu(ttk.Frame):
             font=("Georgia", 15),
         )
         ttk.Style().configure(
-            "apropos.TButton",
-            background="#2F818B",
-            bordercolor="#2F818B",
-            relief="flat",
-            font=("Georgia", 15),
-        )
-        ttk.Style().configure(
             "setting.TButton",
             background="#B17F35",
             bordercolor="#B17F35",
@@ -72,46 +70,48 @@ class MainMenu(ttk.Frame):
             background="#283747",
         )
         # widget button
-        bt_item = ttk.Button(
+        self.bt_item = ttk.Button(
             self,
             text="Article",
             command=self.show_article,
             width=12,
             style="item.TButton",
         )
-        bt_customer = ttk.Button(
+        self.bt_customer = ttk.Button(
             self,
             text="Client",
             command=self.do_show_customer,
             width=12,
             style="customer.TButton",
         )
-        bt_invoice = ttk.Button(
+        self.bt_invoice = ttk.Button(
             self,
             text="Facture",
             command=self.do_show_invoice,
             width=12,
             style="invoices.TButton",
         )
-        bt_close = ttk.Button(
+        self.bt_close = ttk.Button(
             self,
             text="Quitter",
             command=self.quit,
             width=12,
             style="close.TButton",
         )
-        bt_apropos = ttk.Button(self, text="Apropos", width=12, style="apropos.TButton")
-        bt_myCompagny = ttk.Button(
-            self, text="Mon entreprise", width=12, style="setting.TButton"
+        self.bt_myCompany = ttk.Button(
+            self,
+            text="Mon entreprise",
+            width=12,
+            style="setting.TButton",
+            command=self.do_show_company,
         )
         # position widget
         lb_tittle.pack(side=cttk.TOP, pady=20, padx=10)
-        bt_item.pack(side=cttk.TOP, pady=30, padx=10)
-        bt_customer.pack(side=cttk.TOP, padx=10)
-        bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
-        bt_close.pack(side=cttk.BOTTOM, pady=30, padx=10)
-        bt_apropos.pack(side=cttk.BOTTOM, padx=10)
-        bt_myCompagny.pack(side=cttk.BOTTOM, pady=30, padx=10)
+        self.bt_item.pack(side=cttk.TOP, pady=30, padx=10)
+        self.bt_customer.pack(side=cttk.TOP, padx=10)
+        self.bt_invoice.pack(side=cttk.TOP, pady=30, padx=10)
+        self.bt_close.pack(side=cttk.BOTTOM, pady=30, padx=10)
+        self.bt_myCompany.pack(side=cttk.BOTTOM, pady=30, padx=10)
 
     def show_article(self):
         """Lance le menu article"""
@@ -132,3 +132,22 @@ class MainMenu(ttk.Frame):
         self.destroy()
         # affiche le menu facture
         menuInvoice.MenuInvoice(self.window)
+
+    def do_show_company(self):
+        # Module MyCompany
+        myCompany = dataCompany.DataCompany(self.window, self)
+        myCompany.controllerZipcode = zipcodeController.ZipCodeController(
+            zipcodeModel.ZipCodes()
+        )
+        myCompany.controllerCompany = companyController.CompanyController(
+            companyModel.MyCompanys()
+        )
+        myCompany.create_data_company()
+        self.state_bt_mainMenu("disabled")
+
+    def state_bt_mainMenu(self, state):
+        self.bt_customer.configure(state=state)
+        self.bt_item.configure(state=state)
+        self.bt_invoice.configure(state=state)
+        self.bt_myCompany.configure(state=state)
+        self.bt_close.configure(state=state)

@@ -14,7 +14,7 @@ class DataInvoice(ttk.Frame):
 
     tableCustomerWindow: ttk.Toplevel
     tableItemWindow: ttk.Toplevel
-    tableDeleteWindow : ttk.Toplevel
+    tableDeleteWindow: ttk.Toplevel
 
     en_quantityItem: ttk.Entry
 
@@ -121,7 +121,9 @@ class DataInvoice(ttk.Frame):
         try:
             return self._controllerItemInvoice
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour Article facturé")
+            windowView.Window.show_message_error(
+                "Pas de controlleur pour Article facturé"
+            )
             self.quit()
 
     @controllerItemInvoice.setter
@@ -135,7 +137,9 @@ class DataInvoice(ttk.Frame):
         try:
             return self._controllerCompany
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour mon entreprise")
+            windowView.Window.show_message_error(
+                "Pas de controlleur pour mon entreprise"
+            )
             self.quit()
 
     @controllerCompany.setter
@@ -434,7 +438,6 @@ class DataInvoice(ttk.Frame):
         bt_back.grid(column=1, row=2, padx=20, pady=20)
         bt_confirm_selected.grid(column=3, row=2, padx=20, pady=20)
 
-
     def set_variable_ttk_customer(
         self,
         id_customer: int = -1,
@@ -697,7 +700,6 @@ class DataInvoice(ttk.Frame):
             self.table_invoice.item(selected_item)
             self.table_invoice.delete(selected_item)
 
-
     def get_selected_item(self):
         """Récupère les données de l'article, sélectionnez"""
         for selected_item in self.tableItem.selection():
@@ -755,11 +757,11 @@ class DataInvoice(ttk.Frame):
 
         invoice.create_pdf("test.pdf")
 
-    def get_all_items_of_invoice(self)->list:
-        items=[]
+    def get_all_items_of_invoice(self) -> list:
+        items = []
         for selection in self.table_invoice.get_children():
             select = self.table_invoice.item(selection)
-            item= select["values"]
+            item = select["values"]
             items.append(item)
             print(item)
         return items
@@ -769,17 +771,23 @@ class DataInvoice(ttk.Frame):
         items = []
         result = self.get_all_items_of_invoice()
         for item in result:
-            items.append( {"numéroArticle": item[0],
+            items.append(
+                {
+                    "numéroArticle": item[0],
                     "product": item[1],
                     "tauxTva": item[2],
                     "quantity": item[5],
                     "price": float(item[3]),
-                    "total": float(item[4]),})
+                    "total": float(item[4]),
+                }
+            )
 
         # pdf
         invoice = pdf.PDF()
         invoice.add_page()
-        invoice.add_invoice_header(1, self.get_date()) # modifier le numéro 1 par le numéro de facture
+        invoice.add_invoice_header(
+            1, self.get_date()
+        )  # modifier le numéro 1 par le numéro de facture
         invoice.add_invoice_client_and_company(
             self.var_full_name_customer.get(),
             self.var_name_company.get(),
@@ -796,13 +804,6 @@ class DataInvoice(ttk.Frame):
             self.id_customer,
             self.var_account_number_company.get(),
         )
-        invoice.add_invoice_items(
-            items
-        )
+        invoice.add_invoice_items(items)
 
-        invoice.create_pdf("Facture.pdf") # nom du pdf
-
-
-
-
-
+        invoice.create_pdf("Facture.pdf")  # nom du pdf

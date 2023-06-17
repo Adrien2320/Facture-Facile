@@ -47,7 +47,7 @@ class MenuInvoice(ttk.Frame):
         self.data_invoice.controllerItemInvoice = (
             itemInvoiceController.ItemInvoiceController(itemInvoiceModel.ItemInvoices())
         )
-        self.data_invoice.controllerCompany = companyController.CompanyContoller(
+        self.data_invoice.controllerCompany = companyController.CompanyController(
             companyModel.MyCompanys()
         )
 
@@ -130,7 +130,11 @@ class MenuInvoice(ttk.Frame):
             command=self.add_item,
         )
         bt_delete_item = ttk.Button(
-            frame_item, text="Supprimer", style="item.TButton", width=13, command=self.delete_item
+            frame_item,
+            text="Supprimer",
+            style="item.TButton",
+            width=13,
+            command=self.delete_item,
         )
 
         # widgets for self
