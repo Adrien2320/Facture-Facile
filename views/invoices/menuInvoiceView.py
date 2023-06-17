@@ -32,6 +32,7 @@ class MenuInvoice(ttk.Frame):
         self.create_menu()
         #
         self.data_invoice = invoiceView.DataInvoice(self.window)
+
         self.data_invoice.controllerCustomer = customerController.CustomerController(
             customerModel.Customers()
         )
@@ -50,6 +51,7 @@ class MenuInvoice(ttk.Frame):
         self.data_invoice.controllerCompany = companyController.CompanyController(
             companyModel.MyCompanys()
         )
+        self.data_invoice.create_dataInvoice()
 
     def create_menu(self):
         """Création des widgets du menu facture"""

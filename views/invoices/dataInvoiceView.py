@@ -1,4 +1,6 @@
 from tkinter import PhotoImage
+
+import models.companyModel
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
 import views.windowView as windowView
@@ -50,14 +52,11 @@ class DataInvoice(ttk.Frame):
         self.var_phone_company = ttk.StringVar()
         self.var_account_number_company = ttk.StringVar()
 
-        # crate
-        self.create_dataInvoice()
-
         # set variable ttk customer
         self.set_variable_ttk_customer()
 
-        # set variable ttk company
-        self.set_variable_ttk_company()
+
+
 
     @property
     def controllerCustomer(self):
@@ -149,6 +148,9 @@ class DataInvoice(ttk.Frame):
 
     def create_dataInvoice(self):
         """Créer les widgets"""
+
+        # set variable ttk company
+        self.insert_companyData_into_invoice()
 
         # style
         ttk.Style().configure("data.TFrame", background="#283747")
@@ -807,3 +809,18 @@ class DataInvoice(ttk.Frame):
         invoice.add_invoice_items(items)
 
         invoice.create_pdf("Facture.pdf")  # nom du pdf
+
+    def insert_companyData_into_invoice(self):
+        result = self.controllerCompany.load_company()
+        element: models.companyModel.MyCompany = result[0]
+        codePostal = self.get_postalCode_customer(element.postalCode)
+
+        self.set_variable_ttk_company(
+            element.name,
+            element.address,
+            f"{codePostal.codePostal_zipcode} {codePostal.locality_zipcode}",
+            element.tva,
+            element.email,
+            element.phoneNumber,
+            element.accountNumber,
+        )

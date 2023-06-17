@@ -53,7 +53,7 @@ class PDF(FPDF):
         self.cell(
             0,
             0,
-            f"TVA:{numberTva_customer}" if numberTva_customer == "" else "",
+            f"TVA:{numberTva_customer}" if numberTva_customer != "" else "",
             0,
             1,
             "L",
@@ -61,7 +61,7 @@ class PDF(FPDF):
         self.cell(
             0,
             0,
-            f"TVA:{numberTva_company}" if numberTva_company == "" else "",
+            f"TVA:{numberTva_company}" if numberTva_company != "" else "",
             0,
             1,
             "R",
@@ -166,15 +166,15 @@ class PDF(FPDF):
         # données en desous du tableau a droite
         self.set_font("Arial", "B", 12)
         self.set_y(var_y)
-        self.set_x(var_x + 70)
+        self.set_x(var_x + 65)
         self.cell(30, 10, "Total (HT)", 1, 0, "R")
         self.cell(30, 10, str(totalHtAll), 1, 0, "R")
         self.ln()
-        self.set_x(var_x + 70)
+        self.set_x(var_x + 65)
         self.cell(30, 10, "Total Taxes", 1, 0, "R")
         self.cell(30, 10, str(totalTaxeAll), 1, 0, "R")
         self.ln()
-        self.set_x(var_x + 70)
+        self.set_x(var_x + 65)
         self.cell(30, 10, "Total", 1, 0, "R")
         self.cell(30, 10, str(totalHtAll + totalTaxeAll), 1, 0, "R")
 
