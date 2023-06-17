@@ -6,6 +6,7 @@ import models.companyModel as companyModel
 
 class DataCompany(ttk.Frame):
     cbb_postal_code: ttk.Combobox
+    oldName : str
 
     def __init__(self, window, mainMenu):
         """Constructeur"""
@@ -85,6 +86,18 @@ class DataCompany(ttk.Frame):
         self.var_email.set(email_customer)
         self.var_phone.set(phone_customer)
         self.var_accountNumber.set(accountNumber)
+
+    def clean_variable_ttk(
+        self
+    ):
+        """Assigne les variables ttk"""
+        self.var_name.set("")
+        self.var_address.set("")
+        self.var_postal_code.set(int())
+        self.var_number_tva.set("")
+        self.var_email.set("")
+        self.var_phone.set("")
+        self.var_accountNumber.set("")
 
     def create_data_company(self):
         """ créer le formulaire pour mon entreprise"""
@@ -190,10 +203,14 @@ class DataCompany(ttk.Frame):
 
     def confirm_company(self):
         """ enregistre les données. si elle existe déjà, elle va modifier au lieu de les crées"""
+        self.clean_variable_ttk()
         if self.emptyData:
-            self.controllerCompany.add_company()
+            self.controllerCompany.add_company(str(self.var_name.get()),str(self.var_address.get()),int(self.cbb_postal_code.current()+1),str(self.var_phone.get()),str(self.var_email.get()),str(self.var_number_tva.get()),str(self.var_accountNumber.get()))
+            self.clean_variable_ttk()
         else:
-            self.controllerCompany.modif_company()
+            self.controllerCompany.modif_company(str(self.var_name.get()),str(self.var_address.get()),int(self.cbb_postal_code.current()+1),str(self.var_phone.get()),str(self.var_email.get()),str(self.var_number_tva.get()),str(self.var_accountNumber.get()),self.oldName)
+            self.clean_variable_ttk()
+
     def back_mainMenu(self):
         """ débloque le menu et supprime le formulaire mon entreprise"""
         self.destroy()
@@ -207,6 +224,7 @@ class DataCompany(ttk.Frame):
         else:
             self.emptyData = False
             element: companyModel.MyCompany = result[0]
+            self.oldName = element.name
             self.set_variable_ttk(
                 element.name,
                 element.address,
