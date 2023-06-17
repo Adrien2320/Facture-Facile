@@ -145,10 +145,13 @@ class PDF(FPDF):
         self.ln(10)
 
         # En-têtes des colonnes
+        var_y = self.get_y()
         self.set_font("Arial", "B", 12)
         self.cell(30, 10, "Taux de taxe", 1, 0, "C")
         self.cell(35, 10, "Prix de Base", 1, 0, "C")
+        var_x = self.get_x()
         self.cell(30, 10, "Total Taxes", 1, 1, "C")
+
 
         # Données en desous du tableau a gauche
         for element in elements:
@@ -162,16 +165,16 @@ class PDF(FPDF):
 
         # données en desous du tableau a droite
         self.set_font("Arial", "B", 12)
-        self.set_y(135)
-        self.set_x(140)
+        self.set_y(var_y)
+        self.set_x(var_x + 70)
         self.cell(30, 10, "Total (HT)", 1, 0, "R")
         self.cell(30, 10, str(totalHtAll), 1, 0, "R")
         self.ln()
-        self.set_x(140)
+        self.set_x(var_x + 70)
         self.cell(30, 10, "Total Taxes", 1, 0, "R")
         self.cell(30, 10, str(totalTaxeAll), 1, 0, "R")
         self.ln()
-        self.set_x(140)
+        self.set_x(var_x + 70)
         self.cell(30, 10, "Total", 1, 0, "R")
         self.cell(30, 10, str(totalHtAll + totalTaxeAll), 1, 0, "R")
 
