@@ -1,5 +1,4 @@
 from tkinter import PhotoImage
-
 import models.companyModel
 import ttkbootstrap as ttk
 import ttkbootstrap.constants as cttk
@@ -7,6 +6,8 @@ import views.windowView as windowView
 import other.pdf as pdf
 import datetime
 import locale
+import ttkbootstrap.dialogs as dialogs
+import tkinter.filedialog as filedialog
 
 
 class DataInvoice(ttk.Frame):
@@ -54,9 +55,6 @@ class DataInvoice(ttk.Frame):
 
         # set variable ttk customer
         self.set_variable_ttk_customer()
-
-
-
 
     @property
     def controllerCustomer(self):
@@ -716,63 +714,19 @@ class DataInvoice(ttk.Frame):
         date = now.strftime("%d %B %Y")
         return str(date)
 
-    def create_pdf(self):
-        invoice = pdf.PDF()
-        invoice.add_page()
-        invoice.add_invoice_header(1, self.get_date())
-        invoice.add_invoice_client_and_company(
-            "Adrien Mertens",
-            "Zénith Computer",
-            "Rue constant legrève 51",
-            "Rue des battons 25",
-            "1300 Limal",
-            "1300 Wavre",
-            "",
-            "BE17.125.158.4125",
-            "",
-            "Zénith-computer@gmail.com",
-            "",
-            "010.25.69.35.84",
-            124587,
-            "BE56.2587.3695.2547",
-        )
-        invoice.add_invoice_items(
-            [
-                {
-                    "numéroArticle": "1254",
-                    "product": "Produit 1",
-                    "tauxTva": "21%",
-                    "quantity": 2,
-                    "price": 10,
-                    "total": 20,
-                },
-                {
-                    "numéroArticle": "4578",
-                    "product": "Produit 2",
-                    "tauxTva": "12%",
-                    "quantity": 1,
-                    "price": 100,
-                    "total": 100,
-                },
-            ]
-        )
-
-        invoice.create_pdf("test.pdf")
-
     def get_all_items_of_invoice(self) -> list:
         items = []
         for selection in self.table_invoice.get_children():
             select = self.table_invoice.item(selection)
             item = select["values"]
             items.append(item)
-            print(item)
         return items
 
     def record_invoice(self):
         """enregistré les données de la facture dans la base de données"""
         items = []
-        result = self.get_all_items_of_invoice()
-        for item in result:
+        items2 = self.get_all_items_of_invoice()
+        for item in items2:
             items.append(
                 {
                     "numéroArticle": item[0],
@@ -783,32 +737,48 @@ class DataInvoice(ttk.Frame):
                     "total": float(item[4]),
                 }
             )
-
-        # pdf
-        invoice = pdf.PDF()
-        invoice.add_page()
-        invoice.add_invoice_header(
-            1, self.get_date()
-        )  # modifier le numéro 1 par le numéro de facture
-        invoice.add_invoice_client_and_company(
-            self.var_full_name_customer.get(),
-            self.var_name_company.get(),
-            self.var_address_customer.get(),
-            self.var_address_company.get(),
-            self.var_postal_code_customer.get(),
-            self.var_postal_code_company.get(),
-            self.var_number_tva_customer.get(),
-            self.var_number_tva_company.get(),
-            "",
-            self.var_email_company.get(),
-            self.var_phone_customer.get(),
-            self.var_phone_company.get(),
-            self.id_customer,
-            self.var_account_number_company.get(),
+        answer = dialogs.Messagebox.yesno(
+            "Voulez-vous créer la facture", "Confirmation Facture"
         )
-        invoice.add_invoice_items(items)
-
-        invoice.create_pdf("Facture.pdf")  # nom du pdf
+        if answer=="Oui":
+            # enregistré les données de la facture
+            result = self.controllerInvoice.add(
+                str(self.get_date()), self.id_customer, self.var_name_company.get()
+            )
+            numberInvoice = result[0]
+            self.controllerItemInvoice.add_itemInvoice(numberInvoice, items2)
+            # pdf
+            invoice = pdf.PDF()
+            invoice.add_page()
+            invoice.add_invoice_header(
+                numberInvoice, self.get_date()
+            )  # modifier le numéro 1 par le numéro de facture
+            invoice.add_invoice_client_and_company(
+                self.var_full_name_customer.get(),
+                self.var_name_company.get(),
+                self.var_address_customer.get(),
+                self.var_address_company.get(),
+                self.var_postal_code_customer.get(),
+                self.var_postal_code_company.get(),
+                self.var_number_tva_customer.get(),
+                self.var_number_tva_company.get(),
+                "",
+                self.var_email_company.get(),
+                self.var_phone_customer.get(),
+                self.var_phone_company.get(),
+                self.id_customer,
+                self.var_account_number_company.get(),
+            )
+            invoice.add_invoice_items(items)
+            saveFile =filedialog.askdirectory(
+                title="Confirmation Facture",
+            )
+            invoice.create_pdf(saveFile+f"/{self.var_full_name_customer.get()}.{str(self.get_date())}.pdf")
+            self.clear_ttkVariable_customer()
+            self.table_invoice.delete(*self.table_invoice.get_children())
+            windowView.Window.show_message_success("La facture a bien été créer")
+        else:
+            windowView.Window.show_message_success("La facture n'a pas été créer")
 
     def insert_companyData_into_invoice(self):
         result = self.controllerCompany.load_company()
@@ -824,3 +794,11 @@ class DataInvoice(ttk.Frame):
             element.phoneNumber,
             element.accountNumber,
         )
+
+    def clear_ttkVariable_customer(self):
+        self.id_customer = 0
+        self.var_full_name_customer.set("")
+        self.var_address_customer.set("")
+        self.var_postal_code_customer.set("")
+        self.var_number_tva_customer.set("")
+        self.var_phone_customer.set("")

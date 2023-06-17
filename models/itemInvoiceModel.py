@@ -25,9 +25,10 @@ class ItemInvoices:
         """Sauvegarde les modifications appliquée à la table"""
         self.database.commit()
 
-    def add_itemInvoice(self, numberInvoice: int, numberItem: int, quantity: int):
+    def add_itemInvoice(self, numberInvoice: int, items):
         sql = """INSERT INTO T_Items_Invoices (idInvoice_itemInvoice, idItem_itemInvoice, quantity_itemInvoice) VALUES (?,?,?)"""
 
         with closing(self.cursor) as cursor:
-            cursor.execute(sql, [numberInvoice, numberItem, quantity])
+            for item in items:
+                cursor.execute(sql, [numberInvoice, item[0], item[5]])
             self.commit()

@@ -25,11 +25,14 @@ class Invoices:
         """Sauvegarde les modifications appliquée à la table"""
         self.database.commit()
 
-    def add_invoice(self, date: str, idCustomer: int, myCompany: str):
+    def add_invoice(self, date: str, idCustomer: int, nameCompany
+    : str):
         """crée une facture dans la table T_Invoices"""
-        sql = """INSERT INTO T_Invoices (date_invoice, customer_invoice, myCompany_invoice) VALUES (?,?,?); SELECT last_insert_rowid()"""
-
+        sql = """INSERT INTO T_Invoices (date_invoice, customer_invoice, myCompany_invoice) VALUES (?,?,?)"""
+        sql2 = """SELECT last_insert_rowid()"""
         with closing(self.cursor) as cursor:
-            result = cursor.execute(sql, [date, idCustomer, myCompany])
+            cursor.execute(sql, [date, idCustomer, nameCompany])
             self.commit()
-        return result
+            cursor.execute(sql2)
+            for result in cursor:
+                return result
