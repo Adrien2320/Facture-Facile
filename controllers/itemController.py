@@ -45,3 +45,7 @@ class ItemController:
     def load_data_item(self, id_item):
         """Récupère un élément de la table article"""
         return self.data.load_item(id_item)
+
+    def check_if_item_exist(self,name : str):
+        """ Vérifie si l'article existe déjà et retourne la réponse en boolean"""
+        return self.data.check_exist_or_no(name)

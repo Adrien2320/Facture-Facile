@@ -28,7 +28,7 @@ class DataItem(ttk.Frame):
         # variable
         self.window = window
         self.menu_item = menu_item
-        self.btConfirm_exist = False
+        self.varBtConfirm_exist = False
 
     def check_content_htvaPrice(self, event):
         try:
@@ -128,7 +128,7 @@ class DataItem(ttk.Frame):
         )
 
         # check the contents of entry
-        if self.btConfirm_exist:
+        if self.varBtConfirm_exist:
             self.en_htva_price.bind("<FocusOut>", self.check_content_htvaPrice)
             en_name.bind('<FocusOut>',self.check_if_all_entry_are_filled)
             en_description.bind('<FocusOut>',self.check_if_all_entry_are_filled)
@@ -283,20 +283,25 @@ class DataItem(ttk.Frame):
 
     def show_new_item(self):
         """Affiche le formulaire pour créer un article"""
-        self.btConfirm_exist = True
+        self.varBtConfirm_exist = True
         self.create_data_item()
         self.bt_confirm_item["command"] = self.new_item
 
     def new_item(self):
         """Crée un article dans la base de données"""
-        self.controller.new_item(
-            str(self.var_name.get()),
-            str(self.var_description.get()),
-            float(str(self.var_htva_price.get())),
-            str(self.var_tva_tare.get()),
-        )
-        self.destroy()
-        menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
+        print(self.controller.check_if_item_exist(str(self.var_name.get())))
+        if not self.controller.check_if_item_exist(str(self.var_name.get())):
+            self.controller.new_item(
+                str(self.var_name.get()),
+                str(self.var_description.get()),
+                float(str(self.var_htva_price.get())),
+                str(self.var_tva_tare.get()),
+            )
+            self.destroy()
+            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
+        else:
+            windowView.Window.show_message_failure(f"L'article {str(self.var_name.get())} existe déjà")
+            self.bt_confirm_item.configure(state="disabled")
 
     def show_search_item(self):
         """Affiche la table d'article pour sélectionner l'article à rechercher"""
@@ -336,7 +341,7 @@ class DataItem(ttk.Frame):
             item.tva_tare,
         )
         self.clean_frame()
-        self.btConfirm_exist = True
+        self.varBtConfirm_exist = True
         self.create_data_item()
         self.bt_confirm_item["command"] = self.modif_item
 
