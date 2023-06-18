@@ -53,7 +53,7 @@ class PDF(FPDF):
         self.cell(
             0,
             0,
-            f"TVA:{numberTva_customer}" if numberTva_customer == "" else "",
+            f"TVA:{numberTva_customer}" if numberTva_customer != " " else "",
             0,
             1,
             "L",
@@ -61,7 +61,7 @@ class PDF(FPDF):
         self.cell(
             0,
             0,
-            f"TVA:{numberTva_company}" if numberTva_company != "" else "",
+            f"TVA:{numberTva_company}" if numberTva_company != " " else "",
             0,
             1,
             "R",
@@ -153,6 +153,7 @@ class PDF(FPDF):
         self.cell(30, 10, "Total Taxes", 1, 1, "C")
 
         # Données en desous du tableau a gauche
+        self.set_font("Arial", "", 12)
         for element in elements:
             if not element == {}:
                 self.cell(30, 10, str(element["tauxTva"]), 1, 0, "L")
@@ -167,14 +168,19 @@ class PDF(FPDF):
         self.set_y(var_y)
         self.set_x(var_x + 65)
         self.cell(30, 10, "Total (HT)", 1, 0, "R")
+        self.set_font("Arial", "", 12)
         self.cell(30, 10, str(totalHtAll)+chr(128), 1, 0, "R")
         self.ln()
         self.set_x(var_x + 65)
+        self.set_font("Arial", "B", 12)
         self.cell(30, 10, "Total Taxes", 1, 0, "R")
+        self.set_font("Arial", "", 12)
         self.cell(30, 10, str(totalTaxeAll)+chr(128), 1, 0, "R")
         self.ln()
         self.set_x(var_x + 65)
+        self.set_font("Arial", "B", 12)
         self.cell(30, 10, "Total", 1, 0, "R")
+        self.set_font("Arial", "", 12)
         self.cell(30, 10, str(totalHtAll + totalTaxeAll)+chr(128), 1, 0, "R")
 
     def create_pdf(self, name: str):
