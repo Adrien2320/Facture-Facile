@@ -6,7 +6,7 @@ import models.companyModel as companyModel
 
 class DataCompany(ttk.Frame):
     cbb_postal_code: ttk.Combobox
-    oldName : str
+    oldName: str
 
     def __init__(self, window, mainMenu):
         """Constructeur"""
@@ -88,9 +88,7 @@ class DataCompany(ttk.Frame):
         self.var_phone.set(phone_company)
         self.var_accountNumber.set(accountNumber)
 
-    def clean_variable_ttk(
-        self
-    ):
+    def clean_variable_ttk(self):
         """Assigne les variables ttk"""
         self.var_name.set("")
         self.var_address.set("")
@@ -101,7 +99,7 @@ class DataCompany(ttk.Frame):
         self.var_accountNumber.set("")
 
     def create_data_company(self):
-        """ créer le formulaire pour mon entreprise"""
+        """créer le formulaire pour mon entreprise"""
         # Préremplis le formulaire
         self.check_data_in_table_and_return()
         self.postal_code = self.insert_postal_code()
@@ -137,7 +135,7 @@ class DataCompany(ttk.Frame):
             style="confirm.TButton",
             width=15,
             command=self.confirm_company,
-            state="disabled"
+            state="disabled",
         )
         self.bt_back = ttk.Button(
             bottom_frame,
@@ -214,17 +212,34 @@ class DataCompany(ttk.Frame):
         en_phone.bind("<FocusOut>", self.check_if_all_entry_are_filled)
 
     def confirm_company(self):
-        """ Enregistre les données. Si elle existe déjà, elle va modifier au lieu de les crées"""
+        """Enregistre les données. Si elle existe déjà, elle va modifier au lieu de les crées"""
         self.clean_variable_ttk()
         if self.emptyData:
-            self.controllerCompany.add_company(str(self.var_name.get()),str(self.var_address.get()),int(self.cbb_postal_code.current()+1),str(self.var_phone.get()),str(self.var_email.get()),str(self.var_number_tva.get()),str(self.var_accountNumber.get()))
+            self.controllerCompany.add_company(
+                str(self.var_name.get()),
+                str(self.var_address.get()),
+                int(self.cbb_postal_code.current() + 1),
+                str(self.var_phone.get()),
+                str(self.var_email.get()),
+                str(self.var_number_tva.get()),
+                str(self.var_accountNumber.get()),
+            )
             self.clean_variable_ttk()
         else:
-            self.controllerCompany.modif_company(str(self.var_name.get()),str(self.var_address.get()),int(self.cbb_postal_code.current()+1),str(self.var_phone.get()),str(self.var_email.get()),str(self.var_number_tva.get()),str(self.var_accountNumber.get()),self.oldName)
+            self.controllerCompany.modif_company(
+                str(self.var_name.get()),
+                str(self.var_address.get()),
+                int(self.cbb_postal_code.current() + 1),
+                str(self.var_phone.get()),
+                str(self.var_email.get()),
+                str(self.var_number_tva.get()),
+                str(self.var_accountNumber.get()),
+                self.oldName,
+            )
             self.clean_variable_ttk()
 
     def back_mainMenu(self):
-        """ Débloque le menu et supprime le formulaire mon entreprise"""
+        """Débloque le menu et supprime le formulaire mon entreprise"""
         self.destroy()
         self.mainMenu.state_bt_mainMenu("normal")
 
@@ -248,13 +263,20 @@ class DataCompany(ttk.Frame):
             )
             self.codePostalTemp = element.postalCode
 
+    def set_cbb_postal_code(self, indexPostalCode: int):
+        self.cbb_postal_code.current(indexPostalCode - 1)
 
-    def set_cbb_postal_code(self, indexPostalCode:int):
-        self.cbb_postal_code.current(indexPostalCode-1)
-
-    def check_if_all_entry_are_filled(self,*args):
+    def check_if_all_entry_are_filled(self, *args):
         """Vérifie si l'utilisateur a rempli toutes les entrées importantes"""
-        if self.var_name.get() and self.var_address.get() and self.cbb_postal_code.get() and self.var_number_tva.get() and self.var_accountNumber.get() and self.var_email.get() and self.var_phone.get():
+        if (
+            self.var_name.get()
+            and self.var_address.get()
+            and self.cbb_postal_code.get()
+            and self.var_number_tva.get()
+            and self.var_accountNumber.get()
+            and self.var_email.get()
+            and self.var_phone.get()
+        ):
             self.bt_confirm_company.configure(state="normal")
         else:
             self.bt_confirm_company.configure(state="disabled")

@@ -152,7 +152,6 @@ class PDF(FPDF):
         var_x = self.get_x()
         self.cell(30, 10, "Total Taxes", 1, 1, "C")
 
-
         # Données en desous du tableau a gauche
         for element in elements:
             if not element == {}:

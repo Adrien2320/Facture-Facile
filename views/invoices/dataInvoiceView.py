@@ -740,7 +740,7 @@ class DataInvoice(ttk.Frame):
         answer = dialogs.Messagebox.yesno(
             "Voulez-vous créer la facture", "Confirmation Facture"
         )
-        if answer=="Oui":
+        if answer == "Oui":
             # enregistré les données de la facture
             result = self.controllerInvoice.add(
                 str(self.get_date()), self.id_customer, self.var_name_company.get()
@@ -770,10 +770,13 @@ class DataInvoice(ttk.Frame):
                 self.var_account_number_company.get(),
             )
             invoice.add_invoice_items(items)
-            saveFile =filedialog.askdirectory(
+            saveFile = filedialog.askdirectory(
                 title="Confirmation Facture",
             )
-            invoice.create_pdf(saveFile+f"/{self.var_full_name_customer.get()}.{str(self.get_date())}.pdf")
+            invoice.create_pdf(
+                saveFile
+                + f"/{self.var_full_name_customer.get()}.{str(self.get_date())}.pdf"
+            )
             self.clear_ttkVariable_customer()
             self.table_invoice.delete(*self.table_invoice.get_children())
             windowView.Window.show_message_success("La facture a bien été créer")

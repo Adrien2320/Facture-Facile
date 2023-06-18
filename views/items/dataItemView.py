@@ -31,22 +31,27 @@ class DataItem(ttk.Frame):
         self.varBtConfirm_exist = False
 
     def check_content_htvaPrice(self, event):
-        """ Vérifie si le contenu de l'entry pour le prix htva est correct """
+        """Vérifie si le contenu de l'entry pour le prix htva est correct"""
         try:
             float(self.en_htva_price.get())
         except ValueError:
             windowView.Window.show_message_error("Veuillez entré un nombre")
             self.var_htva_price.set(0.0)
 
-    def check_if_all_entry_are_filled(self,*args):
-        """ Vérifie si toutes les entrys sont bien remplis"""
-        if self.var_name.get() and self.var_description.get() and self.var_tva_tare.get() and self.var_htva_price.get():
+    def check_if_all_entry_are_filled(self, *args):
+        """Vérifie si toutes les entrys sont bien remplis"""
+        if (
+            self.var_name.get()
+            and self.var_description.get()
+            and self.var_tva_tare.get()
+            and self.var_htva_price.get()
+        ):
             self.bt_confirm_item.configure(state="normal")
         else:
             self.bt_confirm_item.configure(state="disabled")
 
-    def check_treeview_select(self,event):
-        """ Vérifie si l'utilisateur à sélectionner un élément  """
+    def check_treeview_select(self, event):
+        """Vérifie si l'utilisateur à sélectionner un élément"""
         selected_item = self.table.selection()
         if selected_item:
             self.bt_confirm_selected.configure(state="normal")
@@ -93,7 +98,7 @@ class DataItem(ttk.Frame):
             text="Confirmation",
             style="confirm.TButton",
             width=15,
-            state="disabled"
+            state="disabled",
         )
         bt_back = ttk.Button(
             bottom_frame,
@@ -132,10 +137,10 @@ class DataItem(ttk.Frame):
         # check the contents of entry
         if self.varBtConfirm_exist:
             self.en_htva_price.bind("<FocusOut>", self.check_content_htvaPrice)
-            en_name.bind('<FocusOut>',self.check_if_all_entry_are_filled)
-            en_description.bind('<FocusOut>',self.check_if_all_entry_are_filled)
-            self.en_htva_price.bind('<FocusOut>',self.check_if_all_entry_are_filled)
-            cbb_tva_tare.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+            en_name.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            en_description.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            self.en_htva_price.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            cbb_tva_tare.bind("<FocusOut>", self.check_if_all_entry_are_filled)
 
         # position label
         lb_name.grid(column=0, row=1, pady=10)
@@ -168,21 +173,27 @@ class DataItem(ttk.Frame):
             relief="flat",
             font=("Georgia", 15),
         )
-        ttk.Style().configure("title.TLabel",background="#283747")
+        ttk.Style().configure("title.TLabel", background="#283747")
         ttk.Style().configure("my.Treeview", background="#283747", rowheight=25)
         # frame
         bottom_frame = ttk.Frame(self)
         top_frame = ttk.Frame(self)
         table_frame = ttk.Frame(top_frame)
         # title
-        lb_title = ttk.Label(top_frame, text="Liste de sélection d'articles", style="title.TLabel",font=("Georgia", 20),anchor=cttk.CENTER)
+        lb_title = ttk.Label(
+            top_frame,
+            text="Liste de sélection d'articles",
+            style="title.TLabel",
+            font=("Georgia", 20),
+            anchor=cttk.CENTER,
+        )
         # position frame
         bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.BOTH, expand=True)
-        bottom_frame.columnconfigure(0,weight=1)
-        bottom_frame.columnconfigure(2,weight=1)
-        bottom_frame.columnconfigure(4,weight=1)
-        bottom_frame.rowconfigure(0,weight=1)
-        bottom_frame.rowconfigure(2,weight=1)
+        bottom_frame.columnconfigure(0, weight=1)
+        bottom_frame.columnconfigure(2, weight=1)
+        bottom_frame.columnconfigure(4, weight=1)
+        bottom_frame.rowconfigure(0, weight=1)
+        bottom_frame.rowconfigure(2, weight=1)
 
         top_frame.pack(side=cttk.TOP, fill=cttk.BOTH, expand=True)
         lb_title.pack(side=cttk.TOP, fill=cttk.X)
@@ -209,7 +220,7 @@ class DataItem(ttk.Frame):
         self.table.heading("name", text="Nom", anchor=cttk.W)
         # position views table
         self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
-        self.table.bind("<<TreeviewSelect>>",self.check_treeview_select)
+        self.table.bind("<<TreeviewSelect>>", self.check_treeview_select)
         scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
         # button widget
         bt_back = ttk.Button(
@@ -227,14 +238,14 @@ class DataItem(ttk.Frame):
             state="disabled",
         )
         # label widget
-        lb_top = tk.Label(bottom_frame ,height=5)
-        lb_bottom = tk.Label(bottom_frame ,height=5)
+        lb_top = tk.Label(bottom_frame, height=5)
+        lb_bottom = tk.Label(bottom_frame, height=5)
 
         # button position
-        lb_top.grid(columnspan=5,row=0,sticky=cttk.NS)
-        bt_back.grid(column=1,row=1,sticky=cttk.EW)
-        self.bt_confirm_selected.grid(column=3,row=1,sticky=cttk.EW)
-        lb_bottom.grid(columnspan=5, row=2,sticky=cttk.NS)
+        lb_top.grid(columnspan=5, row=0, sticky=cttk.NS)
+        bt_back.grid(column=1, row=1, sticky=cttk.EW)
+        self.bt_confirm_selected.grid(column=3, row=1, sticky=cttk.EW)
+        lb_bottom.grid(columnspan=5, row=2, sticky=cttk.NS)
 
     def insert_item_in_table(self):
         """Ajout chaque article de la table"""
@@ -302,7 +313,9 @@ class DataItem(ttk.Frame):
             self.destroy()
             menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
         else:
-            windowView.Window.show_message_failure(f"L'article {str(self.var_name.get())} existe déjà")
+            windowView.Window.show_message_failure(
+                f"L'article {str(self.var_name.get())} existe déjà"
+            )
             self.bt_confirm_item.configure(state="disabled")
 
     def show_search_item(self):
@@ -346,7 +359,6 @@ class DataItem(ttk.Frame):
         self.varBtConfirm_exist = True
         self.create_data_item()
         self.bt_confirm_item["command"] = self.modif_item
-
 
     def modif_item(self):
         """Modifie un article"""

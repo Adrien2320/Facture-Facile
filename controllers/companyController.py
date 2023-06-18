@@ -1,5 +1,5 @@
 import views.windowView as windowView
-from models.companyModel import MyCompanys,MyCompany
+from models.companyModel import MyCompanys, MyCompany
 
 
 class CompanyController:
@@ -64,6 +64,5 @@ class CompanyController:
         else:
             windowView.Window.show_message_failure("Veuillez remplire les données")
 
-    def load_company(self)->MyCompany:
-
+    def load_company(self) -> MyCompany:
         return self.data.load_myCompany()

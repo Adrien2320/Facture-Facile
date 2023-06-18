@@ -23,7 +23,7 @@ class DataCustomer(ttk.Frame):
         # variable
         self.window = window
         self.menu_customer = menu_customer
-        self.varBtConfirm_exist =False
+        self.varBtConfirm_exist = False
         self.postal_code = self.insert_postal_code()
         # variable ttk
         self.var_idCustomer = ttk.IntVar()
@@ -150,7 +150,7 @@ class DataCustomer(ttk.Frame):
             text="Confirmer",
             style="confirm.TButton",
             width=15,
-            state="disabled"
+            state="disabled",
         )
         bt_back = ttk.Button(
             bottom_frame,
@@ -231,7 +231,6 @@ class DataCustomer(ttk.Frame):
             self.cbb_postal_code.bind("<FocusOut>", self.check_if_all_entry_are_filled)
             en_tva.bind("<FocusOut>", self.check_if_all_entry_are_filled)
 
-
     def create_table_customer(self):
         """Affiche tous les clients dans une treeview"""
         # style
@@ -258,8 +257,13 @@ class DataCustomer(ttk.Frame):
         table_frame = ttk.Frame(top_frame)
 
         # title
-        lb_title = ttk.Label(top_frame, text="Liste de sélection de client", style="title.TLabel",
-                             font=("Georgia", 20), anchor=cttk.CENTER)
+        lb_title = ttk.Label(
+            top_frame,
+            text="Liste de sélection de client",
+            style="title.TLabel",
+            font=("Georgia", 20),
+            anchor=cttk.CENTER,
+        )
 
         # position frame
         bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.BOTH, expand=True)
@@ -302,7 +306,7 @@ class DataCustomer(ttk.Frame):
 
         # position views table
         self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
-        self.table.bind("<<TreeviewSelect>>",self.check_treeview_select)
+        self.table.bind("<<TreeviewSelect>>", self.check_treeview_select)
         scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
 
         # button widget
@@ -318,7 +322,7 @@ class DataCustomer(ttk.Frame):
             text="Confirmer",
             style="confirm.TButton",
             width=15,
-            state="disabled"
+            state="disabled",
         )
         # label widget
         lb_top = tk.Label(bottom_frame, height=5)
@@ -326,8 +330,8 @@ class DataCustomer(ttk.Frame):
 
         # button position
         lb_top.grid(columnspan=5, row=0, sticky=cttk.NS)
-        bt_back.grid(column=1,row=1,sticky=cttk.EW)
-        self.bt_confirm_selected.grid(column=3,row=1,sticky=cttk.EW)
+        bt_back.grid(column=1, row=1, sticky=cttk.EW)
+        self.bt_confirm_selected.grid(column=3, row=1, sticky=cttk.EW)
         lb_bottom.grid(columnspan=5, row=2, sticky=cttk.NS)
 
     def insert_customer_in_table(self):
@@ -480,21 +484,30 @@ class DataCustomer(ttk.Frame):
     def check_if_all_entry_are_filled(self, *args):
         """Vérifie si l'utilisateur a rempli toutes les entrées selon le type de client"""
         if self.var_type.get() == "Professionnel":
-            if self.var_name.get() and self.var_address.get() and self.cbb_postal_code.get() and self.var_number_tva.get():
+            if (
+                self.var_name.get()
+                and self.var_address.get()
+                and self.cbb_postal_code.get()
+                and self.var_number_tva.get()
+            ):
                 self.bt_confirm_customer.configure(state="normal")
             else:
                 self.bt_confirm_customer.configure(state="disabled")
         elif self.var_type.get() == "Particulier":
-            if self.var_first_name.get() and self.var_name.get() and self.var_address.get() and self.cbb_postal_code.get():
+            if (
+                self.var_first_name.get()
+                and self.var_name.get()
+                and self.var_address.get()
+                and self.cbb_postal_code.get()
+            ):
                 self.bt_confirm_customer.configure(state="normal")
             else:
                 self.bt_confirm_customer.configure(state="disabled")
 
     def check_treeview_select(self, event):
-        """ Vérifie si l'utilisateur à sélectionner un élément  """
+        """Vérifie si l'utilisateur à sélectionner un élément"""
         selected_item = self.table.selection()
         if selected_item:
             self.bt_confirm_selected.configure(state="normal")
         else:
             self.bt_confirm_selected.configure(state="disabled")
-

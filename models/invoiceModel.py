@@ -25,8 +25,7 @@ class Invoices:
         """Sauvegarde les modifications appliquée à la table"""
         self.database.commit()
 
-    def add_invoice(self, date: str, idCustomer: int, nameCompany
-    : str):
+    def add_invoice(self, date: str, idCustomer: int, nameCompany: str):
         """crée une facture dans la table T_Invoices"""
         sql = """INSERT INTO T_Invoices (date_invoice, customer_invoice, myCompany_invoice) VALUES (?,?,?)"""
         sql2 = """SELECT last_insert_rowid()"""
