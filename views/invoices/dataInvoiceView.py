@@ -767,6 +767,7 @@ class DataInvoice(ttk.Frame):
             )
             numberInvoice = result[0]
             self.controllerItemInvoice.add_itemInvoice(numberInvoice, items2)
+            numberInvoicePdf = f"facture {numberInvoice}"
             # pdf
             invoice = pdf.PDF()
             invoice.add_page()
@@ -795,7 +796,7 @@ class DataInvoice(ttk.Frame):
             )
             invoice.create_pdf(
                 saveFile
-                + f"/{self.var_full_name_customer.get()}.{str(self.get_date())}.pdf"
+                + f"/{numberInvoicePdf} {self.var_full_name_customer.get()} {str(self.get_date())}.pdf"
             )
             self.clear_ttkVariable_customer()
             self.table_invoice.delete(*self.table_invoice.get_children())
