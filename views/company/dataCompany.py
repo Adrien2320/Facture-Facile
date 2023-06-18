@@ -29,6 +29,7 @@ class DataCompany(ttk.Frame):
         self.var_email = ttk.StringVar()
         self.var_phone = ttk.StringVar()
         self.var_accountNumber = ttk.StringVar()
+        self.codePostalTemp = 0
 
     @property
     def controllerZipcode(self):
@@ -70,21 +71,21 @@ class DataCompany(ttk.Frame):
 
     def set_variable_ttk(
         self,
-        name_customer: str,
-        address_customer: str,
-        postal_code_customer: int,
-        number_tva_customer: str,
-        email_customer: str,
-        phone_customer: str,
+        name_company: str,
+        address_company: str,
+        postalCode_company: int,
+        number_tva_company: str,
+        email_company: str,
+        phone_company: str,
         accountNumber: str,
     ):
         """Assigne les variables ttk"""
-        self.var_name.set(name_customer)
-        self.var_address.set(address_customer)
-        self.var_postal_code.set(postal_code_customer)
-        self.var_number_tva.set(number_tva_customer)
-        self.var_email.set(email_customer)
-        self.var_phone.set(phone_customer)
+        self.var_name.set(name_company)
+        self.var_address.set(address_company)
+        self.var_postal_code.set(postalCode_company)
+        self.var_number_tva.set(number_tva_company)
+        self.var_email.set(email_company)
+        self.var_phone.set(phone_company)
         self.var_accountNumber.set(accountNumber)
 
     def clean_variable_ttk(
@@ -130,14 +131,15 @@ class DataCompany(ttk.Frame):
         top_frame.pack(side=cttk.TOP, expand=True, fill=cttk.BOTH)
         bottom_frame.pack(side=cttk.BOTTOM, expand=True, fill=cttk.BOTH)
         # widget button
-        bt_confirm_company = ttk.Button(
+        self.bt_confirm_company = ttk.Button(
             bottom_frame,
             text="Enregistrer",
             style="confirm.TButton",
             width=15,
             command=self.confirm_company,
+            state="disabled"
         )
-        bt_back = ttk.Button(
+        self.bt_back = ttk.Button(
             bottom_frame,
             text="Retour",
             style="back.TButton",
@@ -181,8 +183,8 @@ class DataCompany(ttk.Frame):
             state="readonly",
         )
         # position button
-        bt_confirm_company.pack(side=cttk.RIGHT, padx=50)
-        bt_back.pack(side=cttk.LEFT, padx=50)
+        self.bt_confirm_company.pack(side=cttk.RIGHT, padx=50)
+        self.bt_back.pack(side=cttk.LEFT, padx=50)
         # position Label
         lb_name.grid(column=0, row=1, pady=10)
         lb_address.grid(column=0, row=2, pady=10)
@@ -200,9 +202,19 @@ class DataCompany(ttk.Frame):
         en_accountNumber.grid(column=1, row=5, sticky=cttk.EW, pady=10, padx=20)
         # position combobox
         self.cbb_postal_code.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=20)
+        if not self.emptyData:
+            self.set_cbb_postal_code(self.codePostalTemp)
+        # check the contents of entry
+        en_name.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+        en_address.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+        self.cbb_postal_code.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+        en_tva.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+        en_accountNumber.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+        en_email.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+        en_phone.bind("<FocusOut>", self.check_if_all_entry_are_filled)
 
     def confirm_company(self):
-        """ enregistre les données. si elle existe déjà, elle va modifier au lieu de les crées"""
+        """ Enregistre les données. Si elle existe déjà, elle va modifier au lieu de les crées"""
         self.clean_variable_ttk()
         if self.emptyData:
             self.controllerCompany.add_company(str(self.var_name.get()),str(self.var_address.get()),int(self.cbb_postal_code.current()+1),str(self.var_phone.get()),str(self.var_email.get()),str(self.var_number_tva.get()),str(self.var_accountNumber.get()))
@@ -212,7 +224,7 @@ class DataCompany(ttk.Frame):
             self.clean_variable_ttk()
 
     def back_mainMenu(self):
-        """ débloque le menu et supprime le formulaire mon entreprise"""
+        """ Débloque le menu et supprime le formulaire mon entreprise"""
         self.destroy()
         self.mainMenu.state_bt_mainMenu("normal")
 
@@ -234,3 +246,15 @@ class DataCompany(ttk.Frame):
                 element.phoneNumber,
                 element.accountNumber,
             )
+            self.codePostalTemp = element.postalCode
+
+
+    def set_cbb_postal_code(self, indexPostalCode:int):
+        self.cbb_postal_code.current(indexPostalCode-1)
+
+    def check_if_all_entry_are_filled(self,*args):
+        """Vérifie si l'utilisateur a rempli toutes les entrées importantes"""
+        if self.var_name.get() and self.var_address.get() and self.cbb_postal_code.get() and self.var_number_tva.get() and self.var_accountNumber.get() and self.var_email.get() and self.var_phone.get():
+            self.bt_confirm_company.configure(state="normal")
+        else:
+            self.bt_confirm_company.configure(state="disabled")

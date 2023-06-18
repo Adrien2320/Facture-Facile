@@ -455,6 +455,7 @@ class DataCustomer(ttk.Frame):
             self.clean_frame()
             self.varBtConfirm_exist = True
             self.create_data_customer()
+            self.set_cbb_postal_code(customer.postalCode_customer)
             self.bt_confirm_customer["command"] = self.modif_customer
         except AttributeError:
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
