@@ -28,11 +28,19 @@ class DataItem(ttk.Frame):
         self.window = window
         self.menu_item = menu_item
 
-    def check_htvaPrice(self,event):
+    def check_content_htvaPrice(self, event):
         try:
             float(self.en_htva_price.get())
         except ValueError:
             windowView.Window.show_message_error("Veuillez entré un nombre")
+            self.var_htva_price.set(0.0)
+
+    def check_if_all_entry_are_filled(self,*args):
+        """ Vérifie si toutes les entrées sont bien remplis"""
+        if self.var_name.get() and self.var_description.get() and self.var_tva_tare.get() and self.var_htva_price.get():
+            self.bt_confirm_item.configure(state="normal")
+        else:
+            self.bt_confirm_item.configure(state="disabled")
 
     def create_data_item(self):
         """Création du formulaire article"""
@@ -74,6 +82,7 @@ class DataItem(ttk.Frame):
             text="Confirmation",
             style="confirm.TButton",
             width=15,
+            state="disabled"
         )
         bt_back = ttk.Button(
             bottom_frame,
@@ -101,7 +110,7 @@ class DataItem(ttk.Frame):
         )
 
         # widget list
-        en_tva_tare = ttk.Combobox(
+        cbb_tva_tare = ttk.Combobox(
             top_frame,
             values=tva_rate,
             font=("Georgia", 25),
@@ -109,7 +118,11 @@ class DataItem(ttk.Frame):
         )
 
         # check the contents of entry
-        self.en_htva_price.bind("<FocusOut>", self.check_htvaPrice)
+        self.en_htva_price.bind("<FocusOut>", self.check_content_htvaPrice)
+        en_name.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+        en_description.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+        self.en_htva_price.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+        cbb_tva_tare.bind('<FocusOut>',self.check_if_all_entry_are_filled)
 
         # position label
         lb_name.grid(column=0, row=1, pady=10)
@@ -120,7 +133,7 @@ class DataItem(ttk.Frame):
         en_name.grid(column=1, row=1, sticky=cttk.EW, pady=10, padx=10)
         en_description.grid(column=1, row=2, sticky=cttk.EW, pady=10, padx=10)
         self.en_htva_price.grid(column=1, row=3, sticky=cttk.EW, pady=10, padx=10)
-        en_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
+        cbb_tva_tare.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=10)
         # position button
         self.bt_confirm_item.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
