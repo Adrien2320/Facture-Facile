@@ -31,7 +31,7 @@ class MenuInvoice(ttk.Frame):
         # creation du menu
         self.create_menu()
         # assign of dataInvoice
-        self.data_invoice = invoiceView.DataInvoice(self.window)
+        self.data_invoice = invoiceView.DataInvoice(self.window, self)
         self.data_invoice.controllerCustomer = customerController.CustomerController(
             customerModel.Customers()
         )
@@ -152,12 +152,13 @@ class MenuInvoice(ttk.Frame):
             width=13,
             command=self.back_main_menu,
         )
-        bt_invoice_overview = ttk.Button(
+        self.bt_invoice_generate = ttk.Button(
             self,
-            text="Aperçu Facture",
+            text="Générer Facture",
             style="test.TButton",
             width=13,
             command=self.show_facture,
+            state="disabled",
         )
 
         # position label self
@@ -178,7 +179,7 @@ class MenuInvoice(ttk.Frame):
 
         # position widgets self
         bt_main_menu.pack(side=cttk.BOTTOM, padx=10, pady=10)
-        bt_invoice_overview.pack(side=cttk.BOTTOM, pady=20, padx=10)
+        self.bt_invoice_generate.pack(side=cttk.BOTTOM, pady=20, padx=10)
 
     def back_main_menu(self):
         """Reviens au menu principale"""

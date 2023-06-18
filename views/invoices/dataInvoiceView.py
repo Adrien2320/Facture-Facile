@@ -21,13 +21,14 @@ class DataInvoice(ttk.Frame):
 
     en_quantityItem: ttk.Entry
 
-    def __init__(self, window):
+    def __init__(self, window, menuInvoice):
         """Constructeur"""
         # paramètre de la frame
         super().__init__(window)
         # variable
 
         self.window = window
+        self.menuInvoice = menuInvoice
 
         # position de la frame
         self.pack(side=cttk.RIGHT, fill=cttk.BOTH, expand=True)
@@ -43,6 +44,7 @@ class DataInvoice(ttk.Frame):
         self.var_postal_code_customer = ttk.StringVar()
         self.var_number_tva_customer = ttk.StringVar()
         self.var_phone_customer = ttk.StringVar()
+        self.customerDetailsIsFilled = False
 
         # variable ttk my company
         self.var_name_company = ttk.StringVar()
@@ -420,12 +422,13 @@ class DataInvoice(ttk.Frame):
             command=self.tableCustomerWindow.destroy,
             width=15,
         )
-        bt_confirm_selected = ttk.Button(
+        self.bt_confirm_selected_Customer = ttk.Button(
             self.tableCustomerWindow,
             text="Confirmer",
             style="confirm.TButton",
             command=self.insert_customer_into_invoice,
             width=15,
+            state="disabled",
         )
 
         # position views table
@@ -436,7 +439,12 @@ class DataInvoice(ttk.Frame):
 
         # button position
         bt_back.grid(column=1, row=2, padx=20, pady=20)
-        bt_confirm_selected.grid(column=3, row=2, padx=20, pady=20)
+        self.bt_confirm_selected_Customer.grid(column=3, row=2, padx=20, pady=20)
+
+        # vérifie si l'utilisateur sélectionne un élement
+        self.tableCustomer.bind(
+            "<<TreeviewSelect>>", self.check_customer_selected_into_tableCustomer
+        )
 
     def set_variable_ttk_customer(
         self,
@@ -508,6 +516,9 @@ class DataInvoice(ttk.Frame):
                 customer.phone_customer,
             )
             self.tableCustomerWindow.destroy()
+            # check the contents
+            self.customerDetailsIsFilled = True
+            self.check_CustomerDetails_and_article_into_invoice()
         except AttributeError:
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
 
@@ -607,12 +618,13 @@ class DataInvoice(ttk.Frame):
             command=self.tableItemWindow.destroy,
             width=15,
         )
-        bt_confirm_selected = ttk.Button(
+        self.bt_confirm_selected_item = ttk.Button(
             self.tableItemWindow,
             text="Confirmer",
             style="confirm.TButton",
             command=self.insert_Item_into_invoice,
             width=15,
+            state="disabled",
         )
 
         # position views table
@@ -628,7 +640,15 @@ class DataInvoice(ttk.Frame):
 
         # button position
         bt_back.grid(column=1, row=3, padx=20, pady=20)
-        bt_confirm_selected.grid(column=3, row=3, padx=20, pady=20)
+        self.bt_confirm_selected_item.grid(column=3, row=3, padx=20, pady=20)
+
+        # vérifie si l'utilisateur selection un élément ou non
+        self.en_quantityItem.bind(
+            "<KeyRelease>", self.check_item_selected_into_tableItem
+        )
+        self.tableItem.bind(
+            "<<TreeviewSelect>>", self.check_item_selected_into_tableItem
+        )
 
     def insert_Item_into_invoice(self):
         """Insert l'article choisit dans la facture"""
@@ -661,6 +681,8 @@ class DataInvoice(ttk.Frame):
                 ),
             )
             self.tableItemWindow.destroy()
+            # check the contents
+            self.check_CustomerDetails_and_article_into_invoice()
         except AttributeError:
             windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
 
@@ -699,6 +721,7 @@ class DataInvoice(ttk.Frame):
         for selected_item in self.table_invoice.selection():
             self.table_invoice.item(selected_item)
             self.table_invoice.delete(selected_item)
+        self.menuInvoice.bt_invoice_generate.configure(state="disabled")
 
     def get_selected_item(self):
         """Récupère les données de l'article, sélectionnez"""
@@ -805,3 +828,33 @@ class DataInvoice(ttk.Frame):
         self.var_postal_code_customer.set("")
         self.var_number_tva_customer.set("")
         self.var_phone_customer.set("")
+
+    def check_customer_selected_into_tableCustomer(self, event):
+        """Vérifie si l'utilisateur à sélectionner un élément"""
+        selected_customer = self.tableCustomer.selection()
+        if selected_customer:
+            self.bt_confirm_selected_Customer.configure(state="normal")
+        else:
+            self.bt_confirm_selected_Customer.configure(state="disabled")
+
+    def check_item_selected_into_tableItem(self, event):
+        """Vérifie si l'utilisateur à sélectionner un élément"""
+        selected_item = self.tableItem.selection()
+        if selected_item and self.en_quantityItem.get():
+            value_entry = self.en_quantityItem.get()
+            # vérifie si l'utilisateur à entrer un nombre et qu'il soit positif
+            if value_entry.isdigit() and int(value_entry) > 0:
+                self.bt_confirm_selected_item.configure(state="normal")
+            else:
+                dialogs.Messagebox.show_error(
+                    "Veuillez entrer un nombre, et qu'il soit supérieur à zéro"
+                )
+        else:
+            self.bt_confirm_selected_item.configure(state="disabled")
+
+    def check_CustomerDetails_and_article_into_invoice(self):
+        """Vérifier les coordonnées client et le tableau article sont remplis"""
+        if self.table_invoice.get_children() and self.customerDetailsIsFilled:
+            self.menuInvoice.bt_invoice_generate.configure(state="normal")
+        else:
+            self.menuInvoice.bt_invoice_generate.configure(state="disabled")
