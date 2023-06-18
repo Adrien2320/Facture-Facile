@@ -3,6 +3,7 @@ import ttkbootstrap.constants as cttk
 import views.customer.menuCustomerView as menuCustomer
 import views.windowView as windowView
 from models.customerModel import Customer
+import tkinter as tk
 
 
 class DataCustomer(ttk.Frame):
@@ -14,14 +15,15 @@ class DataCustomer(ttk.Frame):
     def __init__(self, window, menu_customer):
         """Constructeur"""
         # style Frame
-        ttk.Style().configure("frame.TFrame", background="#283747")
+        ttk.Style().configure("myFrame.TFrame", background="#283747")
         # paramètre de la frame
-        super().__init__(window, style="frame.TFrame")
+        super().__init__(window, style="myFrame.TFrame")
         # position de la frame
         self.pack(side=cttk.RIGHT, fill=cttk.BOTH, expand=True)
         # variable
         self.window = window
         self.menu_customer = menu_customer
+        self.varBtConfirm_exist =False
         self.postal_code = self.insert_postal_code()
         # variable ttk
         self.var_idCustomer = ttk.IntVar()
@@ -148,6 +150,7 @@ class DataCustomer(ttk.Frame):
             text="Confirmer",
             style="confirm.TButton",
             width=15,
+            state="disabled"
         )
         bt_back = ttk.Button(
             bottom_frame,
@@ -220,6 +223,14 @@ class DataCustomer(ttk.Frame):
         # position combobox
         cbb_type.grid(column=1, row=6, sticky=cttk.EW, pady=10, padx=20)
         self.cbb_postal_code.grid(column=1, row=4, sticky=cttk.EW, pady=10, padx=20)
+        # check the contents of entry
+        if self.varBtConfirm_exist:
+            en_name.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            en_first_name.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            en_address.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            self.cbb_postal_code.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+            en_tva.bind("<FocusOut>", self.check_if_all_entry_are_filled)
+
 
     def create_table_customer(self):
         """Affiche tous les clients dans une treeview"""
@@ -239,14 +250,29 @@ class DataCustomer(ttk.Frame):
             font=("Georgia", 15),
         )
         ttk.Style().configure("my.Treeview", background="#283747", rowheight=25)
+        ttk.Style().configure("title.TLabel", background="#283747")
+
         # Frame
         bottom_frame = ttk.Frame(self)
         top_frame = ttk.Frame(self)
         table_frame = ttk.Frame(top_frame)
+
+        # title
+        lb_title = ttk.Label(top_frame, text="Liste de sélection de client", style="title.TLabel",
+                             font=("Georgia", 20), anchor=cttk.CENTER)
+
         # position frame
-        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X, expand=True)
+        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.BOTH, expand=True)
+        bottom_frame.columnconfigure(0, weight=1)
+        bottom_frame.columnconfigure(2, weight=1)
+        bottom_frame.columnconfigure(4, weight=1)
+        bottom_frame.rowconfigure(0, weight=1)
+        bottom_frame.rowconfigure(2, weight=1)
+
         top_frame.pack(side=cttk.TOP, fill=cttk.BOTH, expand=True)
-        table_frame.pack(pady=50, padx=50, fill=cttk.BOTH, expand=True)
+        lb_title.pack(side=cttk.TOP, fill=cttk.X)
+        table_frame.pack(pady=20, padx=20, fill=cttk.BOTH, expand=True)
+
         # views table
         scrollbar = ttk.Scrollbar(table_frame, orient=cttk.VERTICAL)
         self.table = ttk.Treeview(
@@ -256,23 +282,29 @@ class DataCustomer(ttk.Frame):
             selectmode=cttk.BROWSE,
             style="my.Treeview",
         )
+
         # config the scrollbar
         scrollbar.config(command=self.table.yview)
+
         # format column
         self.table.column("#0", anchor=cttk.W, stretch=False, width=0, minwidth=0)
         self.table.column("id", anchor=cttk.W, stretch=False, width=200)
         self.table.column("name", anchor=cttk.W, stretch=True, width=200)
         self.table.column("firstName", anchor=cttk.W, stretch=True, width=200)
         self.table.column("address", anchor=cttk.W, stretch=True, width=200)
+
         # heading column
         self.table.heading("#0", anchor=cttk.W)
         self.table.heading("id", text="Numéro Client", anchor=cttk.W)
         self.table.heading("name", text="Nom", anchor=cttk.W)
         self.table.heading("firstName", text="Prénom", anchor=cttk.W)
         self.table.heading("address", text="Adresse", anchor=cttk.W)
+
         # position views table
         self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
+        self.table.bind("<<TreeviewSelect>>",self.check_treeview_select)
         scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
+
         # button widget
         bt_back = ttk.Button(
             bottom_frame,
@@ -286,10 +318,17 @@ class DataCustomer(ttk.Frame):
             text="Confirmer",
             style="confirm.TButton",
             width=15,
+            state="disabled"
         )
+        # label widget
+        lb_top = tk.Label(bottom_frame, height=5)
+        lb_bottom = tk.Label(bottom_frame, height=5)
+
         # button position
-        bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
-        self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
+        lb_top.grid(columnspan=5, row=0, sticky=cttk.NS)
+        bt_back.grid(column=1,row=1,sticky=cttk.EW)
+        self.bt_confirm_selected.grid(column=3,row=1,sticky=cttk.EW)
+        lb_bottom.grid(columnspan=5, row=2, sticky=cttk.NS)
 
     def insert_customer_in_table(self):
         """Ajout chaque client dans la table"""
@@ -315,6 +354,7 @@ class DataCustomer(ttk.Frame):
 
     def show_new_customer(self):
         """Affiche le formulaire pour créer un nouveau client"""
+        self.varBtConfirm_exist = True
         self.create_data_customer()
         self.bt_confirm_customer["command"] = self.new_customer
 
@@ -393,6 +433,7 @@ class DataCustomer(ttk.Frame):
     def show_modif_customer(self):
         """Affiche la table pour sélectionner le client à modifier"""
         self.create_table_customer()
+        self.varBtConfirm_exist = True
         self.insert_customer_in_table()
         self.bt_confirm_selected["command"] = self.set_modif_customer
 
@@ -412,6 +453,7 @@ class DataCustomer(ttk.Frame):
                 customer.phone_customer,
             )
             self.clean_frame()
+            self.varBtConfirm_exist = True
             self.create_data_customer()
             self.bt_confirm_customer["command"] = self.modif_customer
         except AttributeError:
@@ -433,3 +475,25 @@ class DataCustomer(ttk.Frame):
         )
         self.destroy()
         menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+
+    def check_if_all_entry_are_filled(self, *args):
+        """Vérifie si l'utilisateur a rempli toutes les entrées selon le type de client"""
+        if self.var_type.get() == "Professionnel":
+            if self.var_name.get() and self.var_address.get() and self.cbb_postal_code.get() and self.var_number_tva.get():
+                self.bt_confirm_customer.configure(state="normal")
+            else:
+                self.bt_confirm_customer.configure(state="disabled")
+        elif self.var_type.get() == "Particulier":
+            if self.var_first_name.get() and self.var_name.get() and self.var_address.get() and self.cbb_postal_code.get():
+                self.bt_confirm_customer.configure(state="normal")
+            else:
+                self.bt_confirm_customer.configure(state="disabled")
+
+    def check_treeview_select(self, event):
+        """ Vérifie si l'utilisateur à sélectionner un élément  """
+        selected_item = self.table.selection()
+        if selected_item:
+            self.bt_confirm_selected.configure(state="normal")
+        else:
+            self.bt_confirm_selected.configure(state="disabled")
+

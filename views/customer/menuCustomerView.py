@@ -18,9 +18,9 @@ class MenuCustomer(ttk.Frame):
     def __init__(self, window):
         """Constructeur"""
         # style frame
-        ttk.Style().configure("frame.TFrame", background="#283747")
+        ttk.Style().configure("customer.TFrame", background="#283747")
         # paramètre de la frame
-        super().__init__(window, style="frame.TFrame")
+        super().__init__(window, style="customer.TFrame")
         # position de la frame
         self.pack(side=cttk.LEFT, fill=cttk.Y)
         # variable
@@ -102,7 +102,7 @@ class MenuCustomer(ttk.Frame):
         )
         self.bt_back_customer = ttk.Button(
             self,
-            text="Retour",
+            text="Menu Principal",
             command=self.back_main_menu,
             width=12,
             style="back.TButton",

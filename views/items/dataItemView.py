@@ -177,12 +177,13 @@ class DataItem(ttk.Frame):
         # title
         lb_title = ttk.Label(top_frame, text="Liste de sélection d'articles", style="title.TLabel",font=("Georgia", 20),anchor=cttk.CENTER)
         # position frame
-        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X)
+        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.BOTH, expand=True)
         bottom_frame.columnconfigure(0,weight=1)
         bottom_frame.columnconfigure(2,weight=1)
         bottom_frame.columnconfigure(4,weight=1)
         bottom_frame.rowconfigure(0,weight=1)
         bottom_frame.rowconfigure(2,weight=1)
+
         top_frame.pack(side=cttk.TOP, fill=cttk.BOTH, expand=True)
         lb_title.pack(side=cttk.TOP, fill=cttk.X)
         table_frame.pack(pady=50, padx=50, fill=cttk.BOTH, expand=True)
