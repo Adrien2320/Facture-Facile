@@ -114,7 +114,7 @@ class DataCustomer(ttk.Frame):
         for widget in self.winfo_children():
             widget.destroy()
 
-    def create_data_customer(self):
+    def create_data_customer(self,title :str):
         """Création des widgets pour le formulaire client"""
         # variable
         types = ["Particulier", "Professionnel"]
@@ -160,6 +160,7 @@ class DataCustomer(ttk.Frame):
             command=self.back_customer_menu,
         )
         # widget label
+        lb_title = ttk.Label(top_frame, text=title, font=("Georgia", 20))
         lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 15))
         lb_first_name = ttk.Label(top_frame, text="Prénom :", font=("Georgia", 15))
         lb_address = ttk.Label(top_frame, text="Adresse :", font=("Georgia", 15))
@@ -205,6 +206,7 @@ class DataCustomer(ttk.Frame):
         self.bt_confirm_customer.pack(side=cttk.RIGHT, padx=50)
         bt_back.pack(side=cttk.LEFT, padx=50)
         # position Label
+        lb_title.grid(columnspan=2, row=0, pady=10)
         lb_name.grid(column=0, row=1, pady=10)
         lb_first_name.grid(column=0, row=2, pady=10)
         lb_address.grid(column=0, row=3, pady=10)
@@ -359,7 +361,7 @@ class DataCustomer(ttk.Frame):
     def show_new_customer(self):
         """Affiche le formulaire pour créer un nouveau client"""
         self.varBtConfirm_exist = True
-        self.create_data_customer()
+        self.create_data_customer("Formulaire d'ajout de client")
         self.bt_confirm_customer["command"] = self.new_customer
 
     def new_customer(self):
@@ -400,7 +402,7 @@ class DataCustomer(ttk.Frame):
                 customer.phone_customer,
             )
             self.clean_frame()
-            self.create_data_customer()
+            self.create_data_customer("Informations client")
             self.set_cbb_postal_code(customer.postalCode_customer)
             self.bt_confirm_customer.destroy()
         except AttributeError:
@@ -458,7 +460,7 @@ class DataCustomer(ttk.Frame):
             )
             self.clean_frame()
             self.varBtConfirm_exist = True
-            self.create_data_customer()
+            self.create_data_customer("Formulaire de modification client")
             self.set_cbb_postal_code(customer.postalCode_customer)
             self.bt_confirm_customer["command"] = self.modif_customer
         except AttributeError:

@@ -145,6 +145,7 @@ class DataCompany(ttk.Frame):
             command=self.back_mainMenu,
         )
         # widget label
+        lb_title = ttk.Label(top_frame, text="Informations de mon entreprise",font=("Georgia", 20))
         lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 15))
         lb_address = ttk.Label(top_frame, text="Adresse :", font=("Georgia", 15))
         lb_postal_code = ttk.Label(
@@ -184,6 +185,7 @@ class DataCompany(ttk.Frame):
         self.bt_confirm_company.pack(side=cttk.RIGHT, padx=50)
         self.bt_back.pack(side=cttk.LEFT, padx=50)
         # position Label
+        lb_title.grid(columnspan=2, row=0, pady=10)
         lb_name.grid(column=0, row=1, pady=10)
         lb_address.grid(column=0, row=2, pady=10)
         lb_postal_code.grid(column=0, row=3, pady=10)

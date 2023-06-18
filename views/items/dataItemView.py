@@ -58,7 +58,7 @@ class DataItem(ttk.Frame):
         else:
             self.bt_confirm_selected.configure(state="disabled")
 
-    def create_data_item(self):
+    def create_data_item(self,title:str):
         """Création du formulaire article"""
         # variable
         tva_rate = ["21%", "12%", "6%"]
@@ -108,7 +108,8 @@ class DataItem(ttk.Frame):
             width=15,
         )
 
-        # widget label
+        # widget
+        lb_title = ttk.Label(top_frame, text=title, font=("Georgia", 20))
         lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 15))
         lb_description = ttk.Label(
             top_frame, text="Description :", font=("Georgia", 15)
@@ -143,6 +144,7 @@ class DataItem(ttk.Frame):
             cbb_tva_tare.bind("<FocusOut>", self.check_if_all_entry_are_filled)
 
         # position label
+        lb_title.grid(columnspan=2, row=0, pady=10)
         lb_name.grid(column=0, row=1, pady=10)
         lb_description.grid(column=0, row=2, pady=10)
         lb_htva_price.grid(column=0, row=3, pady=10)
@@ -297,7 +299,7 @@ class DataItem(ttk.Frame):
     def show_new_item(self):
         """Affiche le formulaire pour créer un article"""
         self.varBtConfirm_exist = True
-        self.create_data_item()
+        self.create_data_item("Formulaire d'ajout d'article")
         self.bt_confirm_item["command"] = self.new_item
 
     def new_item(self):
@@ -335,7 +337,7 @@ class DataItem(ttk.Frame):
             item.tva_tare,
         )
         self.clean_frame()
-        self.create_data_item()
+        self.create_data_item("Détails de l'article")
         self.bt_confirm_item.destroy()
 
     def show_modif_item(self):
@@ -357,7 +359,7 @@ class DataItem(ttk.Frame):
         )
         self.clean_frame()
         self.varBtConfirm_exist = True
-        self.create_data_item()
+        self.create_data_item("Formulaire de modification d'article")
         self.bt_confirm_item["command"] = self.modif_item
 
     def modif_item(self):
