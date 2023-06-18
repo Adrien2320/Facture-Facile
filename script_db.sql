@@ -2774,7 +2774,7 @@ INSERT INTO "T_Zipcodes" ("postal_code_zipcode", "locality_zipcode") VALUES ('10
 CREATE TABLE T_Customers (
 id_customer INTEGER PRIMARY KEY AUTOINCREMENT,
 name_customer TEXT NOT NULL,
-first_name_customer TEXT NOT NULL,
+first_name_customer TEXT,
 address_customer TEXT NOT NULL,
 postal_code INTEGER NOT NULL,
 type_customer TEXT NOT NULL,

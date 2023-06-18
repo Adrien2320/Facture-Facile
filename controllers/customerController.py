@@ -20,7 +20,6 @@ class CustomerController:
         """Créer un nouveau client"""
         if (
             nameCustomer != ""
-            and firstNameCustomer != ""
             and addressCustomer != ""
             and postalCodeCustomer != ""
             and typeCustomer != ""
