@@ -4,6 +4,7 @@ from models.itemModel import Data
 
 class ItemController:
     def __init__(self, data: Data):
+        """Constructeur"""
         self.data = data
 
     def new_item(self, name: str, description: str, htva_price: float, tva_tare: str):

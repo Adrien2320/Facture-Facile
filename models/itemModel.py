@@ -96,7 +96,7 @@ class Data:
             self.commit()
 
     def check_exist_or_no(self, name : str)->bool:
-        """vérifier si l'article existe déjà et retourne oui ou non"""
+        """Vérifier si l'article existe déjà et retourne oui ou non"""
         sql = """ SELECT COUNT(*) FROM T_Items WHERE name_item=?"""
         with closing(self.cursor) as cursor:
             cursor.execute(sql,[name])

@@ -31,6 +31,7 @@ class DataItem(ttk.Frame):
         self.varBtConfirm_exist = False
 
     def check_content_htvaPrice(self, event):
+        """ Vérifie si le contenu de l'entry pour le prix htva est correct """
         try:
             float(self.en_htva_price.get())
         except ValueError:
@@ -38,13 +39,14 @@ class DataItem(ttk.Frame):
             self.var_htva_price.set(0.0)
 
     def check_if_all_entry_are_filled(self,*args):
-        """ Vérifie si toutes les entrées sont bien remplis"""
+        """ Vérifie si toutes les entrys sont bien remplis"""
         if self.var_name.get() and self.var_description.get() and self.var_tva_tare.get() and self.var_htva_price.get():
             self.bt_confirm_item.configure(state="normal")
         else:
             self.bt_confirm_item.configure(state="disabled")
 
     def check_treeview_select(self,event):
+        """ Vérifie si l'utilisateur à sélectionner un élément  """
         selected_item = self.table.selection()
         if selected_item:
             self.bt_confirm_selected.configure(state="normal")
@@ -205,7 +207,6 @@ class DataItem(ttk.Frame):
         self.table.heading("id", text="Code Article", anchor=cttk.W)
         self.table.heading("name", text="Nom", anchor=cttk.W)
         # position views table
-
         self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
         self.table.bind("<<TreeviewSelect>>",self.check_treeview_select)
         scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
