@@ -30,9 +30,8 @@ class MenuInvoice(ttk.Frame):
         self.window = window
         # creation du menu
         self.create_menu()
-        #
+        # assign of dataInvoice
         self.data_invoice = invoiceView.DataInvoice(self.window)
-
         self.data_invoice.controllerCustomer = customerController.CustomerController(
             customerModel.Customers()
         )

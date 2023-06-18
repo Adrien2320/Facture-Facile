@@ -1,4 +1,5 @@
 import ttkbootstrap as ttk
+import tkinter as tk
 import ttkbootstrap.constants as cttk
 import views.items.menuItemView as menuItem
 import views.windowView as windowView
@@ -27,6 +28,7 @@ class DataItem(ttk.Frame):
         # variable
         self.window = window
         self.menu_item = menu_item
+        self.btConfirm_exist = False
 
     def check_content_htvaPrice(self, event):
         try:
@@ -42,6 +44,13 @@ class DataItem(ttk.Frame):
         else:
             self.bt_confirm_item.configure(state="disabled")
 
+    def check_treeview_select(self,event):
+        selected_item = self.table.selection()
+        if selected_item:
+            self.bt_confirm_selected.configure(state="normal")
+        else:
+            self.bt_confirm_selected.configure(state="disabled")
+
     def create_data_item(self):
         """Création du formulaire article"""
         # variable
@@ -53,14 +62,14 @@ class DataItem(ttk.Frame):
             background="#C0392B",
             bordercolor="#C0392B",
             relief="flat",
-            font=("Georgia", 25),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "confirm.TButton",
             background="#2ECC71",
             bordercolor="#2ECC71",
             relief="flat",
-            font=("Georgia", 25),
+            font=("Georgia", 15),
         )
 
         # split window in multiple frames
@@ -93,36 +102,38 @@ class DataItem(ttk.Frame):
         )
 
         # widget label
-        lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 25))
+        lb_name = ttk.Label(top_frame, text="Nom :", font=("Georgia", 15))
         lb_description = ttk.Label(
-            top_frame, text="Description :", font=("Georgia", 25)
+            top_frame, text="Description :", font=("Georgia", 15)
         )
-        lb_htva_price = ttk.Label(top_frame, text="Prix HTVA :", font=("Georgia", 25))
-        lb_tva_tare = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 25))
+        lb_htva_price = ttk.Label(top_frame, text="Prix HTVA :", font=("Georgia", 15))
+        lb_tva_tare = ttk.Label(top_frame, text="Taux TVA :", font=("Georgia", 15))
 
         # entry for item data
-        en_name = ttk.Entry(top_frame, font=("Georgia", 25), textvariable=self.var_name)
+        en_name = ttk.Entry(top_frame, font=("Georgia", 15), textvariable=self.var_name)
         en_description = ttk.Entry(
-            top_frame, font=("Georgia", 25), textvariable=self.var_description
+            top_frame, font=("Georgia", 15), textvariable=self.var_description
         )
         self.en_htva_price = ttk.Entry(
-            top_frame, font=("Georgia", 25), textvariable=self.var_htva_price
+            top_frame, font=("Georgia", 15), textvariable=self.var_htva_price
         )
 
         # widget list
         cbb_tva_tare = ttk.Combobox(
             top_frame,
             values=tva_rate,
-            font=("Georgia", 25),
+            font=("Georgia", 15),
             textvariable=self.var_tva_tare,
+            state="readonly",
         )
 
         # check the contents of entry
-        self.en_htva_price.bind("<FocusOut>", self.check_content_htvaPrice)
-        en_name.bind('<FocusOut>',self.check_if_all_entry_are_filled)
-        en_description.bind('<FocusOut>',self.check_if_all_entry_are_filled)
-        self.en_htva_price.bind('<FocusOut>',self.check_if_all_entry_are_filled)
-        cbb_tva_tare.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+        if self.btConfirm_exist:
+            self.en_htva_price.bind("<FocusOut>", self.check_content_htvaPrice)
+            en_name.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+            en_description.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+            self.en_htva_price.bind('<FocusOut>',self.check_if_all_entry_are_filled)
+            cbb_tva_tare.bind('<FocusOut>',self.check_if_all_entry_are_filled)
 
         # position label
         lb_name.grid(column=0, row=1, pady=10)
@@ -146,24 +157,34 @@ class DataItem(ttk.Frame):
             background="#C0392B",
             bordercolor="#C0392B",
             relief="flat",
-            font=("Georgia", 25),
+            font=("Georgia", 15),
         )
         ttk.Style().configure(
             "confirm.TButton",
             background="#2ECC71",
             bordercolor="#2ECC71",
             relief="flat",
-            font=("Georgia", 25),
+            font=("Georgia", 15),
         )
+        ttk.Style().configure("title.TLabel",background="#283747")
         ttk.Style().configure("my.Treeview", background="#283747", rowheight=25)
         # frame
         bottom_frame = ttk.Frame(self)
         top_frame = ttk.Frame(self)
         table_frame = ttk.Frame(top_frame)
+        # title
+        lb_title = ttk.Label(top_frame, text="Liste de sélection d'articles", style="title.TLabel",font=("Georgia", 20),anchor=cttk.CENTER)
         # position frame
-        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X, expand=True)
+        bottom_frame.pack(side=cttk.BOTTOM, fill=cttk.X)
+        bottom_frame.columnconfigure(0,weight=1)
+        bottom_frame.columnconfigure(2,weight=1)
+        bottom_frame.columnconfigure(4,weight=1)
+        bottom_frame.rowconfigure(0,weight=1)
+        bottom_frame.rowconfigure(2,weight=1)
         top_frame.pack(side=cttk.TOP, fill=cttk.BOTH, expand=True)
+        lb_title.pack(side=cttk.TOP, fill=cttk.X)
         table_frame.pack(pady=50, padx=50, fill=cttk.BOTH, expand=True)
+
         # views table
         scrollbar = ttk.Scrollbar(table_frame, orient=cttk.VERTICAL)
         self.table = ttk.Treeview(
@@ -184,7 +205,9 @@ class DataItem(ttk.Frame):
         self.table.heading("id", text="Code Article", anchor=cttk.W)
         self.table.heading("name", text="Nom", anchor=cttk.W)
         # position views table
+
         self.table.pack(side=cttk.LEFT, fill=cttk.BOTH, expand=True)
+        self.table.bind("<<TreeviewSelect>>",self.check_treeview_select)
         scrollbar.pack(side=cttk.LEFT, fill=cttk.Y, padx=5)
         # button widget
         bt_back = ttk.Button(
@@ -199,10 +222,17 @@ class DataItem(ttk.Frame):
             text="Confirmer",
             style="confirm.TButton",
             width=15,
+            state="disabled",
         )
+        # label widget
+        lb_top = tk.Label(bottom_frame ,height=5)
+        lb_bottom = tk.Label(bottom_frame ,height=5)
+
         # button position
-        bt_back.pack(side=cttk.LEFT, padx=20, pady=10)
-        self.bt_confirm_selected.pack(side=cttk.RIGHT, padx=20, pady=10)
+        lb_top.grid(columnspan=5,row=0,sticky=cttk.NS)
+        bt_back.grid(column=1,row=1,sticky=cttk.EW)
+        self.bt_confirm_selected.grid(column=3,row=1,sticky=cttk.EW)
+        lb_bottom.grid(columnspan=5, row=2,sticky=cttk.NS)
 
     def insert_item_in_table(self):
         """Ajout chaque article de la table"""
@@ -253,6 +283,7 @@ class DataItem(ttk.Frame):
 
     def show_new_item(self):
         """Affiche le formulaire pour créer un article"""
+        self.btConfirm_exist = True
         self.create_data_item()
         self.bt_confirm_item["command"] = self.new_item
 
@@ -275,21 +306,17 @@ class DataItem(ttk.Frame):
 
     def set_search_item(self):
         """Insert les données récolté dans le formulaire de recherche d'un article"""
-        try:
-            item = self.get_selected()
-            self.set_variable_ttk(
-                item.id_item,
-                item.name_item,
-                item.description_item,
-                item.htva_price,
-                item.tva_tare,
-            )
-            self.clean_frame()
-            self.create_data_item()
-            self.bt_confirm_item.destroy()
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
-            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
+        item = self.get_selected()
+        self.set_variable_ttk(
+            item.id_item,
+            item.name_item,
+            item.description_item,
+            item.htva_price,
+            item.tva_tare,
+        )
+        self.clean_frame()
+        self.create_data_item()
+        self.bt_confirm_item.destroy()
 
     def show_modif_item(self):
         """Affiche la table pour sélectionner l'article à modifier"""
@@ -299,21 +326,20 @@ class DataItem(ttk.Frame):
 
     def set_modif_item(self):
         """Insert les données dans le formulaire pour modifier un article"""
-        try:
-            item = self.get_selected()
-            self.set_variable_ttk(
-                item.id_item,
-                item.name_item,
-                item.description_item,
-                item.htva_price,
-                item.tva_tare,
-            )
-            self.clean_frame()
-            self.create_data_item()
-            self.bt_confirm_item["command"] = self.modif_item
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
-            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
+
+        item = self.get_selected()
+        self.set_variable_ttk(
+            item.id_item,
+            item.name_item,
+            item.description_item,
+            item.htva_price,
+            item.tva_tare,
+        )
+        self.clean_frame()
+        self.btConfirm_exist = True
+        self.create_data_item()
+        self.bt_confirm_item["command"] = self.modif_item
+
 
     def modif_item(self):
         """Modifie un article"""
@@ -335,14 +361,10 @@ class DataItem(ttk.Frame):
 
     def delete_item(self):
         """Supprime un article"""
-        try:
-            item = self.get_selected()
-            self.controller.delete_item(item.id_item)
-            self.destroy()
-            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
-            menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
+        item = self.get_selected()
+        self.controller.delete_item(item.id_item)
+        self.destroy()
+        menuItem.MenuItem.state_item_menu(self.menu_item, "normal")
 
     @property
     def controller(self):

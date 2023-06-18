@@ -72,21 +72,21 @@ class MainMenu(ttk.Frame):
         # widget button
         self.bt_item = ttk.Button(
             self,
-            text="Article",
+            text="Menu Article",
             command=self.show_article,
             width=12,
             style="item.TButton",
         )
         self.bt_customer = ttk.Button(
             self,
-            text="Client",
+            text="Menu Client",
             command=self.do_show_customer,
             width=12,
             style="customer.TButton",
         )
         self.bt_invoice = ttk.Button(
             self,
-            text="Facture",
+            text="Menu Facture",
             command=self.do_show_invoice,
             width=12,
             style="invoices.TButton",

@@ -16,9 +16,9 @@ class MenuItem(ttk.Frame):
     def __init__(self, window):
         """Constructeur"""
         # style frame
-        ttk.Style().configure("frame.TFrame", background="#283747")
+        ttk.Style().configure("myFrame.TFrame", background="#283747")
         # paramètre de la frame
-        super().__init__(window, style="frame.TFrame")
+        super().__init__(window, style="myFrame.TFrame")
         # position de la frame
         self.pack(side=cttk.LEFT, fill=cttk.Y)
         # creation du menu article
@@ -102,7 +102,7 @@ class MenuItem(ttk.Frame):
         )
         self.bt_back = ttk.Button(
             self,
-            text="Retour",
+            text="Menu principal",
             command=self.back_main_menu,
             width=12,
             style="back.TButton",
