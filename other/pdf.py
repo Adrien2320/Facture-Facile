@@ -53,7 +53,7 @@ class PDF(FPDF):
         self.cell(
             0,
             0,
-            f"TVA:{numberTva_customer}" if numberTva_customer != "" else "",
+            f"TVA:{numberTva_customer}" if numberTva_customer == "" else "",
             0,
             1,
             "L",
@@ -107,8 +107,8 @@ class PDF(FPDF):
             self.cell(65, 10, item["product"], 1, 0, "L")
             self.cell(20, 10, str(item["tauxTva"]), 1, 0, "R")
             self.cell(10, 10, str(item["quantity"]), 1, 0, "R")
-            self.cell(35, 10, str(item["price"]), 1, 0, "R")
-            self.cell(30, 10, str(item["total"]), 1, 1, "R")
+            self.cell(35, 10, str(item["price"])+chr(128), 1, 0, "R")
+            self.cell(30, 10, str(item["total"])+chr(128), 1, 1, "R")
 
             # récupère le total pour chaque article a 21%
             if item["tauxTva"] == "21%":
@@ -156,8 +156,8 @@ class PDF(FPDF):
         for element in elements:
             if not element == {}:
                 self.cell(30, 10, str(element["tauxTva"]), 1, 0, "L")
-                self.cell(35, 10, str(element["totalHt"]), 1, 0, "L")
-                self.cell(30, 10, str(element["totalTaxe"]), 1, 0, "L")
+                self.cell(35, 10, str(element["totalHt"])+chr(128), 1, 0, "L")
+                self.cell(30, 10, str(element["totalTaxe"])+chr(128), 1, 0, "L")
                 self.ln()
                 totalHtAll += element["totalHt"]
                 totalTaxeAll += element["totalTaxe"]
@@ -167,15 +167,15 @@ class PDF(FPDF):
         self.set_y(var_y)
         self.set_x(var_x + 65)
         self.cell(30, 10, "Total (HT)", 1, 0, "R")
-        self.cell(30, 10, str(totalHtAll), 1, 0, "R")
+        self.cell(30, 10, str(totalHtAll)+chr(128), 1, 0, "R")
         self.ln()
         self.set_x(var_x + 65)
         self.cell(30, 10, "Total Taxes", 1, 0, "R")
-        self.cell(30, 10, str(totalTaxeAll), 1, 0, "R")
+        self.cell(30, 10, str(totalTaxeAll)+chr(128), 1, 0, "R")
         self.ln()
         self.set_x(var_x + 65)
         self.cell(30, 10, "Total", 1, 0, "R")
-        self.cell(30, 10, str(totalHtAll + totalTaxeAll), 1, 0, "R")
+        self.cell(30, 10, str(totalHtAll + totalTaxeAll)+chr(128), 1, 0, "R")
 
     def create_pdf(self, name: str):
         self.output(name, "F")
