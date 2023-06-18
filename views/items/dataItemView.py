@@ -393,7 +393,7 @@ class DataItem(ttk.Frame):
         try:
             return self._controller
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour article")
+            windowView.Window.show_message_error("Pas de contrôleur pour article")
             self.quit()
 
     @controller.setter

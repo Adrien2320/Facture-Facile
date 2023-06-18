@@ -64,7 +64,7 @@ class DataInvoice(ttk.Frame):
         try:
             return self._controllerCustomer
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour client")
+            windowView.Window.show_message_error("Pas de contrôleur pour client")
             self.quit()
 
     @controllerCustomer.setter
@@ -78,7 +78,7 @@ class DataInvoice(ttk.Frame):
         try:
             return self._controllerZipcode
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour code postal")
+            windowView.Window.show_message_error("Pas de contrôleur pour code postal")
             self.quit()
 
     @controllerZipcode.setter
@@ -92,7 +92,7 @@ class DataInvoice(ttk.Frame):
         try:
             return self._controllerItem
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour Article")
+            windowView.Window.show_message_error("Pas de contrôleur pour Article")
             self.quit()
 
     @controllerItem.setter
@@ -106,7 +106,7 @@ class DataInvoice(ttk.Frame):
         try:
             return self._controllerInvoice
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour facture")
+            windowView.Window.show_message_error("Pas de contrôleur pour facture")
             self.quit()
 
     @controllerInvoice.setter
@@ -121,7 +121,7 @@ class DataInvoice(ttk.Frame):
             return self._controllerItemInvoice
         except AttributeError:
             windowView.Window.show_message_error(
-                "Pas de controlleur pour Article facturé"
+                "Pas de contrôleur pour Article facturé"
             )
             self.quit()
 
@@ -137,7 +137,7 @@ class DataInvoice(ttk.Frame):
             return self._controllerCompany
         except AttributeError:
             windowView.Window.show_message_error(
-                "Pas de controlleur pour mon entreprise"
+                "Pas de contrôleur pour mon entreprise"
             )
             self.quit()
 
@@ -502,25 +502,22 @@ class DataInvoice(ttk.Frame):
         self.insert_data_in_tableCustomer()
 
     def insert_customer_into_invoice(self):
-        try:
-            customer = self.get_selected_customer()
-            code_postal_customer = self.get_postalCode_customer(
-                customer.postalCode_customer
-            )
-            self.set_variable_ttk_customer(
-                customer.id_customer,
-                f"{customer.name_customer} {customer.first_name}",
-                customer.address_customer,
-                f"{code_postal_customer.codePostal_zipcode} {code_postal_customer.locality_zipcode}",
-                customer.numberTva_customer,
-                customer.phone_customer,
-            )
-            self.tableCustomerWindow.destroy()
-            # check the contents
-            self.customerDetailsIsFilled = True
-            self.check_CustomerDetails_and_article_into_invoice()
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+        customer = self.get_selected_customer()
+        code_postal_customer = self.get_postalCode_customer(
+            customer.postalCode_customer
+        )
+        self.set_variable_ttk_customer(
+            customer.id_customer,
+            f"{customer.name_customer} {customer.first_name}",
+            customer.address_customer,
+            f"{code_postal_customer.codePostal_zipcode} {code_postal_customer.locality_zipcode}",
+            customer.numberTva_customer,
+            customer.phone_customer,
+        )
+        self.tableCustomerWindow.destroy()
+        # check the contents
+        self.customerDetailsIsFilled = True
+        self.check_CustomerDetails_and_article_into_invoice()
 
     def get_selected_customer(self):
         """Récupère les données de l'article, sélectionnez"""
@@ -654,37 +651,37 @@ class DataInvoice(ttk.Frame):
         """Insert l'article choisit dans la facture"""
         tva_tare_int: int
         quantity: int
-        try:
-            item = self.get_selected_item()
-            match item.tva_tare:
-                case "21%":
-                    tva_tare_int = 21
-                case "12%":
-                    tva_tare_int = 12
-                case _:
-                    tva_tare_int = 6
 
-            quantity = int(self.en_quantityItem.get())
-            self.table_invoice.insert(
-                "",
-                ttk.END,
-                values=(
-                    item.id_item,
-                    item.name_item,
-                    item.tva_tare,
-                    item.htva_price,
-                    round(
-                        (item.htva_price * quantity),
-                        2,
-                    ),
-                    quantity,
+        item = self.get_selected_item()
+        match item.tva_tare:
+            case "21%":
+                tva_tare_int = 21
+            case "12%":
+                tva_tare_int = 12
+            case _:
+                tva_tare_int = 6
+
+
+        quantity = int(self.en_quantityItem.get())
+        self.table_invoice.insert(
+            "",
+            ttk.END,
+            values=(
+                item.id_item,
+                item.name_item,
+                item.tva_tare,
+                item.htva_price,
+                round(
+                    (item.htva_price * quantity),
+                    2,
                 ),
-            )
-            self.tableItemWindow.destroy()
-            # check the contents
-            self.check_CustomerDetails_and_article_into_invoice()
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
+                quantity,
+            ),
+        )
+        self.tableItemWindow.destroy()
+        # check the contents
+        self.check_CustomerDetails_and_article_into_invoice()
+
 
     def insert_data_in_tableItem(self):
         print(1)
@@ -802,9 +799,9 @@ class DataInvoice(ttk.Frame):
             )
             self.clear_ttkVariable_customer()
             self.table_invoice.delete(*self.table_invoice.get_children())
-            windowView.Window.show_message_success("La facture a bien été créer")
+            windowView.Window.show_message_success("La facture a bien été enregistrée")
         else:
-            windowView.Window.show_message_success("La facture n'a pas été créer")
+            windowView.Window.show_message_success("La facture n'a pas été enregistrée")
 
     def insert_companyData_into_invoice(self):
         result = self.controllerCompany.load_company()

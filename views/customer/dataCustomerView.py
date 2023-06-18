@@ -388,26 +388,23 @@ class DataCustomer(ttk.Frame):
 
     def set_search_customer(self):
         """Insert les données récolté dans le formulaire de recherche d'un client"""
-        try:
-            customer = self.get_selected()
-            self.set_variable_ttk(
-                customer.id_customer,
-                customer.name_customer,
-                customer.first_name,
-                customer.address_customer,
-                customer.postalCode_customer,
-                customer.numberTva_customer,
-                customer.type_customer,
-                customer.email_customer,
-                customer.phone_customer,
-            )
-            self.clean_frame()
-            self.create_data_customer("Informations client")
-            self.set_cbb_postal_code(customer.postalCode_customer)
-            self.bt_confirm_customer.destroy()
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
-            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+        customer = self.get_selected()
+        self.set_variable_ttk(
+            customer.id_customer,
+            customer.name_customer,
+            customer.first_name,
+            customer.address_customer,
+            customer.postalCode_customer,
+            customer.numberTva_customer,
+            customer.type_customer,
+            customer.email_customer,
+            customer.phone_customer,
+        )
+        self.clean_frame()
+        self.create_data_customer("Informations client")
+        self.set_cbb_postal_code(customer.postalCode_customer)
+        self.bt_confirm_customer.destroy()
+
 
     def get_selected(self) -> Customer:
         """Récupère les données de l'article, sélectionnez"""
@@ -427,14 +424,10 @@ class DataCustomer(ttk.Frame):
 
     def delete_item(self):
         """Supprime un client"""
-        try:
-            customer = self.get_selected()
-            self.controllerCustomer.delete_item(customer.id_customer)
-            self.destroy()
-            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
-            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+        customer = self.get_selected()
+        self.controllerCustomer.delete_item(customer.id_customer)
+        self.destroy()
+        menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
 
     def show_modif_customer(self):
         """Affiche la table pour sélectionner le client à modifier"""
@@ -445,27 +438,24 @@ class DataCustomer(ttk.Frame):
 
     def set_modif_customer(self):
         """Insert les données dans le formulaire pour modifier un client"""
-        try:
-            customer = self.get_selected()
-            self.set_variable_ttk(
-                customer.id_customer,
-                customer.name_customer,
-                customer.first_name,
-                customer.address_customer,
-                customer.postalCode_customer,
-                customer.numberTva_customer,
-                customer.type_customer,
-                customer.email_customer,
-                customer.phone_customer,
+        customer = self.get_selected()
+        self.set_variable_ttk(
+            customer.id_customer,
+            customer.name_customer,
+            customer.first_name,
+            customer.address_customer,
+            customer.postalCode_customer,
+            customer.numberTva_customer,
+            customer.type_customer,
+            customer.email_customer,
+            customer.phone_customer,
             )
-            self.clean_frame()
-            self.varBtConfirm_exist = True
-            self.create_data_customer("Formulaire de modification client")
-            self.set_cbb_postal_code(customer.postalCode_customer)
-            self.bt_confirm_customer["command"] = self.modif_customer
-        except AttributeError:
-            windowView.Window.show_message_failure("Veuillez sélectionnez un élément!")
-            menuCustomer.MenuCustomer.state_customer_menu(self.menu_customer, "normal")
+        self.clean_frame()
+        self.varBtConfirm_exist = True
+        self.create_data_customer("Formulaire de modification client")
+        self.set_cbb_postal_code(customer.postalCode_customer)
+        self.bt_confirm_customer["command"] = self.modif_customer
+
 
     def modif_customer(self):
         """Modifie un client"""

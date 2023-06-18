@@ -37,7 +37,7 @@ class DataCompany(ttk.Frame):
         try:
             return self._controllerZipcode
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour code postal")
+            windowView.Window.show_message_error("Pas de contrôleur pour code postal")
             self.quit()
 
     @controllerZipcode.setter
@@ -51,7 +51,7 @@ class DataCompany(ttk.Frame):
         try:
             return self._controllerCompany
         except AttributeError:
-            windowView.Window.show_message_error("Pas de controlleur pour company")
+            windowView.Window.show_message_error("Pas de contrôleur pour company")
             self.quit()
 
     @controllerCompany.setter
